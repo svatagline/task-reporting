@@ -28,20 +28,20 @@ const Tree = ({ data }: TreeProps) => {
     };
 
     const handleClose = () => setShowDialog(false);
-    const handleSubmit = (record: NodeFormSchema) => { 
-        Object.keys(record).forEach((key:string) =>{
+    const handleSubmit = (record: NodeFormSchema) => {
+        Object.keys(record).forEach((key: string) => {
             data[key] = record[key]
-        }) 
+        })
         handleClose()
-       console.log('form submit',record,{...data,...record})
-        
+        console.log('form submit', record, { ...data, ...record })
+
     };
- 
-    const onSubmitBtn = ()=>{
+
+    const onSubmitBtn = () => {
         // @ts-ignore
         console.log(formRef.current.values)
 
-        let formaData =  JSON.parse(JSON.stringify(data))
+        let formaData = JSON.parse(JSON.stringify(data))
         delete formaData.id
         delete formaData.children
         delete formaData.color
@@ -56,7 +56,7 @@ const Tree = ({ data }: TreeProps) => {
 
         return (
 
-            <div className='viewElement'> 
+            <div className='viewElement'>
                 <AddEditNodeForm
                     ref={formRef}
                     handleSubmit={handleSubmit}
@@ -96,7 +96,7 @@ const Tree = ({ data }: TreeProps) => {
                     <div className='beforeTitle'>
                         <div className='bt-inner' onClick={() => setShowDialog(true)}>✒️</div>
                     </div>
-                    <div className='nodeName' onClick={()=>console.log(data)}> {data.name} </div>
+                    <div className='nodeName' onClick={() => console.log(data)}> {data.name} </div>
                     <div className='afterTitle'>
                         {isChildren &&
                             (isExpanded ? (
@@ -108,7 +108,7 @@ const Tree = ({ data }: TreeProps) => {
                 </div>
 
                 <div className='child-tree'>
-
+                   
                     {isChildren && isExpanded && data.children && (
                         <>
                             {data.children.map(i => {
@@ -119,9 +119,9 @@ const Tree = ({ data }: TreeProps) => {
                 </div>
             </div>
             <Dialog
-                height={'auto'} 
+                height={'auto'}
                 isOpen={showDialog}
-                onClose={() => setShowDialog(false)} 
+                onClose={() => setShowDialog(false)}
                 children={<ViewElement
                     data={data}
                 />}

@@ -90,3 +90,10 @@
         max-height: 600px !important;
  
     }
+
+.form-child-list{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 15px;
+}
