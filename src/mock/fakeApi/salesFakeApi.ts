@@ -3,6 +3,28 @@ import sortBy, { Primer } from '@/utils/sortBy'
 import paginate from '@/utils/paginate'
 import type { Server } from 'miragejs'
 
+const exatractNestedChild = (data, level) => {
+    let listing = []
+    const listLastNestedItems = (data) => {
+      data.forEach((record) => {
+        record.id
+        if (level.includes(`${record.id}`.split('_').length)) {
+          listing.push(record)
+        }
+  
+        if (record.children && record.children.length > 0) {
+          listLastNestedItems(record.children)
+        }
+      })
+    }
+    listLastNestedItems(data)
+  
+  
+    return listing
+  }
+
+
+
 export default function salesFakeApi(server: Server, apiPrefix: string) {
     server.post(`${apiPrefix}/sales/dashboard`, (schema) => {
         return schema.db.salesDashboardData[0]
@@ -10,12 +32,18 @@ export default function salesFakeApi(server: Server, apiPrefix: string) {
 
     server.post(`${apiPrefix}/tasks`, (schema, { requestBody }) => {
         const body = JSON.parse(requestBody)
+        console.log({body})
         const { pageIndex, pageSize, sort, query } = body
         const { order, key } = sort
-        const tasks = schema.db.tasksData 
+        // const tasks = schema.db.tasksData 
+
+      
+        const tasks = exatractNestedChild(schema.db.tasksTreeData,[3] )
+
         const sanitizeTasks = tasks.filter(
             (elm) => typeof elm !== 'function'
         )
+      
         let data = sanitizeTasks
         let total = tasks.length
 
@@ -33,13 +61,11 @@ export default function salesFakeApi(server: Server, apiPrefix: string) {
             data = wildCardSearch(data, query)
             total = data.length
         }
-
-        data = paginate(data, pageSize, pageIndex)
-
+        data = paginate(data, pageSize, pageIndex) 
         const responseData = {
             data: data,
             total: total,
-        }
+        } 
         return responseData
     })
 
@@ -47,6 +73,8 @@ export default function salesFakeApi(server: Server, apiPrefix: string) {
         `${apiPrefix}/tasks/delete`,
         (schema, { requestBody }) => {
             const { id } = JSON.parse(requestBody)
+            // schema.db.tasksData.remove({ id })
+            const tasks = exatractNestedChild(schema.db.tasksTreeData,[3] )
             schema.db.tasksData.remove({ id })
             return true
         }

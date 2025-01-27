@@ -164,40 +164,30 @@ const TaskTable = () => {
                     return <span className="capitalize">{row.category}</span>
                 },
             },
-            {
-                header: 'Quantity',
-                accessorKey: 'stock',
-                sortable: true,
-            },
-            {
-                header: 'Status',
-                accessorKey: 'status',
-                cell: (props) => {
-                    const { status } = props.row.original
-                    return (
-                        <div className="flex items-center gap-2">
-                            <Badge
-                                className={
-                                    inventoryStatusColor[status].dotClass
-                                }
-                            />
-                            <span
-                                className={`capitalize font-semibold ${inventoryStatusColor[status].textClass}`}
-                            >
-                                {inventoryStatusColor[status].label}
-                            </span>
-                        </div>
-                    )
-                },
-            },
-            {
-                header: 'Price',
-                accessorKey: 'price',
-                cell: (props) => {
-                    const { price } = props.row.original
-                    return <span>${price}</span>
-                },
-            },
+            
+            // {
+            //     header: 'Status',
+            //     accessorKey: 'status',
+            //     cell: (props) => {
+            //         const { status } = props.row.original
+            //         const validStatus = `${status}`.trim() == ''?0:status
+            //         return (
+            //             <div className="flex items-center gap-2">
+            //                 <Badge
+            //                     className={
+            //                         inventoryStatusColor[0].dotClass
+            //                     }
+            //                 />
+            //                 <span
+            //                     className={`capitalize font-semibold ${inventoryStatusColor[0].textClass}`}
+            //                 >
+            //                     {inventoryStatusColor[0].label}
+            //                 </span>
+            //             </div>
+            //         )
+            //     },
+            // },
+          
             {
                 header: '',
                 id: 'action',

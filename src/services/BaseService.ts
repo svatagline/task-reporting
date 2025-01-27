@@ -31,6 +31,8 @@ BaseService.interceptors.request.use(
             ] = `${TOKEN_TYPE}${accessToken}`
         }
 
+        
+        console.log('Request:', config)
         return config
     },
     (error) => {

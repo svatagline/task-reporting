@@ -4,7 +4,7 @@ import appConfig from '@/configs/app.config'
 import { signInUserData } from './data/authData'
 
 import { authFakeApi, salesFakeApi } from './fakeApi'
-import { tasksData, salesDashboardData } from './data/salesData'
+import { tasksData, salesDashboardData, tasksTreeData } from './data/salesData'
 
 const { apiPrefix } = appConfig
 
@@ -15,7 +15,8 @@ export function mockServer({ environment = 'test' }) {
             server.db.loadData({
                 signInUserData,
                 salesDashboardData,
-                tasksData
+                tasksData,
+                tasksTreeData
             })
         },
         routes() {
