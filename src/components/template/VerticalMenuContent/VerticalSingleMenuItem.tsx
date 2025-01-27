@@ -23,7 +23,7 @@ interface DefaultItemProps {
     userAuthority: string[]
 }
 
-interface VerticalMenuItemProps extends CollapsedItemProps, DefaultItemProps {}
+interface VerticalMenuItemProps extends CollapsedItemProps, DefaultItemProps { }
 
 const CollapsedItem = ({
     title,
@@ -52,18 +52,15 @@ const DefaultItem = (props: DefaultItemProps) => {
                 <Link
                     to={nav.path}
                     className="flex items-center h-full w-full"
-                    onClick={() =>
-                    {
-                           onLinkClick?.({
+                    onClick={() => {
+                        onLinkClick?.({
                             key: nav.key,
                             title: nav.title,
                             path: nav.path,
                         });
-                      
                     }
-                     
                     }
-                    target={nav.isExternalLink ? '_blank' :  ''}
+                    target={nav.isExternalLink ? '_blank' : ''}
                 >
                     <VerticalMenuIcon icon={nav.icon} />
                     {!sideCollapsed && (

@@ -16,7 +16,7 @@ const MenuItem = (props: MenuItemProps) => {
                     {() => (
                         <CollapseContextConsumer>
                             {() => (
-                                <BaseMenuItem
+                                <BaseMenuItem 
                                     menuItemHeight={context.menuItemHeight}
                                     variant={context.variant}
                                     isActive={(

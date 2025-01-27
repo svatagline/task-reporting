@@ -1,15 +1,8 @@
 import { useRef, useState } from 'react'
-import AdaptableCard from '@/components/shared/AdaptableCard'
-import ConfirmDialog from '@/components/shared/ConfirmDialog'
-import DoubleSidedImage from '@/components/shared/DoubleSidedImage'
+import AdaptableCard from '@/components/shared/AdaptableCard' 
 import { FormItem } from '@/components/ui/Form'
-import Dialog from '@/components/ui/Dialog'
-import Upload from '@/components/ui/Upload'
-import { HiEye, HiTrash } from 'react-icons/hi'
-import cloneDeep from 'lodash/cloneDeep'
-import { Field, FieldProps, FieldInputProps, FormikProps } from 'formik'
-import { Button } from '@/components/ui'
-import AddEditNodeForm from '../components/AddEditNodeForm'
+import Dialog from '@/components/ui/Dialog' 
+import { ViewElement } from './AddEditTaskModalComponents' 
 
 
 const Tree = ({ data }: TreeProps) => {
@@ -30,11 +23,11 @@ const Tree = ({ data }: TreeProps) => {
     const handleClose = () => setShowDialog(false);
     const handleSubmit = (record: NodeFormSchema) => {
         Object.keys(record).forEach((key: string) => {
+            // @ts-ignore
             data[key] = record[key]
         })
         handleClose()
-        console.log('form submit', record, { ...data, ...record })
-
+        console.log('form submit', record, { ...data, ...record }) 
     };
 
     const onSubmitBtn = () => {
@@ -52,37 +45,7 @@ const Tree = ({ data }: TreeProps) => {
         // @ts-ignore
         formRef.current.handleSubmit()
     }
-    const ViewElement = ({ data }: TreeProps) => {
 
-        return (
-
-            <div className='viewElement'>
-                <AddEditNodeForm
-                    ref={formRef}
-                    handleSubmit={handleSubmit}
-                    data={JSON.stringify(data)}
-                />
-                <div>
-                    <Button
-                        size="sm"
-                        className="ltr:mr-2 rtl:ml-2"
-                        onClick={handleClose}
-                        variant='default'
-                    >
-                        Close
-                    </Button>
-                    <Button
-                        size="sm"
-                        className="ltr:mr-2 rtl:ml-2"
-                        onClick={onSubmitBtn}
-                        variant='solid'
-                    >
-                        Submit
-                    </Button>
-                </div>
-            </div>
-        )
-    }
     return (
         <>
             <div className='nodeContainer'>
@@ -108,7 +71,7 @@ const Tree = ({ data }: TreeProps) => {
                 </div>
 
                 <div className='child-tree'>
-                   
+
                     {isChildren && isExpanded && data.children && (
                         <>
                             {data.children.map(i => {
@@ -124,6 +87,10 @@ const Tree = ({ data }: TreeProps) => {
                 onClose={() => setShowDialog(false)}
                 children={<ViewElement
                     data={data}
+                    formRef={formRef}
+                    handleSubmit={(record:NodeFormSchema)=>handleSubmit(record)}
+                    handleClose={handleClose}
+                    onSubmitBtn={onSubmitBtn}
                 />}
             />
         </>
@@ -131,11 +98,11 @@ const Tree = ({ data }: TreeProps) => {
     );
 };
 
-const FormTree = (props: TaskImagesProps) => {
+const FormTree = ( ) => {
     return (
         <AdaptableCard className='mb-4'>
-            <h5>Form Tree</h5>
-            <p className='mb-6'>Add or change image for the task</p>
+           
+            <p className='mb-6'>Add or change tasks from the task tree</p>
             <FormItem>
                 {treeData2.map((data, index) => <Tree data={data} key={index} />)}
 
@@ -259,6 +226,8 @@ const treeData = {
         },
     ],
 };
+
+
 const treeData2: INode[] = [{
     id: "root",
     name: "Root Folder",
@@ -271,12 +240,13 @@ const treeData2: INode[] = [{
             children: [
 
                 {
-                    "id": "9_10",
-                    "name": "9_10",
+                    "id": "09_10",
+                    "name": "09_10",
                     "hour": "09:00 - 10:00",
+                    'childFormType': "taskForm",
                     children: [
                         {
-                            "id": "9_10_01",
+                            "id": "09_10_01",
                             "name": "Fix login issue",
                             "description": "Resolved bug causing login failures.",
                             "category": "Development",
@@ -320,6 +290,7 @@ const treeData2: INode[] = [{
                     "id": "10_11",
                     "name": "10_11",
                     "hour": "10:00 - 11:00",
+                    'childFormType': "taskForm",
                     children: [
                         {
                             "id": "10_11_01",
@@ -366,6 +337,7 @@ const treeData2: INode[] = [{
                     "id": "11_12",
                     "name": "11_12",
                     "hour": "11:00 - 12:00",
+                    'childFormType': "taskForm",
                     children: [
                         {
                             "id": "11_12_01",
@@ -421,12 +393,12 @@ const reporting = {
     },
     "work": [
         {
-            "id": "9_10",
+            "id": "09_10",
             "title": "work",
             "hour": "09:00 - 10:00",
             "tasks": [
                 {
-                    "id": "9_10_01",
+                    "id": "09_10_01",
                     "title": "Fix login issue",
                     "description": "Resolved bug causing login failures.",
                     "category": "Development",

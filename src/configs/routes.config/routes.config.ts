@@ -28,6 +28,15 @@ export const protectedRoutes = [
         },
     },
     {
+        key: 'manageTaskTree',
+        path: `/manage-task-tree`,
+        component: lazy(() => import('@/views/tasks/ManageTaskTree')),
+        authority: [ADMIN, USER],
+        meta: {
+            header: 'Manage Tasks Tree',
+        },
+    },
+    {
         key: 'collapseMenu.item1',
         path: '/collapse-menu-item-view-1',
         component: lazy(() => import('@/views/demo/CollapseMenuItemView1')),

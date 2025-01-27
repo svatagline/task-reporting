@@ -14,37 +14,50 @@ type FormModel = {
 
 type TaskImagesProps = {
     values: FormModel
+    touched: boolean
 }
 
 interface INode {
-    id: String
-    name: String
+    id?: string
+    name: string
     children?: INode[]
     isExpanded?: Boolean
-    color?: String
-    description?: String
-    category?: String
-    status?: String
-    time_spent?: String
-    wasted_time?: String
-    focus_rate?: String
-    satisfaction_rate?: String
-    reason_for_satisfaction?: String
-    notes?: String
-    hour?: String
+    color?: string
+    description?: string
+    category?: string
+    status?: string
+    time_spent?: string
+    wasted_time?: string
+    focus_rate?: string
+    satisfaction_rate?: string
+    reason_for_satisfaction?: string
+    notes?: string
+    hour?: string
+    childFormType?: string
 }
-type TreeProps = {
-    data: INode; // Expecting an array of INode
-    key?: String | Number; //
-};
+ 
 
+interface TreeProps {
+    data: INode; // Expecting an array of INode
+    key?: string | number;
+}
+interface IFormTree  {
+    touched: FormikTouched<FormFieldsName>
+    errors: FormikErrors<FormFieldsName>
+}
+interface ExtendedTreeProps extends TreeProps {
+    formRef?: React.RefObject<HTMLFormElement>;
+    handleSubmit?: (record:NodeFormSchema) => void;
+    handleClose: () => void;
+    onSubmitBtn: () => void;
+}
 
 interface NodeFormProps extends CommonProps {
     disableSubmit?: boolean
     forgotPasswordUrl?: string
     signUpUrl?: string
     handleSubmit: (value:NodeFormSchema) => void
-    data:string
+    data:INode
 }
 
 type NodeFormSchema = { 
@@ -62,4 +75,19 @@ type NodeFormSchema = {
     reason_for_satisfaction?: string
     notes?: string
     hour?: string
+    childFormType:string | undefined
 }
+
+
+interface ITaskForm {
+    title:string
+}
+interface IChildFormField {
+    [key: string] : ITaskForm[]
+}
+interface IRowNestedFormState {
+   data:INode,
+   action:string
+}
+
+ 

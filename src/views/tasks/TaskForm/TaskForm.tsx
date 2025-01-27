@@ -12,8 +12,7 @@ import TaskImages from './TaskImages'
 import cloneDeep from 'lodash/cloneDeep'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { AiOutlineSave } from 'react-icons/ai'
-import * as Yup from 'yup'
-import FormTree from './FormTree'
+import * as Yup from 'yup' 
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 type FormikRef = FormikProps<any>
@@ -179,10 +178,7 @@ const TaskForm = forwardRef<FormikRef, TaskForm>((props, ref) => {
                         <FormContainer>
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                                 <div className="lg:col-span-2">
-                                    <FormTree
-                                        touched={touched}
-                                        errors={errors}
-                                    />
+                                
                                     <BasicInformationFields
                                         touched={touched}
                                         errors={errors}

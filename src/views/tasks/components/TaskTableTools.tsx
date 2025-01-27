@@ -20,11 +20,19 @@ const TaskTableTools = () => {
                 </Button>
             </Link>
             <Link
-                className="block lg:inline-block md:mb-0 mb-4"
+                className="block lg:inline-block md:mx-2  md:mb-0 mb-4"
                 to="/add-edit-task"
             >
                 <Button block variant="solid" size="sm" icon={<HiPlusCircle />}>
                     Add Tasks
+                </Button>
+            </Link>
+            <Link
+                className="block lg:inline-block md:mb-0 mb-4"
+                to="/manage-task-tree"
+            >
+                <Button block variant="solid" size="sm" icon={<HiPlusCircle />}>
+                    Manage Tasks Tree
                 </Button>
             </Link>
         </div>
