@@ -5,8 +5,8 @@ import TaskForm, {
 import toast from '@/components/ui/toast'
 import Notification from '@/components/ui/Notification'
 import { useNavigate } from 'react-router-dom'
-import { apiCreateTask } from '@/services/SalesService'
-import FormTree from '../TaskForm/FormTree'
+import { apiCreateTask } from '@/services/SalesService' 
+import TreeForm from '../TaskForm/TreeForm'
 
 const ManageTaskTree = () => {
     const navigate = useNavigate()
@@ -46,7 +46,7 @@ const ManageTaskTree = () => {
 
     return (
         <>
-            <FormTree  />
+            <TreeForm  />
         </>
     )
 }

@@ -33,34 +33,35 @@ interface INode {
     reason_for_satisfaction?: string
     notes?: string
     hour?: string
-    childFormType?: string
+    childFormType?: string,
+    nestedLevelOff?:boolean
 }
- 
+
 
 interface TreeProps {
     data: INode; // Expecting an array of INode
     key?: string | number;
 }
-interface IFormTree  {
+interface IFormTree {
     touched: FormikTouched<FormFieldsName>
     errors: FormikErrors<FormFieldsName>
 }
 interface ExtendedTreeProps extends TreeProps {
     formRef?: React.RefObject<HTMLFormElement>;
-    handleSubmit?: (record:NodeFormSchema) => void;
+    handleSubmit?: (record: NodeFormSchema) => void;
     handleClose: () => void;
-    onSubmitBtn: () => void;
+    onSubmitBtn: () => void; 
 }
 
 interface NodeFormProps extends CommonProps {
     disableSubmit?: boolean
     forgotPasswordUrl?: string
     signUpUrl?: string
-    handleSubmit: (value:NodeFormSchema) => void
-    data:INode
+    handleSubmit: (value: NodeFormSchema) => void
+    data: INode 
 }
 
-type NodeFormSchema = { 
+type NodeFormSchema = {
     name?: string
     children?: INode[]
     isExpanded?: boolean
@@ -75,19 +76,34 @@ type NodeFormSchema = {
     reason_for_satisfaction?: string
     notes?: string
     hour?: string
-    childFormType:string | undefined
+    childFormType: string | undefined
 }
 
+
+interface IOption {
+    label: string
+    value: string
+}
+ 
+ 
+interface IRowNestedFormState {
+    data: INode,
+    action: string
+}
+
+
+
+interface IFormField {
+    title: string;
+    type?: string; 
+    option?: { label: string; value: string }[]; 
+    max_length?:number
+}
 
 interface ITaskForm {
-    title:string
-}
-interface IChildFormField {
-    [key: string] : ITaskForm[]
-}
-interface IRowNestedFormState {
-   data:INode,
-   action:string
+    [key: string]: IFormField;  
 }
 
- 
+interface IChildFormField {
+    [key: string]: ITaskForm;
+}

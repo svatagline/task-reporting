@@ -1,29 +1,7 @@
 import wildCardSearch from '@/utils/wildCardSearch'
 import sortBy, { Primer } from '@/utils/sortBy'
 import paginate from '@/utils/paginate'
-import type { Server } from 'miragejs'
-
-const exatractNestedChild = (data, level) => {
-    let listing = []
-    const listLastNestedItems = (data) => {
-      data.forEach((record) => {
-        record.id
-        if (level.includes(`${record.id}`.split('_').length)) {
-          listing.push(record)
-        }
-  
-        if (record.children && record.children.length > 0) {
-          listLastNestedItems(record.children)
-        }
-      })
-    }
-    listLastNestedItems(data)
-  
-  
-    return listing
-  }
-
-
+import type { Server } from 'miragejs' 
 
 export default function salesFakeApi(server: Server, apiPrefix: string) {
     server.post(`${apiPrefix}/sales/dashboard`, (schema) => {
@@ -38,7 +16,7 @@ export default function salesFakeApi(server: Server, apiPrefix: string) {
         // const tasks = schema.db.tasksData 
 
       
-        const tasks = exatractNestedChild(schema.db.tasksTreeData,[3] )
+        const tasks = schema.db.tasksTreeData
 
         const sanitizeTasks = tasks.filter(
             (elm) => typeof elm !== 'function'
@@ -74,15 +52,15 @@ export default function salesFakeApi(server: Server, apiPrefix: string) {
         (schema, { requestBody }) => {
             const { id } = JSON.parse(requestBody)
             // schema.db.tasksData.remove({ id })
-            const tasks = exatractNestedChild(schema.db.tasksTreeData,[3] )
-            schema.db.tasksData.remove({ id })
+            // const tasks = exatractNestedChild(schema.db.tasksTreeData,[3] )
+            schema.db.tasksTreeData.remove({ id })
             return true
         }
     )
 
     server.get(`${apiPrefix}/tasks`, (schema, { queryParams }) => {
         const id = queryParams.id
-        const task = schema.db.tasksData.find(id)
+        const task = schema.db.tasksTreeData.find(id)
         return task
     })
 
@@ -91,7 +69,7 @@ export default function salesFakeApi(server: Server, apiPrefix: string) {
         (schema, { requestBody }) => {
             const data = JSON.parse(requestBody)
             const { id } = data
-            schema.db.tasksData.update({ id }, data)
+            schema.db.tasksTreeData.update({ id }, data)
             return true
         }
     )
@@ -100,12 +78,12 @@ export default function salesFakeApi(server: Server, apiPrefix: string) {
         `${apiPrefix}/tasks/create`,
         (schema, { requestBody }) => {
             const data = JSON.parse(requestBody)
-            schema.db.tasksData.insert(data)
+            schema.db.tasksTreeData.insert(data)
             return true
         }
     )
 
-    server.get(`${apiPrefix}/sales/orders`, (schema, { queryParams }) => {
+    server.get(`${apiPrefix}/sales/orders`, (schema, { queryParams }) => { 
         const { pageIndex, pageSize, query } = queryParams
         const order = queryParams['sort[order]']
         const key = queryParams['sort[key]']

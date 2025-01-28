@@ -1,11 +1,12 @@
 import Input from '@/components/ui/Input'
 import { FormItem, FormContainer } from '@/components/ui/Form'
-import { Field, Form, Formik } from 'formik'
+import { Field, FieldProps, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { forwardRef, useRef, useState } from 'react'
-import { Button, Dialog } from '@/components/ui'
+import { Button, Checkbox, DatePicker, Dialog, Radio, Select, Switcher, TimeInput } from '@/components/ui'
 import { childFormFields, RemoveElement, rowNestedFormData, ViewElement } from '../TaskForm/AddEditTaskModalComponents'
-
+import CreatableSelect from 'react-select/creatable'
+import { RichTextEditor } from '@/components/shared' 
 const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
     const rowNestedFormState = { data: rowNestedFormData, action: 'none' }
     const [showNestedDialog, setShowNestedDialog] = useState(false);
@@ -18,11 +19,8 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
     const {
         disableSubmit = false,
         handleSubmit,
-        data
-    } = props
-
-
-
+        data 
+    } = props 
     let parseData = JSON.parse(JSON.stringify(data))
     let formaData = { ...parseData }
     delete formaData.id
@@ -35,7 +33,7 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
     if (validationObj) {
         Object.keys(formaData).forEach(key => {
             validationObj[key] = Yup.string()
-                .required(`Please enter ${key}`)
+                .required(`Please add ${key}`)
                 .label(key) // 
         })
     }
@@ -50,7 +48,7 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
         initialValuesObj[key] = formaData[key]
     })
     const test = (e: any) => {
-        // console.log("eeee", data)
+        console.log("eeee", data)
     }
 
     const getNewId = (lastId: string) => {
@@ -89,15 +87,13 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
     const getFormFields = (formType: string) => {
 
         if (childFormFields[formType]) {
-            const fieldsWithValues = childFormFields[formType].reduce((acc: any, field: ITaskForm) => {
-                acc[field.title] = "";
+            const fieldsWithValues = Object.values(childFormFields[formType]).reduce((acc: any, field: ITaskForm) => {
+                acc[`${field.title}`] = "";
                 return acc;
             }, {});
             return fieldsWithValues;
         }
-    }
-
-
+    } 
     const onAction = (action: string, record: INode) => {
         if (action === 'add') {
             setShowNestedDialog(true)
@@ -109,11 +105,267 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
             setShowNestedDialog(true)
             setNestedFormData({ data: record, action: "delete" })
         }
+    } 
+    const timeStamp = (str: string) => {
+        return new Date(str).getTime();
+    } 
+    const parseObj = (str: string) => {
+        try {
+            return JSON.parse(str);
+        } catch (error) {
+            return {}
+        }
     }
+    const FormInputType = ({ type, data, values }: { type: string ,values:any,data:any}) => { 
+        let InputElement = <h1></h1>
+        switch (type) {
+            case 'text':
+                InputElement = <Field
+                    type="text"
+                    name={data.key}
+                    placeholder={data.key}
+                    component={Input}
+                />
+
+                break;
+            case 'number':
+                InputElement = <Field name={data.key}>
+                {({
+                    field,
+                    form,
+                }: FieldProps<FormModel>) => (
+
+                      <Input
+                        {...field}
+                        type="text"
+                        maxLength={2}
+                        placeholder={data.key}
+                        value={values[data.key]}
+                        onChange={(e) => form.setFieldValue(field.name, `${e.target.value}`.replace(/\D/g, ""))} 
+                      />
+                     
+                )}
+            </Field>
+
+                break;
+            case 'select':
+                InputElement = <Field
+                    name={data.key}>
+                    {({
+                        field,
+                        form,
+                    }: FieldProps<FormModel>) => (
+                        <Select
+                            field={field}
+                            form={form}
+                            options={data.options}
+                            value={data.options.filter(
+                                (option:IOption) =>
+                                    option.value ==
+                                    values[data.key]
+                            )}
+                            onChange={(option) =>
+                                form.setFieldValue(
+                                    field.name,
+                                    option?.value
+                                )
+                            }
+                        />
+                    )}
+                </Field>
+
+
+                break;
+            case 'multi_select':
+                InputElement = <Field name={data.key}>
+                    {({
+                        field,
+                        form,
+                    }: FieldProps<FormModel>) => (
+                        <Select
+                            isMulti
+                            componentAs={CreatableSelect}
+                            field={field}
+                            form={form}
+                            options={childFormFields[`${data.childFormType}`][data.key]['option']}
+                            value={values.tags}
+                            onChange={(option) =>
+                                form.setFieldValue(field.name, option)
+                            }
+                        />
+                    )}
+                </Field>
+
+
+                break;
+            case 'textarea':
+                InputElement = <Field name={data.key}>
+                    {({
+                        field,
+                        form,
+                    }: FieldProps<FormModel>) => (
+                        <RichTextEditor
+                            value={`${field.value}`}
+                            onChange={(val) =>
+                                form.setFieldValue(field.name, val)
+                            }
+                        />
+                    )}
+                </Field>
+
+
+                break;
+            case 'date':
+                InputElement = <Field name={data.key}>
+                    {({
+                        field,
+                        form,
+                    }: FieldProps<FormModel>) => (
+                        <DatePicker
+                            field={field}
+                            form={form}
+                            value={values[data.key]}
+                            onChange={(date) => {
+                                console.log(`${date}`)
+                                form.setFieldValue(
+                                    field.name,
+                                    `${date}`
+                                )
+                            }}
+                        />
+                    )}
+                </Field>
+
+
+                break;
+            case 'time':
+                InputElement = <Field name={data.key}>
+                    {({
+                        field,
+                        form,
+                    }: FieldProps<FormModel>) => (
+                        <TimeInput
+                            field={field}
+                            form={form}
+                            value={values[data.key]}
+                            onChange={(time) => { 
+                                form.setFieldValue(
+                                    field.name,
+                                    time
+                                )
+                            }}
+                        />
+                    )}
+                </Field>
+
+
+                break;
+            case 'multi_checkbox':
+                InputElement = <Field name={data.key}>
+                    {({
+                        field,
+                        form,
+                    }: FieldProps<FormModel>) => (
+
+                        <Checkbox.Group
+                            value={`${values[data.key]}`.split(',')}
+                            onChange={(options) => {
+
+                                {
+                                    console.log('options', options)
+                                    form.setFieldValue(
+                                        field.name,
+                                        options.join(','),
+                                    )
+                                }
+                            }
+                            }
+                        >
+                            {data.options && data.options.map((i:IOption, index:number) => {
+                                return (
+                                    <Checkbox name={field.name} key={index} value={i.value}>{i.label}</Checkbox>
+                                )
+                            }
+                            )}
+                        </Checkbox.Group>
+                    )}
+                </Field>
+
+
+                break;
+            case 'radio':
+                InputElement = <Field name={data.key}>
+                    {({
+                        field,
+                        form,
+                    }: FieldProps<FormModel>) => (
+
+                        <Radio.Group
+                            value={values[data.key]}
+                            onChange={(val) =>
+                                form.setFieldValue(
+                                    field.name,
+                                    val
+                                )
+                            }
+                        >
+                            {
+                                data.options && data.options.map((i:IOption, index:number) => {
+                                    return (
+                                        <Radio key={index} value={i.value}>{i.label}</Radio>
+                                    )
+                                }
+                                )}
+
+                        </Radio.Group>
+                    )}
+                </Field>
+
+
+                break;
+            case 'switch':
+                InputElement = <Field name={data.key}>
+                    {({
+                        field,
+                        form,
+                    }: FieldProps<FormModel>) => (
+                        <Switcher
+                            checked={values[data.key] == true}
+                            // @ts-ignore
+                            onClick={() => {
+                                form.setFieldValue(
+                                    field.name,
+                                    !values[data.key]
+                                )
+                            }
+
+                            }
+                        />
+
+                    )}
+                </Field>
+
+
+                break;
+            default:
+                InputElement = <Field
+                    type="text"
+                    name="input"
+                    placeholder="Input"
+                    component={Input}
+                />
+                break;
+        }
+
+
+
+        return InputElement
+    }
+
     return (
         <div  >
-           
-            <h3> Add/Edit Nodes </h3>
+
+            <h3  > Add/Edit Nodes </h3>
             <br />
             <Formik
                 // @ts-ignore
@@ -136,7 +388,7 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
                         <FormContainer>
                             {Object.keys(formaData).map(key => {
                                 return (
-                                    <div key={key} onClick={() => test({ errors, touched, values })}>
+                                    <div key={key} onClick={() => test({ values })}>
                                         <FormItem
                                             label={key}
                                             invalid={
@@ -144,13 +396,25 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
                                             }
                                             errorMessage={`${errors[key]}`}
                                         >
-                                            <Field
-                                                type="text"
-                                                autoComplete="off"
-                                                name={key}
-                                                placeholder={key}
-                                                component={Input}
-                                            />
+                                            {
+                                                (childFormFields[`${data.childFormType}`] && childFormFields[`${data.childFormType}`][key] && childFormFields[`${data.childFormType}`][key]['type'])
+                                                    ?
+                                                    <FormInputType
+                                                        type={`${(childFormFields[`${data.childFormType}`] && childFormFields[`${data.childFormType}`][key] && childFormFields[`${data.childFormType}`][key]['type']) ? childFormFields[`${data.childFormType}`][key]['type'] : 'text'}`}
+                                                        values={values}
+                                                        data={{
+                                                            key: key,
+                                                            max_length:(childFormFields[`${data.childFormType}`][key] && childFormFields[`${data.childFormType}`][key]['max_length']) ? childFormFields[`${data.childFormType}`][key]['max_length'] : 100,
+                                                            options: (childFormFields[`${data.childFormType}`][key] && childFormFields[`${data.childFormType}`][key]['option']) ? childFormFields[`${data.childFormType}`][key]['option'] : {}
+                                                        }}
+                                                    />
+                                                    :
+                                                    <FormInputType
+                                                        type={'text'}
+                                                        values={values}
+                                                        data={{ key: key }}
+                                                    />
+                                            }
                                         </FormItem>
                                     </div>
                                 )
@@ -162,17 +426,16 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
 
 
             </Formik>
-
             <div className='form-child-list'>
                 {
-                    data.childFormType &&
+                    !data.nestedLevelOff &&
                     <div className='flex justify-between'>
                         <h5>Child nodes</h5>
                         <Button
                             size="sm"
                             className="ltr:mr-2 rtl:ml-2"
                             onClick={() => onAction('add', { ...getFormFields('taskForm') })}
-                            variant='solid' 
+                            variant='solid'
                         >
                             Add child
                         </Button>
@@ -180,35 +443,34 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
                     </div>}
 
                 {
-                    data.children && data.children.length > 0 ? (
+                   !data.nestedLevelOff && data.children && data.children.length > 0 ? (
                         <>
 
                             {data.children.map((child: INode, index: number) => {
                                 return (
-                                    <div key={index} className='relative' onClick={() => console.log(child)}>
-                                        <Field
-                                            type="text"
-                                            autoComplete="off"
-                                            name={child.name}
-                                            component={Input}
-                                            value={child.name}
-                                            key={index}
+                                    <div key={index} className='relative' >
+                                        <Input
+                                            asElement="input"
+                                            disabled={true}
+                                            name={child?.name}
+                                            value={child?.name}
+                                            field={'text'}
+                                            suffix={<div className='flex align-center absolute right-[0px] top-[-10px] gap-1'>
+                                                <span className='cursor-pointer' onClick={() => onAction('update', { ...child })}>🖊️</span>&nbsp;
+                                                <span className='cursor-pointer' onClick={() => onAction('delete', { ...child })}>❌</span>
+                                            </div>}
                                         />
-                                        <span className='absolute right-[13px] top-[12px] cursor-pointer' onClick={() => onAction('update', { ...child })}>🖊️</span>
-                                        <span className='absolute right-[36px] top-[12px] cursor-pointer' onClick={() => onAction('delete', { ...child })}>❌</span>
-                                    </div>
 
+                                    </div>
                                 )
                             })}
                         </>) :
                         (
-                            data.childFormType &&
+                            !data.nestedLevelOff &&   data.childFormType &&
                             <h3 className='text-center'>
                                 No record found
                             </h3>
-
                         )
-
                 }
             </div>
 
@@ -225,10 +487,10 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
                             onSubmitBtn={onNestedFormSubmit}
                         /> :
                         <ViewElement
-                            data={nestedFormData.data}
+                            data={{ ...nestedFormData.data, childFormType: data.childFormType,nestedLevelOff:true }}
                             formRef={nestedFormRef}
                             handleSubmit={onNestedFormSubmit}
-                            handleClose={handleClose}
+                            handleClose={handleClose} 
                             // @ts-ignore
                             onSubmitBtn={() => nestedFormRef.current.handleSubmit()}
                         />}

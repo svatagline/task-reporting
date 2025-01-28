@@ -11,8 +11,9 @@ export const ViewElement = ({ data, formRef,
         <div className='viewElement'>
             <AddEditNodeForm
                 ref={formRef}
-                handleSubmit={(record:NodeFormSchema)=>handleSubmit ? handleSubmit(record):()=>{}}
+                handleSubmit={(record: NodeFormSchema) => handleSubmit && handleSubmit(record)}
                 data={data} 
+               
             />
             <div>
                 <Button
@@ -31,17 +32,16 @@ export const ViewElement = ({ data, formRef,
                 >
                     Submit
                 </Button>
-               
+
             </div>
         </div>
     )
 }
-export const RemoveElement = ({ data, formRef, 
+export const RemoveElement = ({ data, formRef,
     handleClose,
     onSubmitBtn }: ExtendedTreeProps) => {
 
-    return (
-
+    return ( 
         <div className='viewElement'  >
             <h3>Are you sure to delete record?</h3>
             <br />
@@ -62,21 +62,43 @@ export const RemoveElement = ({ data, formRef,
                 >
                     Submit
                 </Button>
-                
+
             </div>
         </div>
     )
+} 
+
+export const childFormFields: IChildFormField = {
+    taskForm: {
+        name: { title: "name" }, description: { title: "description",type: "textarea", },
+        category: {
+            title: "category",
+            type: "select",
+            option: [
+                { label: '0', value: '0' },
+                { label: '1', value: '1' },
+            ]
+        },
+        status: { 
+            title: "status",
+            type: "radio",
+            option: [
+                { label: 'Pending', value: '0' },
+                { label: 'Finish', value: '1' },
+                { label: 'Delay', value: '2' },
+            ]
+        }, 
+        time_spent: { title: "time_spent",type: "number",max_length:2 }, 
+        wasted_time: { title: "wasted_time",type: "number",max_length:2 }, 
+        focus_rate: { title: "focus_rate",type: "number", max_length:2}, 
+        satisfaction_rate: { title: "satisfaction_rate",type: "number",max_length:2 }, 
+        reason_for_satisfaction: { title: "reason_for_satisfaction"  }, 
+        notes: { title: "notes",type: "date", }
+    }
 }
 
 
-
-
-export const childFormFields:IChildFormField = {
-    taskForm: [{ title: "name" }, { title: "description" }, { title: "category" }, { title: "status" }, { title: "time_spent" }, { title: "wasted_time" }, { title: "focus_rate" }, { title: "satisfaction_rate" }, { title: "reason_for_satisfaction" }, { title: "notes" }]
-}
-
-
-export const rowNestedFormData =   {
+export const rowNestedFormData = {
     id: '',
     name: '',
     children: [],

@@ -48,6 +48,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>((props, ref) => {
 
     const isChecked = useCallback(() => {
         if (typeof groupValue !== 'undefined' && typeof value !== 'undefined') {
+            console.log({groupValue})
             return groupValue.some((i) => i === value)
         }
         return controlledChecked || defaultChecked

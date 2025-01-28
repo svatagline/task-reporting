@@ -41,8 +41,7 @@ const tags = [
 ]
 
 const OrganizationFields = (props: OrganizationFieldsProps) => {
-    const { values = { category: '', tags: [] }, touched, errors } = props
-
+    const { values = { category: '', tags: [] }, touched, errors } = props 
     return (
         <AdaptableCard divider isLastChild className="mb-4">
             <h5>Organizations</h5>
@@ -77,7 +76,7 @@ const OrganizationFields = (props: OrganizationFieldsProps) => {
                         </Field>
                     </FormItem>
                 </div>
-                <div className="col-span-1">
+                <div className="col-span-1" onClick={()=>console.log(tags)}>
                     <FormItem
                         label="Tags"
                         invalid={
@@ -85,7 +84,7 @@ const OrganizationFields = (props: OrganizationFieldsProps) => {
                         }
                         errorMessage={errors.tags as string}
                     >
-                        <Field name="tags">
+                        <Field name="tags" >
                             {({ field, form }: FieldProps) => (
                                 <Select
                                     isMulti
@@ -95,7 +94,9 @@ const OrganizationFields = (props: OrganizationFieldsProps) => {
                                     options={tags}
                                     value={values.tags}
                                     onChange={(option) =>
+                                    { 
                                         form.setFieldValue(field.name, option)
+                                    }  
                                     }
                                 />
                             )}

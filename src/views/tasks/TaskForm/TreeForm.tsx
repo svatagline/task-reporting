@@ -98,7 +98,7 @@ const Tree = ({ data }: TreeProps) => {
     );
 };
 
-const FormTree = ( ) => {
+const TreeForm = ( ) => {
     return (
         <AdaptableCard className='mb-4'>
            
@@ -113,7 +113,7 @@ const FormTree = ( ) => {
     );
 };
 
-export default FormTree;
+export default TreeForm;
 
 
 
@@ -249,7 +249,7 @@ const treeData2: INode[] = [{
                             "id": "09_10_01",
                             "name": "Fix login issue",
                             "description": "Resolved bug causing login failures.",
-                            "category": "Development",
+                            "category": "1",
                             "status": "Completed",
                             "time_spent": "20 mins",
                             "wasted_time": "10 mins",
@@ -262,7 +262,7 @@ const treeData2: INode[] = [{
                             "id": "09_10_02",
                             "name": "Team standup meeting",
                             "description": "Daily sync-up with the team.",
-                            "category": "Meetings",
+                            "category": "1",
                             "status": "Completed",
                             "time_spent": "30 mins",
                             "wasted_time": "10 mins",
@@ -275,7 +275,7 @@ const treeData2: INode[] = [{
                             "id": "09_10_03",
                             "name": "Review pull requests",
                             "description": "Reviewed and approved 2 pull requests.",
-                            "category": "Code Review",
+                            "category": "0",
                             "status": "Completed",
                             "time_spent": "10 mins",
                             "wasted_time": "10 mins",
@@ -296,7 +296,7 @@ const treeData2: INode[] = [{
                             "id": "10_11_01",
                             "name": "Research new feature",
                             "description": "Explored APIs for implementing user authentication.",
-                            "category": "Research",
+                            "category": "1",
                             "status": "In Progress",
                             "time_spent": "40 mins",
                             "wasted_time": "10 mins",
@@ -309,7 +309,7 @@ const treeData2: INode[] = [{
                             "id": "10_11_02",
                             "name": "Update project documentation",
                             "description": "Added details for the upcoming sprint.",
-                            "category": "Documentation",
+                            "category": "2",
                             "status": "Completed",
                             "time_spent": "15 mins",
                             "wasted_time": "10 mins",
@@ -322,7 +322,7 @@ const treeData2: INode[] = [{
                             "id": "10_11_03",
                             "name": "Break",
                             "description": "Quick coffee break.",
-                            "category": "Break",
+                            "category": "0",
                             "status": "Completed",
                             "time_spent": "5 mins",
                             "wasted_time": "10 mins",
@@ -343,7 +343,7 @@ const treeData2: INode[] = [{
                             "id": "11_12_01",
                             "name": "Write unit tests",
                             "description": "Implemented tests for the login module.",
-                            "category": "Testing",
+                            "category": "1",
                             "status": "Completed",
                             "time_spent": "30 mins",
                             "wasted_time": "10 mins",
@@ -356,7 +356,7 @@ const treeData2: INode[] = [{
                             "id": "11_12_02",
                             "name": "Plan sprint backlog",
                             "description": "Defined user stories and priorities for the next sprint.",
-                            "category": "Planning",
+                            "category": "2",
                             "status": "Completed",
                             "time_spent": "20 mins",
                             "wasted_time": "10 mins",
@@ -369,7 +369,7 @@ const treeData2: INode[] = [{
                             "id": "11_12_03",
                             "name": "Reply to emails",
                             "description": "Responded to client queries and internal communications.",
-                            "category": "Communication",
+                            "category": "0",
                             "status": "Completed",
                             "time_spent": "10 mins",
                             "wasted_time": "10 mins",
@@ -385,149 +385,4 @@ const treeData2: INode[] = [{
     ],
 }];
 
-const reporting = {
-    "id": 'root',
-    "notes": {
-        "id": "notes",
-        "question": "what to do in non-potential time"
-    },
-    "work": [
-        {
-            "id": "09_10",
-            "title": "work",
-            "hour": "09:00 - 10:00",
-            "tasks": [
-                {
-                    "id": "09_10_01",
-                    "title": "Fix login issue",
-                    "description": "Resolved bug causing login failures.",
-                    "category": "Development",
-                    "status": "Completed",
-                    "time_spent": "20 mins",
-                    "wasted_time": "10 mins",
-                    "focus_rate": "",
-                    "satisfaction_rate": "",
-                    "reason_for_satisfaction": "",
-                    "notes": ""
-                },
-                {
-                    "id": "09_10_02",
-                    "title": "Team standup meeting",
-                    "description": "Daily sync-up with the team.",
-                    "category": "Meetings",
-                    "status": "Completed",
-                    "time_spent": "30 mins",
-                    "wasted_time": "10 mins",
-                    "focus_rate": "",
-                    "satisfaction_rate": "",
-                    "reason_for_satisfaction": "",
-                    "notes": ""
-                },
-                {
-                    "id": "09_10_03",
-                    "title": "Review pull requests",
-                    "description": "Reviewed and approved 2 pull requests.",
-                    "category": "Code Review",
-                    "status": "Completed",
-                    "time_spent": "10 mins",
-                    "wasted_time": "10 mins",
-                    "focus_rate": "",
-                    "satisfaction_rate": "",
-                    "reason_for_satisfaction": "",
-                    "notes": ""
-                }
-            ]
-        },
-        {
-            "id": "10_11",
-            "hour": "10:00 - 11:00",
-            "tasks": [
-                {
-                    "id": "10_11_01",
-                    "title": "Research new feature",
-                    "description": "Explored APIs for implementing user authentication.",
-                    "category": "Research",
-                    "status": "In Progress",
-                    "time_spent": "40 mins",
-                    "wasted_time": "10 mins",
-                    "focus_rate": "",
-                    "satisfaction_rate": "",
-                    "reason_for_satisfaction": "",
-                    "notes": ""
-                },
-                {
-                    "id": "10_11_02",
-                    "title": "Update project documentation",
-                    "description": "Added details for the upcoming sprint.",
-                    "category": "Documentation",
-                    "status": "Completed",
-                    "time_spent": "15 mins",
-                    "wasted_time": "10 mins",
-                    "focus_rate": "",
-                    "satisfaction_rate": "",
-                    "reason_for_satisfaction": "",
-                    "notes": ""
-                },
-                {
-                    "id": "10_11_03",
-                    "title": "Break",
-                    "description": "Quick coffee break.",
-                    "category": "Break",
-                    "status": "Completed",
-                    "time_spent": "5 mins",
-                    "wasted_time": "10 mins",
-                    "focus_rate": "",
-                    "satisfaction_rate": "",
-                    "reason_for_satisfaction": "",
-                    "notes": ""
-                }
-            ]
-        },
-        {
-            "id": "11_12",
-            "hour": "11:00 - 12:00",
-            "tasks": [
-                {
-                    "id": "11_12_01",
-                    "title": "Write unit tests",
-                    "description": "Implemented tests for the login module.",
-                    "category": "Testing",
-                    "status": "Completed",
-                    "time_spent": "30 mins",
-                    "wasted_time": "10 mins",
-                    "focus_rate": "",
-                    "satisfaction_rate": "",
-                    "reason_for_satisfaction": "",
-                    "notes": ""
-                },
-                {
-                    "id": "11_12_02",
-                    "title": "Plan sprint backlog",
-                    "description": "Defined user stories and priorities for the next sprint.",
-                    "category": "Planning",
-                    "status": "Completed",
-                    "time_spent": "20 mins",
-                    "wasted_time": "10 mins",
-                    "focus_rate": "",
-                    "satisfaction_rate": "",
-                    "reason_for_satisfaction": "",
-                    "notes": ""
-                },
-                {
-                    "id": "11_12_03",
-                    "title": "Reply to emails",
-                    "description": "Responded to client queries and internal communications.",
-                    "category": "Communication",
-                    "status": "Completed",
-                    "time_spent": "10 mins",
-                    "wasted_time": "10 mins",
-                    "focus_rate": "",
-                    "satisfaction_rate": "",
-                    "reason_for_satisfaction": "",
-                    "notes": ""
-                }
-            ]
-        },
-
-    ]
-}
+ 
