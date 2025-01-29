@@ -24,10 +24,9 @@ type GetTasksResponse = {
 }
 
 type FilterQueries = {
-    name: string
-    category: string[]
-    status: number[]
-    productStatus: number
+    name?: string
+    category?: string[]
+    status?: number[] 
 }
 
 export type TaskListState = {
@@ -50,6 +49,7 @@ export const getTasks = createAsyncThunk(
             GetTasksResponse,
             GetTasksRequest
         >(data)
+ 
         return response.data
     }
 )
@@ -81,9 +81,8 @@ const initialState: TaskListState = {
     tableData: initialTableData,
     filterData: {
         name: '',
-        category: ['bags', 'cloths', 'devices', 'shoes', 'watches'],
-        status: [0, 1, 2],
-        productStatus: 0,
+        category: [ ],
+        status: [0, 1, 2], 
     },
 }
 
@@ -109,7 +108,7 @@ const taskListSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getTasks.fulfilled, (state, action) => {
+            .addCase(getTasks.fulfilled, (state, action) => { 
                 state.taskList = action.payload.data
                 state.tableData.total = action.payload.total
                 state.loading = false

@@ -1,8 +1,10 @@
-import { useRef, useState } from 'react'
-import AdaptableCard from '@/components/shared/AdaptableCard' 
+import { useEffect, useRef, useState } from 'react'
+import AdaptableCard from '@/components/shared/AdaptableCard'
 import { FormItem } from '@/components/ui/Form'
-import Dialog from '@/components/ui/Dialog' 
-import { ViewElement } from './AddEditTaskModalComponents' 
+import Dialog from '@/components/ui/Dialog'
+import { ViewElement } from './AddEditTaskModalComponents'
+import { getTasks, useAppDispatch, useAppSelector } from '../store'
+import { apiPutTask } from '@/services/SalesService'
 
 
 const Tree = ({ data }: TreeProps) => {
@@ -22,17 +24,33 @@ const Tree = ({ data }: TreeProps) => {
 
     const handleClose = () => setShowDialog(false);
     const handleSubmit = (record: NodeFormSchema) => {
-        Object.keys(record).forEach((key: string) => {
-            // @ts-ignore
-            data[key] = record[key]
-        })
+        const updateTask = async (data: any) => {
+            const response = await apiPutTask<boolean, FormModel>(data)
+            console.log(response)
+            return response.data
+        }
+        const updateData = async () => {
+            const success = await updateTask({ ...data, ...record })
+            if (success) {
+                console.log('update success')
+                Object.keys(record).forEach((key: string) => {
+                    // @ts-ignore
+                    data[key] = record[key]
+                })
+            } else {
+                console.log('not update')
+            }
+        }
+        updateData()
+        // Object.keys(record).forEach((key: string) => {
+        //     // @ts-ignore
+        //     data[key] = record[key]
+        // })
         handleClose()
-        console.log('form submit', record, { ...data, ...record }) 
     };
 
     const onSubmitBtn = () => {
-        // @ts-ignore
-        console.log(formRef.current.values)
+        // @ts-ignore 
 
         let formaData = JSON.parse(JSON.stringify(data))
         delete formaData.id
@@ -88,7 +106,7 @@ const Tree = ({ data }: TreeProps) => {
                 children={<ViewElement
                     data={data}
                     formRef={formRef}
-                    handleSubmit={(record:NodeFormSchema)=>handleSubmit(record)}
+                    handleSubmit={(record: NodeFormSchema) => handleSubmit(record)}
                     handleClose={handleClose}
                     onSubmitBtn={onSubmitBtn}
                 />}
@@ -98,15 +116,58 @@ const Tree = ({ data }: TreeProps) => {
     );
 };
 
-const TreeForm = ( ) => {
+const LoadTree = ({ treeNodes }: { treeNodes: string }) => {
+    let data: any = [] 
+        try {
+            data = JSON.parse(treeNodes)
+        } catch (error) {
+            console.log(error)
+            data = []
+        }  
+    return (
+        <>
+            {data.map((data: INode, index: number) => <Tree data={data} key={index} />)}
+        </>
+    )
+}
+const TreeForm = () => {
+    const dispatch = useAppDispatch()
+    let [treeNodes, setTreeNodes] = useState<INode[]>(treeData2)
+
+    const TaskListdata = useAppSelector(
+        (state) => state.taskList.data.taskList
+    ) || []
+    const fetchData = () => {
+        dispatch(getTasks({ pageIndex: 1, pageSize: 15, sort: { order: '', key: '' }, query: "", filterData: {} }))
+    }
+    useEffect(() => {
+        fetchData()
+    }, [])
+    useEffect(() => {
+        const treeObject: INode[] = [
+            {
+                id: "00",
+                name: "Task Tree",
+                color: "#FF5733",
+                // @ts-ignore
+                children: TaskListdata.filter((task) => `${task.id}`.length == 5)
+            }
+        ]
+        setTreeNodes(treeObject)
+    }, [TaskListdata])
+
+
+    const test = () => {
+        console.log(TaskListdata)
+    }
     return (
         <AdaptableCard className='mb-4'>
-           
-            <p className='mb-6'>Add or change tasks from the task tree</p>
-            <FormItem>
-                {treeData2.map((data, index) => <Tree data={data} key={index} />)}
 
-                {/* <FTree data={reporting} title="reporting" /> */}
+            <p className='mb-6' onClick={test}>Add or change tasks from the task tree</p>
+            <FormItem>
+                <LoadTree
+                    treeNodes={JSON.stringify(treeNodes)}
+                />
             </FormItem>
 
         </AdaptableCard>
@@ -385,4 +446,4 @@ const treeData2: INode[] = [{
     ],
 }];
 
- 
+

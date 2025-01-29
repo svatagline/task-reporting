@@ -22,19 +22,15 @@ export const protectedRoutes = [
         key: 'addEditTask',
         path: `/add-edit-task`,
         component: lazy(() => import('@/views/tasks/TaskAddEdit')),
-        authority: [ADMIN, USER],
-        meta: {
-            header: 'Add New Task',
-        },
+        authority: [],
+       
     },
     {
         key: 'manageTaskTree',
         path: `/manage-task-tree`,
         component: lazy(() => import('@/views/tasks/ManageTaskTree')),
-        authority: [ADMIN, USER],
-        meta: {
-            header: 'Manage Tasks Tree',
-        },
+        authority: [],
+       
     },
     {
         key: 'collapseMenu.item1',

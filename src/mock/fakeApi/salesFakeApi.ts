@@ -9,8 +9,7 @@ export default function salesFakeApi(server: Server, apiPrefix: string) {
     })
 
     server.post(`${apiPrefix}/tasks`, (schema, { requestBody }) => {
-        const body = JSON.parse(requestBody)
-        console.log({body})
+        const body = JSON.parse(requestBody) 
         const { pageIndex, pageSize, sort, query } = body
         const { order, key } = sort
         // const tasks = schema.db.tasksData 

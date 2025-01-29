@@ -7,7 +7,10 @@ import Notification from '@/components/ui/Notification'
 import { useNavigate } from 'react-router-dom'
 import { apiCreateTask } from '@/services/SalesService' 
 import TreeForm from '../TaskForm/TreeForm'
+import { injectReducer } from '@/store'
+import reducer from '../store'
 
+injectReducer('taskList', reducer)
 const ManageTaskTree = () => {
     const navigate = useNavigate()
 

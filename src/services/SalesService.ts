@@ -42,7 +42,7 @@ export async function apiGetTask<T, U extends Record<string, unknown>>(
 
 export async function apiPutTask<T, U extends Record<string, unknown>>(
     data: U
-) {
+) { 
     return ApiService.fetchData<T>({
         url: '/tasks/update',
         method: 'put',
@@ -54,6 +54,7 @@ export async function apiCreateTask<
     T,
     U extends Record<string, unknown>
 >(data: U) {
+     
     return ApiService.fetchData<T>({
         url: '/tasks/create',
         method: 'post',

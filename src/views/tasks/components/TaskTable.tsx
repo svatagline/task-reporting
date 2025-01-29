@@ -21,6 +21,7 @@ import type {
     OnSortParam,
     ColumnDef,
 } from '@/components/shared/DataTable'
+import TreeForm from '../TaskForm/TreeForm'
 
 type Product = {
     id: string
@@ -125,6 +126,9 @@ const TaskTable = () => {
     const data = useAppSelector(
         (state) => state.taskList.data.taskList
     )
+    const data2 = useAppSelector(
+        (state) => state 
+    )
 
     useEffect(() => {
         fetchData()
@@ -161,7 +165,7 @@ const TaskTable = () => {
                 accessorKey: 'category',
                 cell: (props) => {
                     const row = props.row.original
-                    return <span className="capitalize">{row.category}</span>
+                    return <span className="capitalize" onClick={()=>console.log(row)}>{row.category}</span>
                 },
             },
             
@@ -217,8 +221,10 @@ const TaskTable = () => {
     }
 
     return (
-        <>
+        <div   onClick={()=>console.log(data2)}>
+        
             <DataTable
+              
                 ref={tableRef}
                 columns={columns}
                 data={data}
@@ -233,9 +239,9 @@ const TaskTable = () => {
                 onPaginationChange={onPaginationChange}
                 onSelectChange={onSelectChange}
                 onSort={onSort}
-            />
+            /> 
             <TaskDeleteConfirmation />
-        </>
+        </div>
     )
 }
 
