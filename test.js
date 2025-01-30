@@ -275,21 +275,26 @@ let data = [
 ]
 
 
-let newData = data.map((i) => { return { ...i, children: [] } })
+
 function makeTreeView(data) {
-    const keys = data.map((i) => i.id)
+    let newData = data.map((i) => { return { ...i, children: [] } })
+    const keys = newData.map((i) => i.id)
 
     keys.forEach((child) => {
         const parentId = keys.find((k) => `${child}`.includes(k) && k !== child)
         if (parentId) {
-            const childData = data.find((c) => c.id === child)
-            data = data.map((d) => d.id == parentId ? { ...d, children: [...d.children, childData] } : d.id == child ?`false`:d) 
-            // console.log(parentId, child)
+            const childData = newData.find((c) => c.id === child)
+            newData = newData.map((d) => d.id == parentId ? { ...d, children: [...d.children, childData] } : d.id == child ? `false` : d) 
         }
-    }) 
-   
-    return data 
+    })
+
+    const filterdData = newData.filter(item =>
+        typeof item === 'object'
+    ) 
+
+    return filterdData
 }
 
 
-console.log(makeTreeView(newData))
+console.log(makeTreeView(data))
+

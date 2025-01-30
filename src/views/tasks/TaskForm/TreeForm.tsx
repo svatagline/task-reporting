@@ -138,8 +138,7 @@ const TreeForm = () => {
     const TaskListdata = useAppSelector(
         (state) => state.taskList.data.taskList
     ) || []
-    const fetchData = () => {
-        console.log('data fetching')
+    const fetchData = () => { 
         dispatch(getTasks({ pageIndex: 1, pageSize: 20, sort: { order: '', key: '' }, query: "", filterData: {} }))
     }
     useEffect(() => {

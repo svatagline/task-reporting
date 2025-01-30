@@ -1,5 +1,6 @@
-import { childFormFields } from "@/views/tasks/TaskForm/AddEditTaskModalComponents"
+import { childFormFields } from "@/constants/tree.constant"
 
+ 
 export function makeTreeView(data: INode[]) {
     let newData: INode[] = data.map((i) => { return { ...i, children: [] } })
     const keys = newData.map((i) => i.id)

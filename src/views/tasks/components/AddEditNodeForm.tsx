@@ -4,13 +4,14 @@ import { Field, FieldProps, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { forwardRef, useEffect, useRef, useState } from 'react'
 import { Button, Checkbox, DatePicker, Dialog, Radio, Select, Switcher, TimeInput } from '@/components/ui'
-import { childFormFields, RemoveElement, rowNestedFormData, ViewElement } from '../TaskForm/AddEditTaskModalComponents'
+import {   RemoveElement, ViewElement } from '../TaskForm/AddEditTaskModalComponents'
 import CreatableSelect from 'react-select/creatable'
 import { RichTextEditor } from '@/components/shared'
 import { deleteTask, getTasks, useAppDispatch, useAppSelector } from '../store'
 import { setSelectedTask, toggleDeleteConfirmation } from '../store'
 import { apiCreateTask, apiPutTask } from '@/services/SalesService'
-import { getFormFields, getNewId } from '@/utils/helper'
+import {  getFormFields, getNewId } from '@/utils/helper'
+import { childFormFields, rowNestedFormData } from '@/constants/tree.constant'
 const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
     const rowNestedFormState = { data: rowNestedFormData, action: 'none' }
     const [showNestedDialog, setShowNestedDialog] = useState(false);
@@ -122,16 +123,16 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
     }
 
 
-    const onAction = (action: string, record: INode) => {
+    const onAction = (action?: string, record?: INode) => { 
         if (action === 'add') {
             setShowNestedDialog(true)
-            setNestedFormData({ data: { ...record, childFormType: `${`${data.id}`.length + 3}` }, action: "add" })
+            record && setNestedFormData({ data: { ...record, childFormType: `${`${data.id}`.length + 3}` }, action: "add" })
         } else if (action === 'update') {
             setShowNestedDialog(true)
-            setNestedFormData({ data: record, action: "update" })
+            record &&setNestedFormData({ data: record, action: "update" })
         } else if (action === 'delete') {
             setShowNestedDialog(true)
-            setNestedFormData({ data: record, action: "delete" })
+            record &&setNestedFormData({ data: record, action: "delete" })
         }
     }
 
@@ -448,6 +449,7 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
                         <Button
                             size="sm"
                             className="ltr:mr-2 rtl:ml-2"
+                            // @ts-ignore
                             onClick={() => onAction('add', { ...getFormFields(`${`${data.id}`.length + 3}`) })}
                             variant='solid'
                         >
