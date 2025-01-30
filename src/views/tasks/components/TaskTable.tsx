@@ -57,7 +57,7 @@ const inventoryStatusColor: Record<
     },
 }
 
-const ActionColumn = ({ row }: { row: Product }) => {
+const ActionColumn = ({ row }: { row: INode }) => {
     const dispatch = useAppDispatch()
     const { textTheme } = useThemeClass()
     const navigate = useNavigate()
@@ -89,16 +89,16 @@ const ActionColumn = ({ row }: { row: Product }) => {
     )
 }
 
-const TaskColumn = ({ row }: { row: Product }) => {
-    const avatar = row.img ? (
-        <Avatar src={row.img} />
-    ) : (
-        <Avatar icon={<FiPackage />} />
-    )
+const TaskColumn = ({ row }: { row: INode }) => {
+    // const avatar = row.img ? (
+    //     <Avatar src={row.img} />
+    // ) : (
+    //     <Avatar icon={<FiPackage />} />
+    // )
 
     return (
         <div className="flex items-center">
-            {avatar}
+            {/* {avatar} */}
             <span className={`ml-2 rtl:mr-2 font-semibold`}>{row.name}</span>
         </div>
     )
@@ -155,8 +155,9 @@ const TaskTable = () => {
         dispatch(getTasks({ pageIndex, pageSize, sort, query, filterData }))
     }
 
-    const columns: ColumnDef<Product>[] = useMemo(
+    const columns: ColumnDef<INode>[] = useMemo(
         () => [
+            
             {
                 header: 'Name',
                 accessorKey: 'name',
@@ -166,11 +167,27 @@ const TaskTable = () => {
                 },
             },
             {
+                header: 'Id',
+                accessorKey: 'id',
+                cell: (props) => {
+                    const row = props.row.original
+                    return <span className="capitalize"  >{row.id}</span>
+                },
+            },
+            {
                 header: 'Category',
                 accessorKey: 'category',
                 cell: (props) => {
                     const row = props.row.original
                     return <span className="capitalize" onClick={()=>console.log(row)}>{row.category}</span>
+                },
+            },
+            {
+                header: 'Time spent',
+                accessorKey: 'time_spent',
+                cell: (props) => {
+                    const row = props.row.original
+                    return <span className="capitalize"  >{row.time_spent?row.time_spent:row.id}</span>
                 },
             },
             
