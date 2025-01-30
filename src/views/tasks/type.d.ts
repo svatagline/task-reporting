@@ -41,6 +41,7 @@ interface INode {
 interface TreeProps {
     data: INode; // Expecting an array of INode
     key?: string | number;
+    fetchData?:()=>void
 }
 interface IFormTree {
     touched: FormikTouched<FormFieldsName>
@@ -58,7 +59,8 @@ interface NodeFormProps extends CommonProps {
     forgotPasswordUrl?: string
     signUpUrl?: string
     handleSubmit: (value: NodeFormSchema) => void
-    data: INode 
+    data: INode ,
+    fetchData:()=>void
 }
 
 type NodeFormSchema = {

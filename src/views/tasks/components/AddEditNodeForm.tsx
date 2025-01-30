@@ -10,6 +10,7 @@ import { RichTextEditor } from '@/components/shared'
 import { deleteTask, getTasks, useAppDispatch, useAppSelector } from '../store'
 import { setSelectedTask, toggleDeleteConfirmation } from '../store'
 import { apiCreateTask, apiPutTask } from '@/services/SalesService'
+import { getFormFields, getNewId } from '@/utils/helper'
 const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
     const rowNestedFormState = { data: rowNestedFormData, action: 'none' }
     const [showNestedDialog, setShowNestedDialog] = useState(false);
@@ -24,7 +25,8 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
     const {
         disableSubmit = false,
         handleSubmit,
-        data
+        data,
+        fetchData
     } = props
     let parseData = JSON.parse(JSON.stringify(data))
     let formaData = { ...parseData }
@@ -57,42 +59,28 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
     })
 
 
-    const getNewId = (lastId: string) => {
-        console.log({ lastId })
-        if (['5', '8'].includes(`${lastId.length}`)) {
-            if (lastId.length < 6) {
-                const newId = `${lastId}_01`
-                return newId
-            } else {
-                const id = parseInt(lastId.split('_')[2])
-                const newId = id < 10 ? `0${id + 1}` : id + 1
-                return `${lastId.slice(0, 5)}_${newId}`
-            }
-        } else {
-            alert("Id not valid")
-        }
-    }
-
+ 
     const onNestedFormSubmit = () => {
         if (data.children) {
             // @ts-ignore
 
             let nestedFormRefCurrentValues = nestedFormRef?.current?.values || {}
             if (nestedFormData.action == 'add') {
-                const newId =   getNewId(data.children.length > 0 ? `${data.children.map(child => child.id)[data.children.length - 1]}` : `${data.id}`)
+                const newId = getNewId(data.children.length > 0 ? `${data.children.map(child => child.id)[data.children.length - 1]}` : `${data.id}`)
                 const addTask = async (data: any) => {
                     const response = await apiCreateTask<boolean, FormModel>(data)
                     return response.data
                 }
                 const addData = async () => {
-                    const success = await addTask({ ...nestedFormRefCurrentValues, id:newId })
+                    const success = await addTask({ ...nestedFormRefCurrentValues, id: newId })
                     if (success) {
-                        data.children.push({ ...nestedFormRefCurrentValues, id:newId })
+                        data.children && data.children.push({ ...nestedFormRefCurrentValues, id: newId })
+                        fetchData()
                     }
                 }
                 addData()
 
-            } else if (nestedFormData.action == 'update') { 
+            } else if (nestedFormData.action == 'update') {
                 const updateTask = async (data: any) => {
                     const response = await apiPutTask<boolean, FormModel>(data)
                     console.log(response)
@@ -101,9 +89,10 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
                 const updateData = async () => {
                     const success = await updateTask({ ...nestedFormData.data, ...nestedFormRefCurrentValues })
                     if (success) {
-                           console.log('update success')
-                        data.children = data.children.map((child, i) => child.id === nestedFormData.data.id ? { ...nestedFormData.data, ...nestedFormRefCurrentValues } : child)
-                    }else{
+                        fetchData()
+                        console.log('update success.....')
+                        data.children =data.children && data.children.map((child, i) => child.id === nestedFormData.data.id ? { ...nestedFormData.data, ...nestedFormRefCurrentValues } : child)
+                    } else {
                         console.log('not update')
                     }
                 }
@@ -118,6 +107,8 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
                             dispatch(setSelectedTask(nestedFormData.data.id))
                             data.children = data.children.filter((child, i) =>
                                 child.id !== nestedFormData.data.id)
+
+                            fetchData()
                         } else {
                             dispatch(toggleDeleteConfirmation(false))
                         }
@@ -130,20 +121,11 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
         handleClose()
     }
 
-    const getFormFields = (formType: string) => {
 
-        if (childFormFields[formType]) {
-            const fieldsWithValues = Object.values(childFormFields[formType]).reduce((acc: any, field: ITaskForm) => {
-                acc[`${field.title}`] = "";
-                return acc;
-            }, {});
-            return fieldsWithValues;
-        }
-    }
     const onAction = (action: string, record: INode) => {
         if (action === 'add') {
             setShowNestedDialog(true)
-            setNestedFormData({ data: { ...record, childFormType: `${`${data.id}`.length + 3}`, ctemphildFormType: `${`${data.id}`.length + 3}`, parentId: `parentId : ${data.id};parentId lebngth: ${`${data.id}`.length + 3} . ` }, action: "add" })
+            setNestedFormData({ data: { ...record, childFormType: `${`${data.id}`.length + 3}` }, action: "add" })
         } else if (action === 'update') {
             setShowNestedDialog(true)
             setNestedFormData({ data: record, action: "update" })
@@ -152,16 +134,7 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
             setNestedFormData({ data: record, action: "delete" })
         }
     }
-    const timeStamp = (str: string) => {
-        return new Date(str).getTime();
-    }
-    const parseObj = (str: string) => {
-        try {
-            return JSON.parse(str);
-        } catch (error) {
-            return {}
-        }
-    }
+
     const FormInputType = ({ type, data, values }: { type: string, values: any, data: any }) => {
         let InputElement = <h1></h1>
         switch (type) {
@@ -335,9 +308,7 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
                             )}
                         </Checkbox.Group>
                     )}
-                </Field>
-
-
+                </Field> 
                 break;
             case 'radio':
                 InputElement = <Field name={data.key}>
@@ -361,13 +332,10 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
                                         <Radio key={index} value={i.value}>{i.label}</Radio>
                                     )
                                 }
-                                )}
-
+                                )} 
                         </Radio.Group>
                     )}
-                </Field>
-
-
+                </Field> 
                 break;
             case 'switch':
                 InputElement = <Field name={data.key}>
@@ -383,15 +351,12 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
                                     field.name,
                                     !values[data.key]
                                 )
-                            }
-
+                            } 
                             }
                         />
 
                     )}
-                </Field>
-
-
+                </Field> 
                 break;
             default:
                 InputElement = <Field
@@ -401,10 +366,7 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
                     component={Input}
                 />
                 break;
-        }
-
-
-
+        } 
         return InputElement
     }
 

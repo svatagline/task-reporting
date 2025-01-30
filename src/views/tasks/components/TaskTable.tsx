@@ -126,6 +126,13 @@ const TaskTable = () => {
     const data = useAppSelector(
         (state) => state.taskList.data.taskList
     )
+    const TaskListdata = useAppSelector(
+        (state) => state.taskList.data.taskList
+    ) || []
+    const test = ( ) => {
+        
+        console.log(TaskListdata)
+    }
     const data2 = useAppSelector(
         (state) => state 
     )
@@ -221,7 +228,7 @@ const TaskTable = () => {
     }
 
     return (
-        <div   onClick={()=>console.log(data2)}>
+        <div   onClick={test}>
         
             <DataTable
               

@@ -4,7 +4,8 @@ import AddEditNodeForm from "../components/AddEditNodeForm"
 export const ViewElement = ({ data, formRef,
     handleSubmit,
     handleClose,
-    onSubmitBtn }: ExtendedTreeProps) => {
+    onSubmitBtn,
+    fetchData }: ExtendedTreeProps) => {
 
     return (
 
@@ -13,6 +14,7 @@ export const ViewElement = ({ data, formRef,
                 ref={formRef}
                 handleSubmit={(record: NodeFormSchema) => handleSubmit && handleSubmit(record)}
                 data={{...data,childFormType:data.childFormType?data.childFormType :`${`${data.id}`.length  }`}} 
+                fetchData={fetchData ? fetchData:()=>{}}
                
             />
             <div>

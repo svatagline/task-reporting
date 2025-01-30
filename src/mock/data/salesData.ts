@@ -467,9 +467,10 @@ export const tasksData = [
 export const tasksTreeData = [
 
     {
+
       "id": "09_10",
-      "name": "09:00 am- 10:00 am",
-      "hour": "09:00 am- 10:00 am",
+      "name": "09:00 am - 10:00 am",
+      "hour": "09:00 am - 10:00 am",
       children: [
         {
           "id": "09_10_01",
@@ -625,6 +626,7 @@ export const tasksTreeData = [
         }
       ]
     },
+   
   ]
 export const ordersData = [
     {
