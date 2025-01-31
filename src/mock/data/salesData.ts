@@ -465,167 +465,175 @@ export const tasksData = [
     },
 ]
 export const tasksTreeData = [
-
-
-
     {
-        "id": "07_08",
-        "name": "07:00 am - 08:00 am",
-        "hour": "07:00 am - 08:00 am",
+        id: "root_1738200600",
+        name: "Reporting",
+        time: "30 Jan 2025",
         children: [
             {
-                "id": "07_08_01",
-                "name": "null",
-                "description": "",
-                "category": 0,
-                "status": "-",
-                "time_spent": "-",
-                "wasted_time": "-",
-                "focus_rate": "-",
-                "satisfaction_rate": 0,
-                "reason_for_satisfaction": "late sleep",
-                "notes": "no alarm ranged"
-            }
-        ]
-    },
-    {
-        "id": "09_11",
-        "name": "09:00 am - 11:00 am",
-        "hour": "09:00 am - 11:00 am",
-        children: [
-            {
-                "id": "09_11_01",
-                "name": "Management",
-                "description": "smit reference and earn, absent message, task add in daily update",
-                "category": 2,
-                "status": "-",
-                "time_spent": "35",
-                "wasted_time": "-",
-                "focus_rate": "-",
-                "satisfaction_rate": 10,
-                "reason_for_satisfaction": "-",
-                "notes": "-"
-            },
-            {
-                "id": "09_11_02",
-                "name": "Programming",
-                "description": "Remove record from Tree vie api",
-                "category": 1,
-                "status": "-",
-                "time_spent": "85",
-                "wasted_time": "-",
-                "focus_rate": "-",
-                "satisfaction_rate": 10,
-                "reason_for_satisfaction": "",
-                "notes": ""
-            },
-        ]
-    },
-    {
-        "id": "11_01",
-        "name": "11:00 am - 01:00 pm",
-        "hour": "11:00 am - 01:00 pm",
-        children: [
-            {
-                "id": "11_01_01",
-                "name": "DSM",
-                "description": "array,string question, javascript exercise web site search and practice.",
-                "category": 1,
-                "status": "-",
-                "time_spent": "120",
-                "wasted_time": "-",
-                "focus_rate": "-",
-                "satisfaction_rate": 5,
-                "reason_for_satisfaction": "need practice on splice, slice",
-                "notes": ""
+                id: '1738200600_1738204200', name: '7 AM to 8 AM',
+                children: [
+                    {
+                        "id": "1738200600_1738204200_01",
+                        "name": "Read book",
+                        "description": "",
+                        "category": '0',
+                        "status": "-",
+                        "time_spent": "0",
+                        "wasted_time": "0",
+                        "focus_rate": "0",
+                        "satisfaction_rate": '0',
+                        "reason_for_satisfaction": "",
+                        "notes": ""
+                    }
+                ]
             },
 
-        ]
-    },
-
-    {
-        "id": "01_02",
-        "name": "01:00 pm - 02:00 pm",
-        "hour": "01:00 pm - 02:00 pm",
-        children: [
             {
-                "id": "01_02_01",
-                "name": "eSkill",
-                "description": "presentation",
-                "category": 1,
-                "status": "-",
-                "time_spent": "60",
-                "wasted_time": "-",
-                "focus_rate": "-",
-                "satisfaction_rate": 10,
-                "reason_for_satisfaction": "",
-                "notes": ""
+                id: '1738207800_1738222200', name: '9 AM to 1 PM',
+                children: [
+                    {
+                        "id": "1738207800_1738222200_01",
+                        "name": "Management",
+                        "description": "add reporting, fresh,account opening",
+                        "category": '2',
+                        "status": "-",
+                        "time_spent": "60",
+                        "wasted_time": "0",
+                        "focus_rate": "0",
+                        "satisfaction_rate": '10',
+                        "reason_for_satisfaction": "-",
+                        "notes": "-"
+                    },
+                    {
+                        "id": "1738207800_1738222200_02",
+                        "name": "Programming",
+                        "description": "Bug fixing in modifying tree ",
+                        "category": '1',
+                        "status": "-",
+                        "time_spent": "180",
+                        "wasted_time": "0",
+                        "focus_rate": "0",
+                        "satisfaction_rate": '10',
+                        "reason_for_satisfaction": "",
+                        "notes": ""
+                    },
+                ]
             },
-        ]
-    },
-    {
-        "id": "02_03",
-        "name": "02:00 pm - 03:00 pm",
-        "hour": "02:00 pm - 03:00 pm",
-        children: [
+
             {
-                "id": "02_03_01",
-                "name": "null",
-                "description": "take it support to solve pc hang",
-                "category": 0,
-                "status": "-",
-                "time_spent": "60",
-                "wasted_time": "-",
-                "focus_rate": "-",
-                "satisfaction_rate": 0,
-                "reason_for_satisfaction": "Pc hang",
-                "notes": ""
+                id: '1738222200_1738225800', name: '1 PM to 2 PM',
+                children: [
+                    {
+                        "id": "1738222200_1738225800_01",
+                        "name": "eSkill",
+                        "description": "presentation",
+                        "category": '1',
+                        "status": "-",
+                        "time_spent": "60",
+                        "wasted_time": "0",
+                        "focus_rate": "0",
+                        "satisfaction_rate": '10',
+                        "reason_for_satisfaction": "",
+                        "notes": ""
+                    },
+                ]
             },
-        ]
-    },
-    {
-        "id": "03_07",
-        "name": "03:00 pm - 07:00 pm",
-        "hour": "03:00 pm - 07:00 pm",
-        children: [
             {
-                "id": "03_07_01",
-                "name": "Programming",
-                "description": "Add/Update record from Tree vie api",
-                "category": 1,
-                "status": "-",
-                "time_spent": "230",
-                "wasted_time": "30",
-                "focus_rate": "-",
-                "satisfaction_rate": 5,
-                "reason_for_satisfaction": "more time consuming in debugging and logic building",
-                "notes": ""
+                id: '1738225800_1738233000', name: '2 PM to 4 PM',
+                children: [
+                    {
+                        "id": "1738225800_1738233000_01",
+                        "name": "DSM",
+                        "description": "array,string question, javascript exercise web site search and practice.",
+                        "category": '1',
+                        "status": "-",
+                        "time_spent": "120",
+                        "wasted_time": "0",
+                        "focus_rate": "0",
+                        "satisfaction_rate": '5',
+                        "reason_for_satisfaction": "need practice on javascript",
+                        "notes": ""
+                    },
+                ]
+
             },
-        ]
-    },
-    {
-        "id": "21_23",
-        "name": "09:00 pm - 11:00 pm",
-        "hour": "09:00 pm - 11:00 pm",
-        children: [
+
             {
-                "id": "21_23_01",
-                "name": "Programming",
-                "description": "vp",
-                "category": 3,
-                "status": "-",
-                "time_spent": "60",
-                "wasted_time": "60",
-                "focus_rate": "-",
-                "satisfaction_rate": 10,
-                "reason_for_satisfaction": "",
-                "notes": ""
+                id: '1738233000_1738240200', name: '4 PM to 6 PM',
+                children: [
+                    {
+                        "id": "1738233000_1738240200_01",
+                        "name": "-",
+                        "description": "indusind bank visit",
+                        "category": '0',
+                        "status": "-",
+                        "time_spent": "60",
+                        "wasted_time": "0",
+                        "focus_rate": "0",
+                        "satisfaction_rate": '0',
+                        "reason_for_satisfaction": "dormate account close",
+                        "notes": ""
+                    },
+                ]
             },
-        ]
-    },
+
+            {
+                id: '1738240200_1738243800', name: '6 PM to 7 PM',
+                children: [
+                    {
+                        "id": "1738240200_1738243800_01",
+                        "name": "Programming",
+                        "description": "Testing",
+                        "category": '1',
+                        "status": "-",
+                        "time_spent": "60",
+                        "wasted_time": "0",
+                        "focus_rate": "0",
+                        "satisfaction_rate": '10',
+                        "reason_for_satisfaction": "",
+                        "notes": ""
+                    },
+                ]
+            },
 
 
+            {
+                id: '1738251000_1738258200', name: '9 PM to 11 PM',
+                children: [
+                    {
+                        "id": "1738251000_1738258200_01",
+                        "name": "reading",
+                        "description": "vp",
+                        "category": '3',
+                        "status": "-",
+                        "time_spent": "120",
+                        "wasted_time": "0",
+                        "focus_rate": "0",
+                        "satisfaction_rate": '10',
+                        "reason_for_satisfaction": "",
+                        "notes": ""
+                    },
+                ]
+            },
 
+            {
+                id: '1738200600_1738258200', name: 'Notes',
+                children: [
+                    {
+                        "id": "1738200600_1738258200_01",
+                        "name": "Notes_1738200600",
+                        "time_spent": "960",
+                        'exercise': '12',
+                        "category": '0',
+                        'deep/light sleep': "02:09/3:45",
+                        "typing-speed": "547 cpm,740 char,4:18 ct, 3:01 act",
+
+                    },
+                ]
+
+            }]
+    }
 ]
 export const ordersData = [
     {

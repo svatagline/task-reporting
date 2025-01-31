@@ -1,159 +1,171 @@
-export const treeRawData: INode[] = [{
-    id: "root",
-    name: "Root Folder",
-    color: "#FF5733", // Unique color for the root node
-    children: [
-        {
-            id: "work",
-            name: "work",
-            color: "#FF6633", // Unique color for Folder 3
+// @ts-ignore
+export const treeRawData: INode[] = [
+    {
+        id: "1738200600",
+        name: "Reporting",
+        time: "30 Jan 2025",
+        children: [{
+            id: '1738200600_1738204200', name: '7 AM to 8 AM',
             children: [
-
                 {
-                    "id": "09_10",
-                    "name": "09_10",
-                    "hour": "09:00 - 10:00",
-                    'childFormType': "taskForm",
-                    children: [
-                        {
-                            "id": "09_10_01",
-                            "name": "Fix login issue",
-                            "description": "Resolved bug causing login failures.",
-                            "category": "1",
-                            "status": "Completed",
-                            "time_spent": "20 mins",
-                            "wasted_time": "10 mins",
-                            "focus_rate": "",
-                            "satisfaction_rate": "",
-                            "reason_for_satisfaction": "",
-                            "notes": ""
-                        },
-                        {
-                            "id": "09_10_02",
-                            "name": "Team standup meeting",
-                            "description": "Daily sync-up with the team.",
-                            "category": "1",
-                            "status": "Completed",
-                            "time_spent": "30 mins",
-                            "wasted_time": "10 mins",
-                            "focus_rate": "",
-                            "satisfaction_rate": "",
-                            "reason_for_satisfaction": "",
-                            "notes": ""
-                        },
-                        {
-                            "id": "09_10_03",
-                            "name": "Review pull requests",
-                            "description": "Reviewed and approved 2 pull requests.",
-                            "category": "0",
-                            "status": "Completed",
-                            "time_spent": "10 mins",
-                            "wasted_time": "10 mins",
-                            "focus_rate": "",
-                            "satisfaction_rate": "",
-                            "reason_for_satisfaction": "",
-                            "notes": ""
-                        }
-                    ]
-                },
-                {
-                    "id": "10_11",
-                    "name": "10_11",
-                    "hour": "10:00 - 11:00",
-                    'childFormType': "taskForm",
-                    children: [
-                        {
-                            "id": "10_11_01",
-                            "name": "Research new feature",
-                            "description": "Explored APIs for implementing user authentication.",
-                            "category": "1",
-                            "status": "In Progress",
-                            "time_spent": "40 mins",
-                            "wasted_time": "10 mins",
-                            "focus_rate": "",
-                            "satisfaction_rate": "",
-                            "reason_for_satisfaction": "",
-                            "notes": ""
-                        },
-                        {
-                            "id": "10_11_02",
-                            "name": "Update project documentation",
-                            "description": "Added details for the upcoming sprint.",
-                            "category": "2",
-                            "status": "Completed",
-                            "time_spent": "15 mins",
-                            "wasted_time": "10 mins",
-                            "focus_rate": "",
-                            "satisfaction_rate": "",
-                            "reason_for_satisfaction": "",
-                            "notes": ""
-                        },
-                        {
-                            "id": "10_11_03",
-                            "name": "Break",
-                            "description": "Quick coffee break.",
-                            "category": "0",
-                            "status": "Completed",
-                            "time_spent": "5 mins",
-                            "wasted_time": "10 mins",
-                            "focus_rate": "",
-                            "satisfaction_rate": "",
-                            "reason_for_satisfaction": "",
-                            "notes": ""
-                        }
-                    ]
-                },
-                {
-                    "id": "11_12",
-                    "name": "11_12",
-                    "hour": "11:00 - 12:00",
-                    'childFormType': "taskForm",
-                    children: [
-                        {
-                            "id": "11_12_01",
-                            "name": "Write unit tests",
-                            "description": "Implemented tests for the login module.",
-                            "category": "1",
-                            "status": "Completed",
-                            "time_spent": "30 mins",
-                            "wasted_time": "10 mins",
-                            "focus_rate": "",
-                            "satisfaction_rate": "",
-                            "reason_for_satisfaction": "",
-                            "notes": ""
-                        },
-                        {
-                            "id": "11_12_02",
-                            "name": "Plan sprint backlog",
-                            "description": "Defined user stories and priorities for the next sprint.",
-                            "category": "2",
-                            "status": "Completed",
-                            "time_spent": "20 mins",
-                            "wasted_time": "10 mins",
-                            "focus_rate": "",
-                            "satisfaction_rate": "",
-                            "reason_for_satisfaction": "",
-                            "notes": ""
-                        },
-                        {
-                            "id": "11_12_03",
-                            "name": "Reply to emails",
-                            "description": "Responded to client queries and internal communications.",
-                            "category": "0",
-                            "status": "Completed",
-                            "time_spent": "10 mins",
-                            "wasted_time": "10 mins",
-                            "focus_rate": "",
-                            "satisfaction_rate": "",
-                            "reason_for_satisfaction": "",
-                            "notes": ""
-                        }
-                    ]
-                },
-            ],
+                    "id": "1738200600_1738204200_01",
+                    "name": "Read book",
+                    "description": "",
+                    "category": '0',
+                    "status": "-",
+                    "time_spent": "-",
+                    "wasted_time": "-",
+                    "focus_rate": "-",
+                    "satisfaction_rate": '0',
+                    "reason_for_satisfaction": "",
+                    "notes": ""
+                }
+            ]
         },
-    ],
-}];
+
+        {
+            id: '1738207800_1738222200', name: '9 AM to 1 PM',
+            children: [
+                {
+                    "id": "1738207800_1738222200_01",
+                    "name": "Management",
+                    "description": "add reporting, fresh,account opening",
+                    "category": '2',
+                    "status": "-",
+                    "time_spent": "60",
+                    "wasted_time": "-",
+                    "focus_rate": "-",
+                    "satisfaction_rate": '10',
+                    "reason_for_satisfaction": "-",
+                    "notes": "-"
+                },
+                {
+                    "id": "1738207800_1738222200_02",
+                    "name": "Programming",
+                    "description": "Bug fixing in modifying tree ",
+                    "category": '1',
+                    "status": "-",
+                    "time_spent": "180",
+                    "wasted_time": "-",
+                    "focus_rate": "-",
+                    "satisfaction_rate": '10',
+                    "reason_for_satisfaction": "",
+                    "notes": ""
+                },
+            ]
+        },
+
+        {
+            id: '1738222200_1738225800', name: '1 PM to 2 PM',
+            children: [
+                {
+                    "id": "1738222200_1738225800_01",
+                    "name": "eSkill",
+                    "description": "presentation",
+                    "category": '1',
+                    "status": "-",
+                    "time_spent": "60",
+                    "wasted_time": "-",
+                    "focus_rate": "-",
+                    "satisfaction_rate": '10',
+                    "reason_for_satisfaction": "",
+                    "notes": ""
+                },
+            ]
+        },
+        {
+            id: '1738225800_1738233000', name: '2 PM to 4 PM',
+            children: [
+                {
+                    "id": "1738225800_1738233000_01",
+                    "name": "DSM",
+                    "description": "array,string question, javascript exercise web site search and practice.",
+                    "category": '1',
+                    "status": "-",
+                    "time_spent": "120",
+                    "wasted_time": "-",
+                    "focus_rate": "-",
+                    "satisfaction_rate": '5',
+                    "reason_for_satisfaction": "need practice on javascript",
+                    "notes": ""
+                },
+            ]
+
+        },
+
+        {
+            id: '1738233000_1738240200', name: '4 PM to 6 PM',
+            children: [
+                {
+                    "id": "1738233000_1738240200_01",
+                    "name": "-",
+                    "description": "indusind bank visit",
+                    "category": '0',
+                    "status": "-",
+                    "time_spent": "60",
+                    "wasted_time": "-",
+                    "focus_rate": "-",
+                    "satisfaction_rate": '0',
+                    "reason_for_satisfaction": "dormate account close",
+                    "notes": ""
+                },
+            ]
+        },
+
+        {
+            id: '1738240200_1738243800', name: '6 PM to 7 PM',
+            children: [
+                {
+                    "id": "1738240200_1738243800_01",
+                    "name": "Programming",
+                    "description": "Testing",
+                    "category": '1',
+                    "status": "-",
+                    "time_spent": "60",
+                    "wasted_time": "-",
+                    "focus_rate": "-",
+                    "satisfaction_rate": '10',
+                    "reason_for_satisfaction": "",
+                    "notes": ""
+                },
+            ]
+        },
+
+
+        {
+            id: '1738251000_1738258200', name: '9 PM to 11 PM',
+            children: [
+                {
+                    "id": "1738251000_1738258200_01",
+                    "name": "read",
+                    "description": "vp",
+                    "category": '3',
+                    "status": "-",
+                    "time_spent": "120",
+                    "wasted_time": "0",
+                    "focus_rate": "-",
+                    "satisfaction_rate": '10',
+                    "reason_for_satisfaction": "",
+                    "notes": ""
+                },
+            ]
+        },
+
+        {
+            id: '1738200600_1738258200', name: 'Notes',
+            children: [
+                {
+                    "id": "1738200600_1738258200_01",
+                    'exercise': '12', 
+                    'deep/light sleep': "02:09/3:45",
+                    "typing-speed": "547 cpm,740 char,4:18 ct, 3:01 act",
+
+                },
+            ]
+
+        }]
+    }
+]
 export const treeRawData2 = {
     id: "root",
     name: "Root Folder",
@@ -278,9 +290,11 @@ export const rowNestedFormData = {
     childFormType: '',
 }
 
-
+interface IChildFormField{
+    [key: string]:object
+}
 export const childFormFields: IChildFormField = {
-    '8': {
+    '24': {
         name: { title: "name" }, description: { title: "description",type: "textarea", },
         category: {
             title: "category",
@@ -306,9 +320,11 @@ export const childFormFields: IChildFormField = {
         reason_for_satisfaction: { title: "reason_for_satisfaction"  }, 
         notes: { title: "notes",type: "date", }
     },
-    '5': {
-        name: { title: "name" },  
-        hour: { title: "hour"  },  
+    '21': {
+        name: { title: "name" },   
+    },
+    '15': {
+        name: { title: "name" },   
     },
     
     '4': {

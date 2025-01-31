@@ -1,3 +1,5 @@
+import { string } from "yup"
+
 type Image = {
     id: string
     name: string
@@ -34,14 +36,17 @@ interface INode {
     notes?: string
     hour?: string
     childFormType?: string,
-    nestedLevelOff?:boolean
+    nestedLevelOff?: boolean,
+    mergeId?: string,
+    assignedTime?: number,
+    [key:string]:string
 }
 
 
 interface TreeProps {
     data: INode; // Expecting an array of INode
     key?: string | number;
-    fetchData?:()=>void
+    fetchData?: () => void
 }
 interface IFormTree {
     touched: FormikTouched<FormFieldsName>
@@ -51,7 +56,7 @@ interface ExtendedTreeProps extends TreeProps {
     formRef?: React.RefObject<HTMLFormElement>;
     handleSubmit?: (record: NodeFormSchema) => void;
     handleClose: () => void;
-    onSubmitBtn: () => void; 
+    onSubmitBtn: () => void;
 }
 
 interface NodeFormProps extends CommonProps {
@@ -59,8 +64,8 @@ interface NodeFormProps extends CommonProps {
     forgotPasswordUrl?: string
     signUpUrl?: string
     handleSubmit: (value: NodeFormSchema) => void
-    data: INode ,
-    fetchData:()=>void
+    data: INode,
+    fetchData: () => void
 }
 
 type NodeFormSchema = {
@@ -86,8 +91,8 @@ interface IOption {
     label: string
     value: string
 }
- 
- 
+
+
 interface IRowNestedFormState {
     data: INode,
     action: string
@@ -97,13 +102,13 @@ interface IRowNestedFormState {
 
 interface IFormField {
     title: string;
-    type?: string; 
-    option?: { label: string; value: string }[]; 
-    max_length?:number
+    type?: string;
+    option?: { label: string; value: string }[];
+    max_length?: number
 }
 
 interface ITaskForm {
-    [key: string]: IFormField;  
+    [key: string]: IFormField;
 }
 
 interface IChildFormField {

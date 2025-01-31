@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Avatar from '@/components/ui/Avatar'
 import Badge from '@/components/ui/Badge'
 import DataTable from '@/components/shared/DataTable'
@@ -11,6 +11,7 @@ import {
     toggleDeleteConfirmation,
     useAppDispatch,
     useAppSelector,
+    TaskListState,
 } from '../store'
 import useThemeClass from '@/utils/hooks/useThemeClass'
 import TaskDeleteConfirmation from './TaskDeleteConfirmation'
@@ -20,44 +21,13 @@ import type {
     DataTableResetHandle,
     OnSortParam,
     ColumnDef,
-} from '@/components/shared/DataTable' 
-type Product = {
-    id: string
-    name: string
-    productCode: string
-    img: string
-    category: string
-    price: number
-    stock: number
-    status: number
-}
+} from '@/components/shared/DataTable'
+import { INode } from '../type'
+import { makeTreeView, mergeTasksData } from '@/utils/helper'
+import TaskRecordView from './TaskRecordView'
 
-const inventoryStatusColor: Record<
-    number,
-    {
-        label: string
-        dotClass: string
-        textClass: string
-    }
-> = {
-    0: {
-        label: 'In Stock',
-        dotClass: 'bg-emerald-500',
-        textClass: 'text-emerald-500',
-    },
-    1: {
-        label: 'Limited',
-        dotClass: 'bg-amber-500',
-        textClass: 'text-amber-500',
-    },
-    2: {
-        label: 'Out of Stock',
-        dotClass: 'bg-red-500',
-        textClass: 'text-red-500',
-    },
-}
 
-const ActionColumn = ({ row }: { row: INode }) => {
+const ActionColumn = ({ row, handleView }: { row: INode, handleView: (data: any) => void }) => {
     const dispatch = useAppDispatch()
     const { textTheme } = useThemeClass()
     const navigate = useNavigate()
@@ -73,18 +43,18 @@ const ActionColumn = ({ row }: { row: INode }) => {
 
     return (
         <div className="flex justify-end text-lg">
-            {/* <span
+            <span
                 className={`cursor-pointer p-2 hover:${textTheme}`}
-                onClick={onEdit}
+                onClick={() => handleView(row)}
             >
                 <HiOutlinePencil />
-            </span> */}
-            <span
+            </span>
+            {/* <span
                 className="cursor-pointer p-2 hover:text-red-500"
                 onClick={onDelete}
             >
                 <HiOutlineTrash />
-            </span>
+            </span> */}
         </div>
     )
 }
@@ -104,9 +74,20 @@ const TaskColumn = ({ row }: { row: INode }) => {
     )
 }
 
-const TaskTable = () => {
+const TaskTable = ({ isMergeTasks }: { isMergeTasks: boolean }) => {
     const tableRef = useRef<DataTableResetHandle>(null)
+    const [modalData, setModalData] = useState<any>({})
+    const [openViewModal, setOpenViewModal] = useState<boolean>(false)
+    const handleView: (data?: any) => void = (data: any) => {
+        if (openViewModal) {
+            setOpenViewModal(false)
 
+        } else {
+            setOpenViewModal(true)
+            setModalData(data)
+
+        }
+    }
     const dispatch = useAppDispatch()
 
     const { pageIndex, pageSize, sort, query, total } = useAppSelector(
@@ -124,15 +105,14 @@ const TaskTable = () => {
     const data = useAppSelector(
         (state) => state.taskList.data.taskList
     )
-    const TaskListdata = useAppSelector(
-        (state) => state.taskList.data.taskList
-    ) || []
-    const test = ( ) => {
-        
+    const [tableDataList, setTableDataList] = useState(data)
+
+    const test = () => {
+
         // console.log(TaskListdata)
     }
     const data2 = useAppSelector(
-        (state) => state 
+        (state) => state
     )
 
     useEffect(() => {
@@ -157,7 +137,7 @@ const TaskTable = () => {
 
     const columns: ColumnDef<INode>[] = useMemo(
         () => [
-            
+
             {
                 header: 'Name',
                 accessorKey: 'name',
@@ -179,7 +159,7 @@ const TaskTable = () => {
                 accessorKey: 'category',
                 cell: (props) => {
                     const row = props.row.original
-                    return <span className="capitalize" onClick={()=>console.log(row)}>{row.category}</span>
+                    return <span className="capitalize" onClick={() => console.log(row)}>{row.category}</span>
                 },
             },
             {
@@ -187,38 +167,16 @@ const TaskTable = () => {
                 accessorKey: 'time_spent',
                 cell: (props) => {
                     const row = props.row.original
-                    return <span className="capitalize"  >{row.time_spent?row.time_spent:row.id}</span>
+                    return <span className="capitalize"  >{row.time_spent ? row.time_spent : row.id}</span>
                 },
             },
-            
-            // {
-            //     header: 'Status',
-            //     accessorKey: 'status',
-            //     cell: (props) => {
-            //         const { status } = props.row.original
-            //         const validStatus = `${status}`.trim() == ''?0:status
-            //         return (
-            //             <div className="flex items-center gap-2">
-            //                 <Badge
-            //                     className={
-            //                         inventoryStatusColor[0].dotClass
-            //                     }
-            //                 />
-            //                 <span
-            //                     className={`capitalize font-semibold ${inventoryStatusColor[0].textClass}`}
-            //                 >
-            //                     {inventoryStatusColor[0].label}
-            //                 </span>
-            //             </div>
-            //         )
-            //     },
-            // },
-          
             {
                 header: '',
                 id: 'action',
-                cell: (props) => <ActionColumn row={props.row.original} />,
+                cell: (props) => <ActionColumn row={props.row.original} handleView={handleView} />,
             },
+
+
         ],
         []
     )
@@ -240,16 +198,24 @@ const TaskTable = () => {
         const newTableData = cloneDeep(tableData)
         newTableData.sort = sort
         dispatch(setTableData(newTableData))
-    }
+    } 
+    useEffect(() => {
+        setTableDataList(data)
+    }, [data])
+    useEffect(() => {
+        if (isMergeTasks) {
 
+            setTableDataList(mergeTasksData(data))
+        } else {
+            setTableDataList(data)
+        }
+    }, [isMergeTasks])
     return (
-        <div   onClick={test}>
-        
-            <DataTable
-              
+        <div >
+            <DataTable 
                 ref={tableRef}
                 columns={columns}
-                data={data}
+                data={tableDataList}
                 skeletonAvatarColumns={[0]}
                 skeletonAvatarProps={{ className: 'rounded-md' }}
                 loading={loading}
@@ -261,8 +227,14 @@ const TaskTable = () => {
                 onPaginationChange={onPaginationChange}
                 onSelectChange={onSelectChange}
                 onSort={onSort}
-            /> 
+            />
             <TaskDeleteConfirmation />
+            <TaskRecordView
+                modalData={modalData}
+                openViewModal={openViewModal}
+                handleView={handleView}
+
+            />
         </div>
     )
 }

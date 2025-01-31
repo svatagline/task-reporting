@@ -9,13 +9,14 @@ import { tasksData, salesDashboardData, tasksTreeData } from './data/salesData'
 const { apiPrefix } = appConfig
 const exatractNestedChild = () => {
     let data: INode[] = tasksTreeData
-    let level = [3]
+    let level = [24]
     let listing: INode[] = []
     const listLastNestedItems = (data: INode[], parentId = 0) => {
         data.forEach((record: any) => {
-            // if (level.includes(`${record.id}`.split('_').length)) {
+            if (level.includes(`${record.id}`.length)) {
+                // console.log(first)
             listing.push({ ...record, parent_id: parentId })
-            // }
+            }
 
             if (record.children && record.children.length > 0) {
                 listLastNestedItems(record.children, record.id)

@@ -4,16 +4,17 @@ import { Field, FieldProps, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { forwardRef, useEffect, useRef, useState } from 'react'
 import { Button, Checkbox, DatePicker, Dialog, Radio, Select, Switcher, TimeInput } from '@/components/ui'
-import {   RemoveElement, ViewElement } from '../TaskForm/AddEditTaskModalComponents'
+import { RemoveElement, ViewElement } from '../TaskForm/AddEditTaskModalComponents'
 import CreatableSelect from 'react-select/creatable'
 import { RichTextEditor } from '@/components/shared'
 import { deleteTask, getTasks, useAppDispatch, useAppSelector } from '../store'
 import { setSelectedTask, toggleDeleteConfirmation } from '../store'
 import { apiCreateTask, apiPutTask } from '@/services/SalesService'
-import {  getFormFields, getNewId } from '@/utils/helper'
+import { getFormFields, getNewId } from '@/utils/helper'
 import { childFormFields, rowNestedFormData } from '@/constants/tree.constant'
+import { FormModel, INode, IOption, IRowNestedFormState, NodeFormProps, NodeFormSchema } from '../type'
 const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
-    const rowNestedFormState = { data: rowNestedFormData, action: 'none' }
+    const rowNestedFormState:IRowNestedFormState = { data: rowNestedFormData, action: 'none' }
     const [showNestedDialog, setShowNestedDialog] = useState(false);
     const dispatch = useAppDispatch()
 
@@ -60,7 +61,7 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
     })
 
 
- 
+
     const onNestedFormSubmit = () => {
         if (data.children) {
             // @ts-ignore
@@ -92,7 +93,7 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
                     if (success) {
                         fetchData()
                         console.log('update success.....')
-                        data.children =data.children && data.children.map((child, i) => child.id === nestedFormData.data.id ? { ...nestedFormData.data, ...nestedFormRefCurrentValues } : child)
+                        data.children = data.children && data.children.map((child, i) => child.id === nestedFormData.data.id ? { ...nestedFormData.data, ...nestedFormRefCurrentValues } : child)
                     } else {
                         console.log('not update')
                     }
@@ -123,16 +124,16 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
     }
 
 
-    const onAction = (action?: string, record?: INode) => { 
+    const onAction = (action?: string, record?: INode) => {
         if (action === 'add') {
             setShowNestedDialog(true)
             record && setNestedFormData({ data: { ...record, childFormType: `${`${data.id}`.length + 3}` }, action: "add" })
         } else if (action === 'update') {
             setShowNestedDialog(true)
-            record &&setNestedFormData({ data: record, action: "update" })
+            record && setNestedFormData({ data: record, action: "update" })
         } else if (action === 'delete') {
             setShowNestedDialog(true)
-            record &&setNestedFormData({ data: record, action: "delete" })
+            record && setNestedFormData({ data: record, action: "delete" })
         }
     }
 
@@ -309,7 +310,7 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
                             )}
                         </Checkbox.Group>
                     )}
-                </Field> 
+                </Field>
                 break;
             case 'radio':
                 InputElement = <Field name={data.key}>
@@ -333,10 +334,10 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
                                         <Radio key={index} value={i.value}>{i.label}</Radio>
                                     )
                                 }
-                                )} 
+                                )}
                         </Radio.Group>
                     )}
-                </Field> 
+                </Field>
                 break;
             case 'switch':
                 InputElement = <Field name={data.key}>
@@ -352,12 +353,12 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
                                     field.name,
                                     !values[data.key]
                                 )
-                            } 
+                            }
                             }
                         />
 
                     )}
-                </Field> 
+                </Field>
                 break;
             default:
                 InputElement = <Field
@@ -367,7 +368,7 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
                     component={Input}
                 />
                 break;
-        } 
+        }
         return InputElement
     }
 
@@ -441,54 +442,57 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
 
 
             </Formik>
-            <div className='form-child-list'>
-                {
-                    !data.nestedLevelOff &&
-                    <div className='flex justify-between'>
-                        <h5>Child nodes</h5>
-                        <Button
-                            size="sm"
-                            className="ltr:mr-2 rtl:ml-2"
-                            // @ts-ignore
-                            onClick={() => onAction('add', { ...getFormFields(`${`${data.id}`.length + 3}`) })}
-                            variant='solid'
-                        >
-                            Add child
-                        </Button>
+          
+                <div className='form-child-list'>
+                    {
+                        !data.nestedLevelOff &&  data.id && !['24','2','15'].includes(`${`${data.id}`.length}`) &&
+                        <div className='flex justify-between'>
+                            <h5>Child nodes</h5>
+                            <Button
+                                size="sm"
+                                className="ltr:mr-2 rtl:ml-2"
+                                // @ts-ignore
+                                onClick={() => onAction('add', { ...getFormFields(`${`${data.id}`.length + 3}`) })}
+                                variant='solid'
+                            >
+                                Add child
+                            </Button>
 
-                    </div>}
+                        </div>}
 
-                {
-                    !data.nestedLevelOff && data.children && data.children.length > 0 ? (
-                        <>
+                    {
+                        (!data.nestedLevelOff && data.children && data.children.length  > 0 && data.id && !['24'].includes(`${`${data.id}`.length}`) )  ? (
+                            <>
 
-                            {data.children.map((child: INode, index: number) => {
-                                return (
-                                    <div key={index} className='relative' >
-                                        <Input
-                                            asElement="input"
-                                            disabled={true}
-                                            name={child?.name}
-                                            value={child?.name}
-                                            field={'text'}
-                                            suffix={<div className='flex align-center absolute right-[0px] top-[-10px] gap-1'>
-                                                <span className='cursor-pointer' onClick={() => onAction('update', { ...child, childFormType: `${`${child.id}`.length}` })}>🖊️</span>&nbsp;
-                                                <span className='cursor-pointer' onClick={() => onAction('delete', { ...child })}>❌</span>
-                                            </div>}
-                                        />
+                                {data.children.map((child: INode, index: number) => {
+                                    return (
+                                        <div key={index} className='relative' >
+                                            <Input
+                                                asElement="input"
+                                                disabled={true}
+                                                name={child?.name}
+                                                value={child?.name}
+                                                field={'text'}
+                                                suffix={<div className='flex align-center absolute right-[0px] top-[-10px] gap-1'>
+                                                    <span className='cursor-pointer' onClick={() => onAction('update', { ...child, childFormType: `${`${child.id}`.length}` })}>🖊️</span>&nbsp;
+                                                    <span className='cursor-pointer' onClick={() => onAction('delete', { ...child })}>❌</span>
+                                                </div>}
+                                            />
 
-                                    </div>
-                                )
-                            })}
-                        </>) :
-                        (
-                            !data.nestedLevelOff && data.childFormType &&
-                            <h3 className='text-center'>
-                                No record found
-                            </h3>
-                        )
-                }
-            </div>
+                                        </div>
+                                    )
+                                })}
+                            </>) :
+                            (
+                                !data.nestedLevelOff && data.childFormType &&
+                                <h3 className='text-center'>
+                                    No record found
+                                </h3>
+                            )
+                    }
+                </div>
+         
+
 
             <Dialog
                 height={'auto'}
