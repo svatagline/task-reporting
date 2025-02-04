@@ -1,9 +1,8 @@
 import { Button, Card, Progress } from '@/components/ui'
-import React, { useEffect, useRef, useState } from 'react'
-import NewQuizForm, { IQuizQue } from '../QuizList/components/NewQuizForm'
+import React, { useEffect, useRef, useState } from 'react' 
 import { QuizData } from './QuizData'
 import QuizResult from './QuizResult'
-import AnswerForm from '../QuizList/components/AnswerForm'
+import AnswerForm, { IQuizQue } from '../QuizList/components/AnswerForm'
 import { useLocation } from 'react-router-dom'
 import { getValidParsedJsonData } from '@/utils/helper'
 const initialTime = 50

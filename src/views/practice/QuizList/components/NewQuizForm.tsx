@@ -59,7 +59,7 @@ const handleSubmit = (value: FormModel) => {
         console.log(parsedData) 
         try {
             const localStorageData = localStorage.getItem('quizData')
-            const parsedLocalStorageData = JSON.parse(localStorageData)
+            const parsedLocalStorageData = JSON.parse(`${localStorageData}`)
             const newData = [...parsedLocalStorageData, { questions: parsedData,name:name }]
             localStorage.setItem('quizData', JSON.stringify(newData))
             dispatch(setQuizData(JSON.stringify(newData)))
