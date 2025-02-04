@@ -167,3 +167,16 @@ export function splitObjectValues(input:any) {
     
     return result;
 }
+
+export  const optIndex = (index:number|string)=>{
+    return `0ABCD`.charAt(parseInt(`${index}`))
+}
+
+export const getValidParsedJsonData = (values:string)=>{
+        try {
+            console.log(values)
+            return JSON.parse(values)
+        } catch (error) {
+            return null
+        }
+    }

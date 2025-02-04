@@ -33,6 +33,18 @@ export const protectedRoutes = [
        
     },
     {
+        key: 'practice',
+        path: `/practice`,
+        component: lazy(() => import('@/views/practice/Practice')),
+        authority: [], 
+    },
+    {
+        key: 'startQuiz',
+        path: `/start-quiz`,
+        component: lazy(() => import('@/views/practice/StartQuiz/StartQuiz')),
+        authority: [], 
+    },
+    {
         key: 'collapseMenu.item1',
         path: '/collapse-menu-item-view-1',
         component: lazy(() => import('@/views/demo/CollapseMenuItemView1')),

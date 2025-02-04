@@ -1,83 +1,35 @@
+function generateHourlyRanges(dateString: string) {
+    const date = new Date(dateString);
+    date.setHours(7, 0, 0, 0); // Start from 7 AM
 
+    let hourlyRanges = [];
 
-const data = {
-    "id": "1738207800_1738222200_02",
-    "name": "Programming",
-    "description": "Bug fixing in modifying tree |---|Bug fixing in modifying tree ",
-    "category": "1",
-    "status": "-|---|-",
-    "time_spent": "180|---|180",
-    "wasted_time": "-|---|-",
-    "focus_rate": "-|---|-",
-    "satisfaction_rate": "10|---|10",
-    "reason_for_satisfaction": "null|---|null",
-    "notes": "",
-    "parent_id": "1738207800_1738222200",
-    "assignedTime": "240 |---| 60",
-    "mergeId": "1738207800_1738222200_02|---|1738207800_1738222200_02",
-    "mergedRecord": 2
-}
-// const output = [
-//     {
-//         "id": "1738207800_1738222200_02",
-//         "name": "Programming",
-//         "description": "Bug fixing in modifying tree",
-//         "category": "1",
-//         "status": "-",
-//         "time_spent": "180",
-//         "wasted_time": "-",
-//         "focus_rate": "-",
-//         "satisfaction_rate": "10",
-//         "reason_for_satisfaction": "null",
-//         "notes": "",
-//         "parent_id": "1738207800_1738222200",
-//         "assignedTime": "240",
-//         "mergeId": "1738207800_1738222200_02",
-//         "mergedRecord": 2
-//     },
-//     {
-//         "id": "1738207800_1738222200_02",
-//         "name": "Programming",
-//         "description": "Bug fixing in modifying tree ",
-//         "category": "1",
-//         "status": "-",
-//         "time_spent": "180",
-//         "wasted_time": "-",
-//         "focus_rate": "-",
-//         "satisfaction_rate": "10",
-//         "reason_for_satisfaction": "null",
-//         "notes": "",
-//         "parent_id": "1738207800_1738222200",
-//         "assignedTime": "60",
-//         "mergeId": "1738207800_1738222200_02",
-//         "mergedRecord": 2
-//     }
-// ]
+    for (let i = 7; i < 23; i++) { // 7 AM to 11 PM
+        let startTimestamp = Math.floor(date.getTime() / 1000);
+        date.setHours(i + 1);
+        let endTimestamp = Math.floor(date.getTime() / 1000);
 
-function splitObjectValues(input) {
-    const separator = "|---|";
-    
-    // Determine the maximum number of splits in any property
-    const maxSplits = Math.max(
-        ...Object.values(input)
-            .filter(value => typeof value === "string")
-            .map(value => value.split(separator).length)
-    );
-    
-    // Generate array of objects
-    const result = Array.from({ length: maxSplits }, (_, index) => {
-        return Object.fromEntries(
-            Object.entries(input).map(([key, value]) => {
-                if (typeof value === "string") {
-                    const splitValues = value.split(separator);
-                    return [key, splitValues[index] ?? splitValues[0]];
-                }
-                return [key, value];
-            })
-        );
+        hourlyRanges.push({
+            id: `${startTimestamp}_${endTimestamp}`,
+            name: `${formatTime(i)} to ${formatTime(i + 1)}`
+        });
+    }
+
+    // Full-day range
+    hourlyRanges.push({
+        id: `${hourlyRanges[0].id.split('_')[0]}_${hourlyRanges[hourlyRanges.length - 1].id.split('_')[1]}`,
+        name: "7 AM to 11 PM"
     });
-    
-    return result;
+
+    return hourlyRanges;
 }
 
-console.log(splitObjectValues(data))
+// Helper function to format time in 12-hour format
+function formatTime(hour: number) {
+    let period = hour >= 12 ? "PM" : "AM";
+    let formattedHour = hour % 12 || 12; // Convert 0 -> 12 for AM/PM format
+    return `${formattedHour} ${period}`;
+}
+
+// Example usage
+// console.log(generateHourlyRanges("January 30, 2025"));

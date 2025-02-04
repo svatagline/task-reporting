@@ -27,6 +27,16 @@ const navigationConfig: NavigationTree[] = [
         authority: [],
         subMenu: [],
     },
+    {
+        key: 'practice',
+        path: '/practice',
+        title: 'Quizlet',
+        translateKey: 'nav.practice',
+        icon: 'hiBookOpen',
+        type: NAV_ITEM_TYPE_ITEM,
+        authority: [],
+        subMenu: [],
+    },
     // {
     //     key: 'collapseMenu',
     //     path: '',
