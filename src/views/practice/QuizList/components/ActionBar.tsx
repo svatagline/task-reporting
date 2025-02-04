@@ -20,26 +20,10 @@ import {
 } from '../store'
 import debounce from 'lodash/debounce'
 import type { ChangeEvent } from 'react'
+import {   getDocument } from '@/utils/firebase/firebaseFunction'
 
 const ActionBar = () => {
-    const dispatch = useAppDispatch()
-
-    // const inputRef = useRef(null)
-
-    // const view = useAppSelector((state) => state.projectList.data.view)
-
-    // const { sort } = useAppSelector((state) => state.projectList.data.query)
-
-    // const onViewToggle = () => {
-    //     dispatch(toggleView(view === 'grid' ? 'list' : 'grid'))
-    // }
-
-    // const onToggleSort = () => {
-    //     dispatch(toggleSort(sort === 'asc' ? 'desc' : 'asc'))
-    // }
-
-  
-    // }
+    const dispatch = useAppDispatch() 
     const onAddNewQuiz = () => {
         dispatch(toggleNewQuizDialog(true))}
     const debounceFn = debounce(handleDebounceFn, 500)
@@ -51,10 +35,14 @@ const ActionBar = () => {
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         debounceFn(e.target.value)
     }
-
+const test = () => {
+    console.log(`click on test`)
+    // createDocument("quiz_list", { name: "John Doe", age: 25 }); 
+    getDocument()
+}
     return (
         <div className="lg:flex items-center justify-between mb-4">
-            <h3 className="mb-4 lg:mb-0">Project List</h3>
+            <h3 className="mb-4 lg:mb-0">Quiz List</h3>
             <div className="flex flex-col md:flex-row md:items-center gap-1">
                 {/* <Input
                     ref={inputRef}

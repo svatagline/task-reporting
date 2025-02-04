@@ -32,7 +32,7 @@ const ListItem = ({ data, cardBorder }: ListItemProps) => {
         data
 
     return (
-        <div className="mb-4">
+        <div className="mb-4" onClick={()=>console.log(data)}>
             <Card bordered={cardBorder}>
                 {/* <div className="grid gap-x-4 grid-cols-12"> */}
                 <div className="flex justify-between">

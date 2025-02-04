@@ -11,7 +11,7 @@ import { HiCheck } from 'react-icons/hi'
 import { components, MultiValueGenericProps, OptionProps } from 'react-select'
 import {
     getMembers,
-    putProject, 
+    putProject,
     useAppDispatch,
     useAppSelector,
 } from '../store'
@@ -78,18 +78,18 @@ const CustomControlMulti = ({ children, ...props }: MultiValueGenericProps) => {
 const validationSchema = Yup.object().shape({
     answer: Yup.string().required('Answer required'),
 })
- 
+
 
 export interface IQuizQue {
     question: string
     options: string[]
     answer: string
-    id:string
+    id: string
 }
-const AnswerForm = forwardRef((props:{handleNext:()=>void, quizData:IQuizQue},formRef)=>{
-    const { handleNext ,quizData } = props
+const AnswerForm = forwardRef((props: { handleNext: () => void, quizData: IQuizQue }, formRef) => {
+    const { handleNext, quizData } = props
     const dispatch = useAppDispatch()
-    const {id,question,answer,options} = quizData
+    const { id, question, answer, options } = quizData
 
     // const members = useAppSelector((state) => state.projectList.data.allMembers)
 
@@ -110,7 +110,7 @@ const AnswerForm = forwardRef((props:{handleNext:()=>void, quizData:IQuizQue},fo
         setSubmitting: (isSubmitting: boolean) => void
     ) => {
         setSubmitting(true)
-        
+
         const { answer } = formValue
 
         const { totalTask, completedTask } = taskCount
@@ -130,58 +130,76 @@ const AnswerForm = forwardRef((props:{handleNext:()=>void, quizData:IQuizQue},fo
         console.log(answer)
     }
 
-    const handlePrevious = () =>{
+    const handlePrevious = () => {
         console.log('handlePrevious')
     }
- 
+
     return (
         <Formik
             initialValues={{
                 answer: '',
-                isSubmited:false
+                isSubmited: false
             }}
+
             validationSchema={validationSchema}
             // @ts-ignore
             innerRef={formRef}
-            onSubmit={ (values, { setSubmitting }) => { 
-                
-                 onSubmit(values, setSubmitting)
+            onSubmit={(values, { setSubmitting }) => {
+
+                onSubmit(values, setSubmitting)
 
             }}
         >
             {({ touched, errors, values, }) => (
-                <Form>
-                    <FormContainer> 
+                <Form >
+                    <FormContainer >
                         <FormItem
+
                             asterisk
                             label={`${id}. ${question}`}
                             invalid={errors.answer && touched.answer}
                             errorMessage={errors.answer}
                         >
-                            <Field name="answer" >
-                                {({
-                                    field,
-                                    form,
-                                }: FieldProps<FormModel>) => (
-                                    <Radio.Group
-                                    // onClick={()=>console.log(values)   }
-                                    className='flex flex-col gap-[20px]'
-                                        value={values.answer}
-                                        onChange={(val) =>
-                                            form.setFieldValue(
-                                                field.name,
-                                                val
-                                            )
-                                        }
-                                    >
-                                        <Radio value={'1'} disabled={values.isSubmited} checked={values.answer == "1"} >{`${optIndex(1)}. ${options[0]}`}</Radio>
-                                        <Radio value={'2'} disabled={values.isSubmited} checked={values.answer == "2"}>{`${optIndex(2)}. ${options[1]}`}</Radio>
-                                        <Radio value={'3'} disabled={values.isSubmited} checked={values.answer == "3"}>{`${optIndex(3)}. ${options[2]}`}</Radio>
-                                        <Radio value={'4'} disabled={values.isSubmited} checked={values.answer == "4"}>{`${optIndex(4)}. ${options[3]}`}</Radio>
-                                    </Radio.Group>
-                                )}
-                            </Field>
-                        </FormItem>  
+                            {!values.isSubmited &&
+
+                                <Field name="answer" >
+                                    {({
+                                        field,
+                                        form,
+                                    }: FieldProps<FormModel>) => (
+                                        <Radio.Group
+                                            // onClick={()=>console.log(values)   }
+
+                                            className='flex flex-col gap-[20px]'
+                                            value={values.answer}
+                                            onChange={(val) =>
+                                                form.setFieldValue(
+                                                    field.name,
+                                                    val
+                                                )
+                                            }
+                                        >
+                                            <Radio value={'1'} disabled={values.isSubmited} checked={values.answer == "1"} >{`${optIndex(1)}. ${options[0]}`}</Radio>
+                                            <Radio value={'2'} disabled={values.isSubmited} checked={values.answer == "2"}>{`${optIndex(2)}. ${options[1]}`}</Radio>
+                                            <Radio value={'3'} disabled={values.isSubmited} checked={values.answer == "3"}>{`${optIndex(3)}. ${options[2]}`}</Radio>
+                                            <Radio value={'4'} disabled={values.isSubmited} checked={values.answer == "4"}>{`${optIndex(4)}. ${options[3]}`}</Radio>
+                                        </Radio.Group>
+                                    )}
+                                </Field>
+                            }
+
+                            {values.isSubmited &&
+                                <div className='flex flex-col  gap-[20px]'> 
+                                    <Radio value={'1'} color={values.answer == "1" ? answer == "1" ? "green-500" : "yellow-500" : values.answer == "1" ? "green-500" : answer == "1" ? "green-500" : ""} checked={values.answer == "1"|| answer =="1"} >{`${optIndex(1)}. ${options[0]}`}</Radio>
+                                    <Radio value={'2'} color={values.answer == "2" ? answer == "2" ? "green-500" : "yellow-500" : values.answer == "2" ? "green-500" : answer == "2" ? "green-500" : ""} checked={values.answer == "2"|| answer =="2"}>{`${optIndex(2)}. ${options[1]}`}</Radio>
+                                    <Radio value={'3'} color={values.answer == "3" ? answer == "3" ? "green-500" : "yellow-500" : values.answer == "3" ? "green-500" : answer == "3" ? "green-500" : ""} checked={values.answer == "3"|| answer =="3"}>{`${optIndex(3)}. ${options[2]}`}</Radio>
+                                    <Radio value={'4'} color={values.answer == "4" ? answer == "4" ? "green-500" : "yellow-500" : values.answer == "4" ? "green-500" : answer == "4" ? "green-500" : ""} checked={values.answer == "4"|| answer =="4"}>{`${optIndex(4)}. ${options[3]}`}</Radio>
+                                </div>
+
+
+                            }
+
+                        </FormItem>
                     </FormContainer>
                 </Form>
             )}

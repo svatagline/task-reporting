@@ -1,17 +1,17 @@
-import { Button, Card, Progress } from '@/components/ui'
-import React, { useEffect, useRef, useState } from 'react' 
+import { Button, Card, Input, Progress } from '@/components/ui'
+import React, { useEffect, useRef, useState } from 'react'
 import { QuizData } from './QuizData'
 import QuizResult from './QuizResult'
 import AnswerForm, { IQuizQue } from '../QuizList/components/AnswerForm'
 import { useLocation } from 'react-router-dom'
 import { getValidParsedJsonData } from '@/utils/helper'
-const initialTime = 50
 const StartQuiz = () => {
   const { state } = useLocation();
-  const formRef = useRef() 
+  const formRef = useRef()
   const [quizData, setQuizData] = useState<IQuizQue[]>([])
   const [quizName, setQuizName] = useState<string>('')
   const [currentQuestion, setCurrentQuestion] = useState<number>(0)
+  const [initialTime, setInitialTime] = useState<number>(50)
   const [score, setScore] = useState({})
   const [seconds, setSeconds] = useState(initialTime)
   const [testSubmitted, setTestSubmitted] = useState<boolean>(false)
@@ -34,7 +34,7 @@ const StartQuiz = () => {
         setTouched({})
         setErrors({})
         setSeconds(initialTime)
-      }, 5000);
+      }, 2000);
     } else {
       console.log(score, values)
       setScore({ ...score, [currentQuestion]: values['answer'] })
@@ -63,11 +63,11 @@ const StartQuiz = () => {
   }
 
 
-  useEffect(() => { 
-      let intervalId;
-      intervalId = setInterval(() => setSeconds(seconds - 1), 1000);
-      return () => clearInterval(intervalId);
-   
+  useEffect(() => {
+    let intervalId;
+    intervalId = setInterval(() => setSeconds(seconds - 1), 1000);
+    return () => clearInterval(intervalId);
+
   }, [seconds]);
   useEffect(() => {
     if (seconds == 0 && !testSubmitted && quizStarted) {
@@ -92,7 +92,7 @@ const StartQuiz = () => {
       // const validData = (state && state.questions) ? state.questions : getValidParsedJsonData(`${localStorage.getItem('curentQuiz')}`)['questions'] ?? []
       const validData = getValidParsedJsonData(`${localStorage.getItem('curentQuiz')}`)
       if (validData) {
-        console.log('first 4',localStorage.getItem('curentQuiz'))
+        console.log('first 4', localStorage.getItem('curentQuiz'))
         setQuizData(validData.questions)
         setQuizName(validData.name)
       }
@@ -104,6 +104,19 @@ const StartQuiz = () => {
       <Card>
         <div className='flex justify-between items-center mb-5'>
           <h5 onClick={test}>{quizName} Quiz </h5>
+          {
+            !quizStarted 
+            && 
+            <div>
+              <Input 
+                type="number"
+                placeholder="Enter time"
+                value={initialTime}
+                onChange={(e) => setInitialTime(parseInt(e.target.value))}
+              />
+            </div>
+          }
+
           <div>
             {(currentQuestion <= quizData.length) && !testSubmitted && seconds > 0 && quizStarted &&
               <Progress variant="circle" percent={(seconds * 100) / initialTime} width={80} customInfo={seconds} />}
@@ -125,7 +138,7 @@ const StartQuiz = () => {
                   quizData={quizData[currentQuestion]}
                 />
                 <div className='flex justify-between'>
-                  <Button block variant="solid" onClick={handleSubmit} style={{ width: "fit-content" }}>
+                  <Button block variant="solid" disabled={values?.isSubmited} onClick={handleSubmit} style={{ width: "fit-content" }}>
                     {currentQuestion >= quizData.length - 1 ? 'Submit' : 'Next'}
                   </Button>
                 </div>

@@ -74,6 +74,6 @@ export const QuizData = [
             "splice always returns an array of the removed elements",
             "splice cannot be used to add new elements"
         ],
-        "answer": '5'
+        "answer": '4'
     }
 ]

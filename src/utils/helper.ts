@@ -174,8 +174,8 @@ export  const optIndex = (index:number|string)=>{
 
 export const getValidParsedJsonData = (values:string)=>{
         try {
-            console.log(values)
             return JSON.parse(values)
+            
         } catch (error) {
             return null
         }
