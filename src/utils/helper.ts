@@ -1,4 +1,5 @@
 import { childFormFields } from "@/constants/tree.constant"
+import { INode } from "@/views/tasks/type"
 
 
 export function makeTreeView(data: INode[]) {
@@ -117,17 +118,18 @@ export function mergeTasksData(data: INode[]) {
 
                 if (t.name == item.name) {
                     let modifiedTask = {
-                        ...t, 
-                        mergedRecord: existTask.mergedRecord + 1,
-                        mergeId: (t.id ? t.id : 'null') + "|---|" + (existTask.id ? existTask.id : 'null'),
-                        assignedTime: `${existTask.assignedTime} |---| ${getTime}`,
-                        time_spent: (t.time_spent ? t.time_spent : 0) + "|---|" + (existTask.time_spent ? existTask.time_spent : 0),
-                        wasted_time: (t.wasted_time ? t.wasted_time : 0) + "|---|" + (existTask.wasted_time ? existTask.wasted_time : 0),
-                        reason_for_satisfaction: (t.reason_for_satisfaction ? t.reason_for_satisfaction : 'null') + "|---|" + (existTask.reason_for_satisfaction ? existTask.reason_for_satisfaction : 'null'),
-                        description: (t.description ? t.description : 'null') + "|---|" + (existTask.description ? existTask.description : 'null'),
-                        status: (t.status ? t.status : 'null') + "|---|" + (existTask.status ? existTask.status : 'null'),
-                        focus_rate: (`${t.focus_rate ? t.focus_rate : 0}` + "|---|" + `${existTask.focus_rate ? existTask.focus_rate : 0}`),
-                        satisfaction_rate: (`${t.satisfaction_rate ? t.satisfaction_rate : 0}` + "|---|" + `${existTask.satisfaction_rate ? existTask.satisfaction_rate : 0}`),
+                        ...t,
+                        mergedRecord: t.mergedRecord + 1,
+                        mergeId: (t.id ? t.id : 'null') + "|---|" + (item.id ? item.id : 'null'),
+                        assignedTime: `${t.assignedTime} |---| ${getTime}`,
+                        time_spent: (t.time_spent ? t.time_spent : 0) + "|---|" + (item.time_spent ? item.time_spent : 0),
+                        estimated_time: (t.estimated_time ? t.estimated_time : 0) + "|---|" + (item.estimated_time ? item.estimated_time : 0),
+                        wasted_time: (t.wasted_time ? t.wasted_time : 0) + "|---|" + (item.wasted_time ? item.wasted_time : 0),
+                        reason_for_satisfaction: (t.reason_for_satisfaction ? t.reason_for_satisfaction : 'null') + "|---|" + (item.reason_for_satisfaction ? item.reason_for_satisfaction : 'null'),
+                        description: (t.description ? t.description : 'null') + "|---|" + (item.description ? item.description : 'null'),
+                        status: (t.status ? t.status : 'null') + "|---|" + (item.status ? item.status : 'null'),
+                        focus_rate: (`${t.focus_rate ? t.focus_rate : 0}` + "|---|" + `${item.focus_rate ? item.focus_rate : 0}`),
+                        satisfaction_rate: (`${t.satisfaction_rate ? t.satisfaction_rate : 0}` + "|---|" + `${item.satisfaction_rate ? item.satisfaction_rate : 0}`),
 
                     }
                     return modifiedTask
@@ -144,14 +146,14 @@ export function mergeTasksData(data: INode[]) {
 
 export function splitObjectValues(input:any) {
     const separator = "|---|";
-    
+
     // Determine the maximum number of splits in any property
     const maxSplits = Math.max(
         ...Object.values(input)
             .filter(value => typeof value === "string")
             .map(value => value.split(separator).length)
     );
-    
+
     // Generate array of objects
     const result = Array.from({ length: maxSplits }, (_, index) => {
         return Object.fromEntries(
@@ -164,19 +166,59 @@ export function splitObjectValues(input:any) {
             })
         );
     });
-    
+
     return result;
 }
+export const getAvg = (str: string) => {
+    const arr = str.split('|---|');
+    const avg = arr.reduce((acc, item) => {
+      return acc + parseInt(item);
+    }, 0);
 
-export  const optIndex = (index:number|string)=>{
-    return `0ABCD`.charAt(parseInt(`${index}`))
-}
+    return avg / arr.length;
+  };
+export   const getSum = (str: string) => {
+    const arr = str.split('|---|');
+    const avg = arr.reduce((acc, item) => {
+      return acc + parseInt(item);
+    }, 0);
 
-export const getValidParsedJsonData = (values:string)=>{
-        try {
-            console.log(values)
-            return JSON.parse(values)
-        } catch (error) {
-            return null
-        }
-    }
+    return avg;
+  };
+
+
+  export const exatractNestedChild = (initialData) => {
+      let data: INode[] = initialData
+      let level = [24]
+      let listing: INode[] = []
+      const listLastNestedItems = (d: INode[], parentId = 0) => {
+          d.forEach((record: any) => {
+              if (level.includes(`${record.id}`.length)) {
+                  // console.log(first)
+              listing.push({ ...record, parent_id: parentId })
+              }
+
+              if (record.children && record.children.length > 0) {
+                  listLastNestedItems(record.children, record.id)
+              }
+          })
+      }
+      listLastNestedItems(data)
+
+
+      return listing
+  }
+
+
+  export const calculateShortFallTime = (name:string,tasktime:string)=>{
+      const dadicatedTime={
+          Programming:500,
+          eSkill:400
+      }
+      const taskTimeSum = getSum(tasktime)
+
+      if (Object.keys(dadicatedTime).includes(name)) {
+          return dadicatedTime[name] - taskTimeSum
+      }
+
+  }

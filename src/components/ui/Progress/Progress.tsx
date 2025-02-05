@@ -46,7 +46,7 @@ const Progress = forwardRef<HTMLDivElement, ProgressProps>((props, ref) => {
         }
         return (
             <span className={`progress-info ${variant}`}>
-                {customInfo || `${percent}%`}
+                {customInfo || `${percent.toFixed(2)}%`}
             </span>
         )
     }

@@ -2,7 +2,7 @@
     "nav": {
         "home": "Home",
         "manage-task": "Manage tasks",
-        "practice": "Quizlet",
+        "analysis-task": "Analysis tasks",
         "singleMenuItem": "Single menu item",
         "collapseMenu": {
             "collapseMenu": "Collapse menu item",

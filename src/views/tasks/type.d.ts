@@ -22,6 +22,7 @@ type TaskImagesProps = {
 interface INode {
     id?: string
     name: string
+    tag?: string
     children?: INode[]
     isExpanded?: Boolean
     color?: string
@@ -35,10 +36,11 @@ interface INode {
     reason_for_satisfaction?: string
     notes?: string
     hour?: string
-    childFormType?: string,
-    nestedLevelOff?: boolean,
-    mergeId?: string,
-    assignedTime?: number,
+    childFormType?: string
+    estimated_time?:string
+    nestedLevelOff?: boolean
+    mergeId?: string
+    assignedTime?: number
     [key:string]:string
 }
 
@@ -73,11 +75,13 @@ type NodeFormSchema = {
     children?: INode[]
     isExpanded?: boolean
     color?: string
+    tag?: string
     description?: string
     category?: string
     status?: string
     time_spent?: string
     wasted_time?: string
+    estimated_time?:string
     focus_rate?: string
     satisfaction_rate?: string
     reason_for_satisfaction?: string

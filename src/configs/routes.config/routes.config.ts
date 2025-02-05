@@ -17,32 +17,27 @@ export const protectedRoutes = [
         path: '/manage-tasks',
         component: lazy(() => import('@/views/tasks/TaskList')),
         authority: [],
-    }, 
+    },
     {
         key: 'addEditTask',
         path: `/add-edit-task`,
         component: lazy(() => import('@/views/tasks/TaskAddEdit')),
         authority: [],
-       
+
     },
     {
         key: 'manageTaskTree',
         path: `/manage-task-tree`,
         component: lazy(() => import('@/views/tasks/ManageTaskTree')),
         authority: [],
-       
+
     },
     {
-        key: 'practice',
-        path: `/practice`,
-        component: lazy(() => import('@/views/practice/Practice')),
-        authority: [], 
-    },
-    {
-        key: 'startQuiz',
-        path: `/start-quiz`,
-        component: lazy(() => import('@/views/practice/StartQuiz/StartQuiz')),
-        authority: [], 
+        key: 'analysisTasks',
+        path: `/analysis-tasks`,
+        component: lazy(() => import('@/views/analysis/AnalysisTasks')),
+        authority: [],
+
     },
     {
         key: 'collapseMenu.item1',

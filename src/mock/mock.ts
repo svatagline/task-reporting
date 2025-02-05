@@ -5,29 +5,10 @@ import { signInUserData } from './data/authData'
 
 import { authFakeApi, salesFakeApi } from './fakeApi'
 import { tasksData, salesDashboardData, tasksTreeData } from './data/salesData'
+import { exatractNestedChild } from '@/utils/helper'
 
 const { apiPrefix } = appConfig
-const exatractNestedChild = () => {
-    let data: INode[] = tasksTreeData
-    let level = [24]
-    let listing: INode[] = []
-    const listLastNestedItems = (data: INode[], parentId = 0) => {
-        data.forEach((record: any) => {
-            if (level.includes(`${record.id}`.length)) {
-                // console.log(first)
-            listing.push({ ...record, parent_id: parentId })
-            }
 
-            if (record.children && record.children.length > 0) {
-                listLastNestedItems(record.children, record.id)
-            }
-        })
-    }
-    listLastNestedItems(data)
-
-
-    return listing
-}
 export function mockServer({ environment = 'test' }) {
     return createServer({
         environment,
@@ -36,7 +17,7 @@ export function mockServer({ environment = 'test' }) {
                 signInUserData,
                 salesDashboardData,
                 tasksData,
-                tasksTreeData: exatractNestedChild()
+                tasksTreeData: exatractNestedChild(tasksTreeData)
             })
         },
         routes() {
