@@ -76,7 +76,14 @@ const CustomControlMulti = ({ children, ...props }: MultiValueGenericProps) => {
 }
 
 const validationSchema = Yup.object().shape({
-    answer: Yup.string().required('Answer required'),
+    answer: Yup.string().required('Answer required')
+    .test('blank string','Answer should not be blank',(value)=>{
+        if (value !== '') {
+            return true
+        } else {
+            return false 
+        }
+    })
 })
 
 
@@ -86,7 +93,7 @@ export interface IQuizQue {
     answer: string
     id: string
 }
-const AnswerForm = forwardRef((props: { handleNext: () => void, quizData: IQuizQue }, formRef) => {
+const AnswerForm = forwardRef((props: { handleNext: (answer:number) => void, quizData: IQuizQue }, formRef) => {
     const { handleNext, quizData } = props
     const dispatch = useAppDispatch()
     const { id, question, answer, options } = quizData
@@ -114,20 +121,10 @@ const AnswerForm = forwardRef((props: { handleNext: () => void, quizData: IQuizQ
         const { answer } = formValue
 
         const { totalTask, completedTask } = taskCount
-        handleNext()
+        handleNext(parseInt(answer))
 
 
-        // const values = {
-        //     id: newId,
-        //     name: title,
-        //     desc: content,
-        //     totalTask,
-        //     completedTask,
-
-        // }
-        // dispatch(putProject(values))
-        // dispatch(toggleNewProjectDialog(false))
-        console.log(answer)
+     
     }
 
     const handlePrevious = () => {

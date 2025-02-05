@@ -1,9 +1,10 @@
 import { Button, Card, Input, Progress } from '@/components/ui'
-import React, { useEffect, useRef, useState } from 'react' 
+import React, { useEffect, useRef, useState } from 'react'
 import QuizResult from './QuizResult'
 import AnswerForm, { IQuizQue } from '../QuizList/components/AnswerForm'
 import { useLocation } from 'react-router-dom'
 import { getValidParsedJsonData } from '@/utils/helper'
+import { alerts } from 'firebase-functions/v2'
 const StartQuiz = () => {
   const { state } = useLocation();
   const formRef = useRef()
@@ -18,30 +19,40 @@ const StartQuiz = () => {
 
   // @ts-ignore 
   const { values, setValues, setFieldValue, setTouched, setErrors } = formRef?.current ?? {}
-  const handleNext = () => {
-    console.log(currentQuestion, quizData.length)
+  const handleNext = (answer:number) => { 
 
     if (currentQuestion < quizData.length - 1) {
 
       // setCurrentQuestion(currentQuestion + 1)
+      if (`${answer}` != "") {
 
-      setScore({ ...score, [currentQuestion]: values['answer'] })
-      setFieldValue('isSubmited', true)
-      setTimeout(() => {
-        setCurrentQuestion(currentQuestion + 1)
-        setValues({ answer: "", isSubmited: false })
-        setTouched({})
-        setErrors({})
-        setSeconds(initialTime)
-      }, 2000);
+        setScore({ ...score, [currentQuestion]: answer })
+        setFieldValue('isSubmited', true)
+        setTimeout(() => {
+          setCurrentQuestion(currentQuestion + 1)
+          setValues({ answer: "", isSubmited: false })
+          setTouched({})
+          setErrors({})
+          setSeconds(initialTime)
+        }, 2000);
+      } else {
+       
+
+        alert("blank answer" + answer)
+      }
+
     } else {
-      console.log(score, values)
-      setScore({ ...score, [currentQuestion]: values['answer'] })
-      setFieldValue('isSubmited', true)
-      setTimeout(() => {
-        setTestSubmitted(true)
-      }, 2000);
-    
+      if (`${answer}` != "") { 
+        setScore({ ...score, [currentQuestion]: answer })
+        setFieldValue('isSubmited', true)
+        setTimeout(() => {
+          setTestSubmitted(true)
+        }, 2000);
+      } else {
+        alert("blank answer" + answer)
+      }
+
+
     }
   }
   const handlePrev = () => {
@@ -88,11 +99,11 @@ const StartQuiz = () => {
   useEffect(() => {
     if (state && state.questions && state.name) {
       setQuizData(state.questions)
-      setQuizName(state.name) 
-    } else { 
+      setQuizName(state.name)
+    } else {
       // const validData = (state && state.questions) ? state.questions : getValidParsedJsonData(`${localStorage.getItem('curentQuiz')}`)['questions'] ?? []
       const validData = getValidParsedJsonData(`${localStorage.getItem('curentQuiz')}`)
-      if (validData) { 
+      if (validData) {
         setQuizData(validData.questions)
         setQuizName(validData.name)
       }
@@ -105,11 +116,13 @@ const StartQuiz = () => {
         <div className='flex justify-between items-center mb-5'>
           <h5 onClick={test}>{quizName} Quiz </h5>
           {
-            !quizStarted 
-            && 
-            <div>
-              <Input 
+            !quizStarted
+            &&
+            <div className='flex justify-between items-center gap-3'>
+              <h6  >  Question display time(in seconds): </h6>
+              <Input
                 type="number"
+                className='w-fit'
                 placeholder="Enter time"
                 value={initialTime}
                 onChange={(e) => setInitialTime(parseInt(e.target.value))}

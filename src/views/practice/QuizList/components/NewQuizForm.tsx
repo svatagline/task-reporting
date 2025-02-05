@@ -5,9 +5,9 @@ import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { setQuizData, toggleNewQuizDialog, useAppDispatch } from '../store'
 import { IQuizQue } from './AnswerForm'
-import { useLocation } from 'react-router-dom'
 import { createDocument, getDocument } from '@/utils/firebase/firebaseFunction'
 import { getValidParsedJsonData } from '@/utils/helper'
+import { HiOutlinePlusCircle } from 'react-icons/hi'
 
 const checkValidQuizData = (data: string) => {
     try {
@@ -47,9 +47,9 @@ const validationSchema = Yup.object().shape({
         ),
 })
 
-  
- 
-const NewQuizForm = () => { 
+
+
+const NewQuizForm = () => {
     const dispatch = useAppDispatch()
     const onDialogClose = () => {
         dispatch(toggleNewQuizDialog(false))
@@ -58,25 +58,27 @@ const NewQuizForm = () => {
         try {
             const { jsonData, name } = value
             const parsedData = JSON.parse(jsonData);
-            console.log(parsedData)  
+            console.log(parsedData)
             const response = await createDocument({ jsonData: JSON.stringify({ questions: parsedData, name: name }) })
             console.log({ response })
 
             if (response.status === 200) {
-                const getData =await getDocument()
+                const getData = await getDocument()
                 if (getData.status === 200) {
-                    const reformatData = getData.data.filter((i:any) => i.jsonData !== null).map((data:any)=>getValidParsedJsonData(data.jsonData)) 
+                    const reformatData = getData.data.filter((i: any) => i.jsonData !== null).map((data: any) => getValidParsedJsonData(data.jsonData))
                     dispatch(setQuizData(JSON.stringify(reformatData)))
                 }
                 onDialogClose()
             } else {
-                alert('Error on creating quiz:'+response.data.message)
-            } 
+                alert('Error on creating quiz:' + response.data.message)
+            }
         } catch (error: any) {
             alert(error?.message ? error?.message : error)
             return false
-        } 
+        }
     }
+
+   
     return (
         <div  >
             <Formik
@@ -125,7 +127,7 @@ const NewQuizForm = () => {
 
 
 
-                            <FormItem >
+                            <FormItem > 
                                 <Button
                                     type="reset"
                                     className="ltr:mr-2 rtl:ml-2"
