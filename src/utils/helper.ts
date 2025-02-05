@@ -180,3 +180,56 @@ export const getValidParsedJsonData = (values:string)=>{
             return null
         }
     }
+
+
+    export const getAvg = (str: string) => {
+        const arr = str.split('|---|');
+        const avg = arr.reduce((acc, item) => {
+            return acc + parseInt(item);
+        }, 0);
+    
+        return avg / arr.length;
+    };
+    export const getSum = (str: string) => {
+        const arr = str.split('|---|');
+        const avg = arr.reduce((acc, item) => {
+            return acc + parseInt(item);
+        }, 0);
+    
+        return avg;
+    };
+
+    export const exatractNestedChild = (initialData:any) => {
+        let data: INode[] = initialData
+        let level = [24]
+        let listing: INode[] = []
+        const listLastNestedItems = (d: INode[], parentId = 0) => {
+            d.forEach((record: any) => {
+                if (level.includes(`${record.id}`.length)) {
+                    // console.log(first)
+                    listing.push({ ...record, parent_id: parentId })
+                }
+    
+                if (record.children && record.children.length > 0) {
+                    listLastNestedItems(record.children, record.id)
+                }
+            })
+        }
+        listLastNestedItems(data)
+    
+    
+        return listing
+    }
+
+    export const calculateShortFallTime = (name: string, tasktime: string) => {
+        const dadicatedTime = {
+            Programming: 500,
+            eSkill: 400
+        }
+        const taskTimeSum = getSum(tasktime)
+    
+        if (Object.keys(dadicatedTime).includes(name)) {
+            return dadicatedTime[name] - taskTimeSum
+        }
+    
+    }

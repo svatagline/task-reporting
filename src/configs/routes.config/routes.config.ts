@@ -39,11 +39,19 @@ export const protectedRoutes = [
         authority: [], 
     },
     {
+        key: 'analysisTasks',
+        path: `/analysis-tasks`,
+        component: lazy(() => import('@/views/analysis/AnalysisTasks')),
+        authority: [],
+
+    },
+    {
         key: 'startQuiz',
         path: `/start-quiz`,
         component: lazy(() => import('@/views/practice/StartQuiz/StartQuiz')),
         authority: [], 
     },
+
     {
         key: 'collapseMenu.item1',
         path: '/collapse-menu-item-view-1',

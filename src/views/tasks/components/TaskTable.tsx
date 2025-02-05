@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import Avatar from '@/components/ui/Avatar'
 import Badge from '@/components/ui/Badge'
 import DataTable from '@/components/shared/DataTable'
-import { HiOutlinePencil, HiOutlineTrash } from 'react-icons/hi'
+import { HiEye, HiOutlinePencil, HiOutlineTrash } from 'react-icons/hi'
 import { FiPackage } from 'react-icons/fi'
 import {
     getTasks,
@@ -23,8 +23,10 @@ import type {
     ColumnDef,
 } from '@/components/shared/DataTable'
 import { INode } from '../type'
-import { makeTreeView, mergeTasksData } from '@/utils/helper'
+import { calculateShortFallTime, exatractNestedChild, getSum, makeTreeView, mergeTasksData } from '@/utils/helper'
 import TaskRecordView from './TaskRecordView'
+import { tasksDatabase } from './TaskDatabase'
+import { Pagination } from '@/components/ui'
 
 
 const ActionColumn = ({ row, handleView }: { row: INode, handleView: (data: any) => void }) => {
@@ -47,7 +49,7 @@ const ActionColumn = ({ row, handleView }: { row: INode, handleView: (data: any)
                 className={`cursor-pointer p-2 hover:${textTheme}`}
                 onClick={() => handleView(row)}
             >
-                <HiOutlinePencil />
+                <HiEye />
             </span>
             {/* <span
                 className="cursor-pointer p-2 hover:text-red-500"
@@ -78,6 +80,7 @@ const TaskTable = ({ isMergeTasks }: { isMergeTasks: boolean }) => {
     const tableRef = useRef<DataTableResetHandle>(null)
     const [modalData, setModalData] = useState<any>({})
     const [openViewModal, setOpenViewModal] = useState<boolean>(false)
+    const [day,setDay] = useState<number>(1)
     const handleView: (data?: any) => void = (data: any) => {
         if (openViewModal) {
             setOpenViewModal(false)
@@ -167,7 +170,15 @@ const TaskTable = ({ isMergeTasks }: { isMergeTasks: boolean }) => {
                 accessorKey: 'time_spent',
                 cell: (props) => {
                     const row = props.row.original
-                    return <span className="capitalize"  >{row.time_spent ? row.time_spent : row.id}</span>
+                    return <span className="capitalize"  >{row.time_spent ? getSum(row.time_spent) : row.id}</span>
+                },
+            },
+            {
+                header: 'Shortfall',
+                accessorKey: 'time_spent',
+                cell: (props) => {
+                    const row = props.row.original
+                    return <span className="capitalize"  >{row.time_spent ? calculateShortFallTime(row.name,row.time_spent) : row.id}</span>
                 },
             },
             {
@@ -198,45 +209,55 @@ const TaskTable = ({ isMergeTasks }: { isMergeTasks: boolean }) => {
         const newTableData = cloneDeep(tableData)
         newTableData.sort = sort
         dispatch(setTableData(newTableData))
-    } 
+    }
     useEffect(() => {
-        setTableDataList(data)
-    }, [data])
+        const makeListView = exatractNestedChild([tasksDatabase[day-1]])
+        console.log({makeListView})
+        setTableDataList(makeListView)
+    }, [day])
     useEffect(() => {
+        const makeListView = exatractNestedChild([tasksDatabase[day-1]])
         if (isMergeTasks) {
-
-            setTableDataList(mergeTasksData(data))
+            setTableDataList(mergeTasksData(makeListView))
         } else {
-            setTableDataList(data)
+            setTableDataList(makeListView)
         }
     }, [isMergeTasks])
     return (
-        <div >
-            <DataTable 
-                ref={tableRef}
-                columns={columns}
-                data={tableDataList}
-                skeletonAvatarColumns={[0]}
-                skeletonAvatarProps={{ className: 'rounded-md' }}
-                loading={loading}
-                pagingData={{
-                    total: tableData.total as number,
-                    pageIndex: tableData.pageIndex as number,
-                    pageSize: tableData.pageSize as number,
-                }}
-                onPaginationChange={onPaginationChange}
-                onSelectChange={onSelectChange}
-                onSort={onSort}
-            />
-            <TaskDeleteConfirmation />
-            <TaskRecordView
-                modalData={modalData}
-                openViewModal={openViewModal}
-                handleView={handleView}
-
-            />
+      <div onClick={() => console.log(tableDataList)}>
+        <DataTable
+          ref={tableRef}
+          columns={columns}
+          data={tableDataList}
+          skeletonAvatarColumns={[0]}
+          skeletonAvatarProps={{ className: 'rounded-md' }}
+          loading={loading}
+          pagingData={{
+            total: tableData.total as number,
+            pageIndex: tableData.pageIndex as number,
+            pageSize: tableData.pageSize as number,
+          }}
+          onPaginationChange={onPaginationChange}
+          onSelectChange={onSelectChange}
+          onSort={onSort}
+        />
+        <TaskDeleteConfirmation />
+        <TaskRecordView
+          modalData={modalData}
+          openViewModal={openViewModal}
+          handleView={handleView}
+        />
+        <div className='flex w-full gap-3 align-center justify-center'>
+            <span className="text-center relative top-1">Days: </span>
+          <Pagination
+            pageSize={1}
+            currentPage={day}
+            total={7}
+            onChange={data => setDay(data)}
+          />
         </div>
-    )
+      </div>
+    );
 }
 
 export default TaskTable

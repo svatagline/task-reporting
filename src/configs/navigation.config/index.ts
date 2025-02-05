@@ -28,6 +28,16 @@ const navigationConfig: NavigationTree[] = [
         subMenu: [],
     },
     {
+        key: 'analysisTasks',
+        path: '/analysis-tasks',
+        title: 'Analysis tasks',
+        translateKey: 'nav.analysis-task',
+        icon: 'singleMenu',
+        type: NAV_ITEM_TYPE_ITEM,
+        authority: [],
+        subMenu: [],
+    },
+    {
         key: 'practice',
         path: '/practice',
         title: 'Quizlet',

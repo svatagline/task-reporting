@@ -8,7 +8,7 @@ import { useState } from 'react'
 
 injectReducer('taskList', reducer)
 const TaskList = () => {
-    const [isMergeTasks, setIsMergeTask] = useState<boolean>(false)
+    const [isMergeTasks, setIsMergeTask] = useState<boolean>(true)
     const mergeTasks = ( ) => {
         if (isMergeTasks) {
             setIsMergeTask(false)
