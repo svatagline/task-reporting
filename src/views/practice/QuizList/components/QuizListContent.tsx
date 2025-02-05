@@ -26,7 +26,7 @@ const QuizListContent = () => {
     const getData = async () => {
         const res = await getDocument(); 
         if (res.status === 200) {
-            const reformatData = res.data.filter((i:any) => i.jsonData !== null).map((data:any)=>getValidParsedJsonData(data.jsonData)) 
+            const reformatData = res.data.filter((i:any) => i.jsonData !== null).map((data:any)=>getValidParsedJsonData(data.jsonData))  
             dispatch(setQuizData(JSON.stringify(reformatData)))
         }
         return res

@@ -376,7 +376,7 @@ const AddEditNodeForm = forwardRef((props: NodeFormProps, formRef) => {
 
 
     const test = () => {
-        console.log(data)
+         
     }
     return (
         <div  >

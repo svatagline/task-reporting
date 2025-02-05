@@ -1,6 +1,5 @@
 import { Button, Card, Input, Progress } from '@/components/ui'
-import React, { useEffect, useRef, useState } from 'react'
-import { QuizData } from './QuizData'
+import React, { useEffect, useRef, useState } from 'react' 
 import QuizResult from './QuizResult'
 import AnswerForm, { IQuizQue } from '../QuizList/components/AnswerForm'
 import { useLocation } from 'react-router-dom'
@@ -38,7 +37,11 @@ const StartQuiz = () => {
     } else {
       console.log(score, values)
       setScore({ ...score, [currentQuestion]: values['answer'] })
-      setTestSubmitted(true)
+      setFieldValue('isSubmited', true)
+      setTimeout(() => {
+        setTestSubmitted(true)
+      }, 2000);
+    
     }
   }
   const handlePrev = () => {
@@ -85,14 +88,11 @@ const StartQuiz = () => {
   useEffect(() => {
     if (state && state.questions && state.name) {
       setQuizData(state.questions)
-      setQuizName(state.name)
-      console.log('first 1')
-    } else {
-      console.log('first 2')
+      setQuizName(state.name) 
+    } else { 
       // const validData = (state && state.questions) ? state.questions : getValidParsedJsonData(`${localStorage.getItem('curentQuiz')}`)['questions'] ?? []
       const validData = getValidParsedJsonData(`${localStorage.getItem('curentQuiz')}`)
-      if (validData) {
-        console.log('first 4', localStorage.getItem('curentQuiz'))
+      if (validData) { 
         setQuizData(validData.questions)
         setQuizName(validData.name)
       }

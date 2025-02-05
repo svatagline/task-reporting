@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { IQuizQue } from '../QuizList/components/NewQuizForm'
+import React, { useEffect, useState } from 'react' 
 import { optIndex } from '@/utils/helper' 
 import { Tooltip } from '@/components/ui'
+import { IQuizQue } from '../QuizList/components/AnswerForm'
 
 const QuizResult = ({ quizData,
     score }: { quizData: IQuizQue[], score: { [key: string]: string } }) => {
@@ -114,9 +114,7 @@ const QuizResult = ({ quizData,
             ]
         ] 
     return (
-        <div
-            onClick={() => console.log({quizData,result,
-                score})}  >
+        <div>
             
             <table>
                 <thead>

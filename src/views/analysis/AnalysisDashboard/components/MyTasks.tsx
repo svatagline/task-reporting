@@ -229,7 +229,7 @@ const navigate = useNavigate();
       //                 to="/app/project/scrum-board"
       //             >
 
-      //                 <span onClick={()=>console.log(data)}> {taskId}</span>
+      //                 <span  > {taskId}</span>
       //             </ActionLink>
       //         )
       //     },

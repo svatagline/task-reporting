@@ -77,7 +77,7 @@ const Tree = ({ data,fetchData }: TreeProps) => {
                     <div className='beforeTitle'>
                         <div className='bt-inner' onClick={() => setShowDialog(true)}>✒️</div>
                     </div>
-                    <div className='nodeName' onClick={() => console.log(data)}> {data.name} </div>
+                    <div className='nodeName'  > {data.name} </div>
                     <div className='afterTitle'>
                         {isChildren &&
                             (isExpanded ? (

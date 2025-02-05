@@ -192,7 +192,7 @@ const ListItem = ({ data, cardBorder,records_count }: ListItemProps) => {
     return str.split('|---|');
   };
   return (
-    <div className='mb-4' onClick={() => console.log(data)}>
+    <div className='mb-4'  >
        { isMutipalRecord && key == 0 && <h4 className='font-bold mt-2  mb-2'>Total avarage</h4>}
       <Card bordered={cardBorder}>
         <div className='grid gap-x-4 grid-cols-12'>
