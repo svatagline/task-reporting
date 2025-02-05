@@ -65,7 +65,7 @@ const NewQuizForm = () => {
             if (response.status === 200) {
                 const getData = await getDocument()
                 if (getData.status === 200) {
-                    const reformatData = getData.data.filter((i: any) => i.jsonData !== null).map((data: any) => getValidParsedJsonData(data.jsonData))
+                    const reformatData = getData.data.filter((i: any) => i.jsonData !== null).map((data: any) => { return {...getValidParsedJsonData(data.jsonData),id:data.id}})  
                     dispatch(setQuizData(JSON.stringify(reformatData)))
                 }
                 onDialogClose()

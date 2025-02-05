@@ -29,7 +29,7 @@ export async function getDocument() {
 /** 📌 UPDATE: Update a document */
 export async function updateDocument(id:number, record:any) {
     const { data, error } = await supabase
-        .from("users")
+        .from("quiz")
         .update(record)
         .eq("id", id);
 
@@ -39,16 +39,16 @@ export async function updateDocument(id:number, record:any) {
 
 /** 📌 DELETE: Delete a document */
 export async function deleteDocument(id:number) {
-    const { error } = await supabase.from("users").delete().eq("id", id);
-    if (error) apiResponse({status:500, data:error});
-    else apiResponse({status:200, data:{message:'Record deleted successfully'}});
+    const { error } = await supabase.from("quiz").delete().eq("id", id);
+    if (error) return apiResponse({status:500, data:error});
+    else return apiResponse({status:200, data:{message:'Record deleted successfully'}});
 }
 
 /** ✅ Example Usaxx     sgdhdsgdsgdsge */
 // createDocument("users", { name: "John Doe", age: 25 });
 // getDocument("users", "YOUR_DOC_ID");
 // updateDocument("users", "YOUR_DOC_ID", { age: 30 });
-// deleteDocument("users", "YOUR_DOC_ID");
+// deleteDocument("users", "34");
 
 
 // 📌 Create a new document
