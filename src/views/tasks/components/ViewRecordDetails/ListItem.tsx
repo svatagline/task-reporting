@@ -4,7 +4,8 @@ import ProgressionBar from './ProgressionBar';
 import { HiOutlineClipboardCheck } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import { Tag } from '@/components/ui';
-import { getAvg, getSum } from '@/utils/helper';
+import { getAvg, getNumbers, getSum } from '@/utils/helper';
+import { INode } from '../../type';
 
 export type ListItemData = {
   id: number;
@@ -25,7 +26,7 @@ export type ListItemData = {
 };
 
 type ListItemProps = {
-  data: ListItemData
+  data: INode
   cardBorder?: boolean
   key:number
   records_count:number
@@ -47,19 +48,37 @@ const ListItem = ({ data, cardBorder,records_count }: ListItemProps) => {
     description,
     reason_for_satisfaction,
     satisfaction_rate,
+    taken_extra_time_to_finish
   } = data;
   const isMutipalRecord = records_count>1
 
   const tu_progression =
     (getSum(time_spent) * 100) / (getSum(time_spent) + getSum(wasted_time));
 
-  const te_progression =
-    parseFloat(getSum(estimated_time ?? time_spent) * 100) /
-    (getSum(time_spent) + getSum(wasted_time));
-
-  const ts_progression = getAvg(satisfaction_rate);
-  const total_progression =
-    ts_progression * 0.5 + te_progression * 0.4 + tu_progression * 0.1;
+ 
+  const ProperWorkPerformance = ({ time_spent, wasted_time,taken_extra_time_to_finish }) => {
+    return (
+      <>
+        <div className='mt-4 flex flex-wrap gap-2'>
+          {[
+            {
+              title: `Spent time: ${getSum(time_spent)+getSum(wasted_time)}`,
+              prefix: 'bg-amber-400',
+            },
+            {
+              title: `Extra time for rework: ${getSum(taken_extra_time_to_finish)}`,
+              prefix: 'bg-rose-500',
+            },
+          ].map((label, index) => (
+            <Tag key={index} prefix className='mx-1' prefixClass={label.prefix}>
+              {label.title}
+            </Tag>
+          ))}
+        </div>
+        <ProgressionBar progression={getNumbers(data,'proper_work_performance')} />
+      </>
+    );
+  };
   const TimeUtilization = ({ time_spent, wasted_time }) => {
     return (
       <>
@@ -79,7 +98,7 @@ const ListItem = ({ data, cardBorder,records_count }: ListItemProps) => {
             </Tag>
           ))}
         </div>
-        <ProgressionBar progression={tu_progression} />
+        <ProgressionBar progression={getNumbers(data,'utilization_performance')} />
       </>
     );
   };
@@ -102,7 +121,7 @@ const ListItem = ({ data, cardBorder,records_count }: ListItemProps) => {
             </Tag>
           ))}
         </div>
-        <ProgressionBar progression={te_progression} />
+        <ProgressionBar progression={getNumbers(data,'estimation_performance')} />
       </>
     );
   };
@@ -111,10 +130,10 @@ const ListItem = ({ data, cardBorder,records_count }: ListItemProps) => {
       <>
         <div
           className='mt-4 flex flex-wrap gap-2'
-          onClick={() => console.log(ts_progression)}
+          
         >
-          {reason_for_satisfaction.length > 0 &&
-            reason_for_satisfaction
+          {`${reason_for_satisfaction}`.length > 0 &&
+            `${reason_for_satisfaction}`
               .split('|---|')
               .map((r, index) => {
                 return {
@@ -133,7 +152,7 @@ const ListItem = ({ data, cardBorder,records_count }: ListItemProps) => {
                 </Tag>
               ))}
         </div>
-        <ProgressionBar progression={ts_progression} />
+        <ProgressionBar progression={getNumbers(data,'satisfaction_rate')} />
       </>
     );
   };
@@ -180,7 +199,7 @@ const ListItem = ({ data, cardBorder,records_count }: ListItemProps) => {
               style={{ textWrap: 'auto' }}
               prefixClass={label.prefix}
             >
-              {getStatus(label.title)}
+              {getStatus(`${label.title}`)}
             </Tag>
           ))}
         </div>
@@ -189,23 +208,23 @@ const ListItem = ({ data, cardBorder,records_count }: ListItemProps) => {
   };
 
   const listBySeparate = (str: string) => {
-    return str.split('|---|');
+    return `${str}`.split('|---|');
   };
   return (
-    <div className='mb-4'  >
-       { isMutipalRecord && key == 0 && <h4 className='font-bold mt-2  mb-2'>Total avarage</h4>}
+    <div className='mb-4'  onClick={()=>console.log(data)}>
+       { isMutipalRecord && key =='0' && <h4 className='font-bold mt-2  mb-2'>Total avarage</h4>}
       <Card bordered={cardBorder}>
         <div className='grid gap-x-4 grid-cols-12'>
           <div className='my-1 sm:my-0 col-span-12    md:flex md:items-center'>
             <div className='flex flex-col'>
-              <h6 className='font-bold'>Description</h6>
+            <h6 className='font-bold'>Task Description { isMutipalRecord && key=='0'?"":key}</h6>
 
               {listBySeparate(description).join(' | ')}
             </div>
           </div>
 
           <div className='my-1 sm:my-0 col-span-12   md:flex md:items-center'>
-            <ProgressionBar progression={total_progression} />
+            <ProgressionBar progression={getNumbers(data,'total_performance')} />
           </div>
         </div>
         <div className='mt-4 flex flex-col gap-2'>
@@ -242,12 +261,28 @@ const ListItem = ({ data, cardBorder,records_count }: ListItemProps) => {
               ),
             },
             {
+              title: `Rework analysis`,
+              prefix: 'bg-blue-500',
+              details: `Total: ${
+                parseInt(time_spent) + parseInt(wasted_time)
+              } Utilazed: ${parseInt(time_spent)} Wasted: ${parseInt(
+                wasted_time,
+              )}`,
+              element: (
+                <ProperWorkPerformance
+                  wasted_time={wasted_time}
+                  time_spent={time_spent}
+                  taken_extra_time_to_finish={`${taken_extra_time_to_finish??0}`}
+                />
+              ),
+            },
+            {
               title: 'Satisfaction',
               prefix: 'bg-rose-500',
-              description: reason_for_satisfaction.length>0?"Reason for satisfaction rate":"",
+              description: `${reason_for_satisfaction}`.length>0?"Reason for satisfaction rate":"",
               element: (
                 <Satisfaction
-                  reason_for_satisfaction={reason_for_satisfaction}
+                  reason_for_satisfaction={`${reason_for_satisfaction}`}
                   satisfaction_rate={satisfaction_rate}
                 />
               ),
@@ -288,7 +323,7 @@ const ListItem = ({ data, cardBorder,records_count }: ListItemProps) => {
         </div>
       </Card>
 
-      { isMutipalRecord && key == 0 && <h4 className='font-bold mt-2  mb-2'>Nested Records</h4>}
+      { isMutipalRecord && key == '0' && <h4 className='font-bold mt-2  mb-2'>Nested Records</h4>}
     </div>
   );
 };

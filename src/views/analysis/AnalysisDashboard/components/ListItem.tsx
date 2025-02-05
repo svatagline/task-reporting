@@ -1,8 +1,9 @@
 import Card from '@/components/ui/Card'
 import ProgressionBar from './ProgressionBar'
-import { HiOutlineClipboardCheck } from 'react-icons/hi'
+import { HiClock, HiOutlineClipboardCheck } from 'react-icons/hi'
 import { Link } from 'react-router-dom'
 import { EllipsisButton, UsersAvatarGroup } from '@/components/shared'
+import { INode } from '@/views/tasks/type'
 
 export type ListItemData = {
     id: number
@@ -26,7 +27,7 @@ type ListItemProps = {
     cardBorder?: boolean
 }
 
-const ListItem = () => {
+const ListItem = ({allTaskData}:{allTaskData:INode[]}) => {
     const data = {
         "id": 27,
         "name": "EVO SaaS",
@@ -61,7 +62,7 @@ const ListItem = () => {
         data
 
     return (
-        <div className="mb-4"  >
+        <div className="mb-4"  onClick={()=>console.log(allTaskData)}>
             <Card bordered={true}>
                 <div className="grid gap-x-4 grid-cols-12">
                     <div className="my-1 sm:my-0 col-span-12 sm:col-span-2 md:col-span-3 lg:col-span-3 md:flex md:items-center">
@@ -76,7 +77,7 @@ const ListItem = () => {
                     </div>
                     <div className="my-1 sm:my-0 col-span-12 sm:col-span-2 md:col-span-2 lg:col-span-2 md:flex md:items-center md:justify-end">
                         <div className="inline-flex items-center px-2 py-1 border border-gray-300 rounded-full">
-                            <HiOutlineClipboardCheck className="text-base" />
+                            <HiClock className="text-base" />
                             <span className="ml-1 rtl:mr-1 whitespace-nowrap">
                                 {completedTask} / {totalTask}
                             </span>

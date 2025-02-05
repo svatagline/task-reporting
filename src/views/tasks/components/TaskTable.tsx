@@ -175,7 +175,7 @@ const TaskTable = ({ isMergeTasks }: { isMergeTasks: boolean }) => {
             },
             {
                 header: 'Shortfall',
-                accessorKey: 'time_spent',
+                accessorKey: 'description',
                 cell: (props) => {
                     const row = props.row.original
                     return <span className="capitalize"  >{row.time_spent ? calculateShortFallTime(row.name,row.time_spent) : row.id}</span>

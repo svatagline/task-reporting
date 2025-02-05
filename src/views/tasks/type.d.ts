@@ -21,7 +21,7 @@ type TaskImagesProps = {
 
 interface INode {
     id?: string
-    name: string
+    name?: string
     tag?: string
     children?: INode[]
     isExpanded?: Boolean
@@ -34,6 +34,7 @@ interface INode {
     focus_rate?: string
     satisfaction_rate?: string
     reason_for_satisfaction?: string
+    taken_extra_time_to_finish?: string
     notes?: string
     hour?: string
     childFormType?: string

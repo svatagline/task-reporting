@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Table from '@/components/ui/Table';
@@ -14,8 +14,9 @@ import {
 } from '@tanstack/react-table';
 import ListItem from './ListItem';
 import { INode } from '@/views/tasks/type';
-import { HiOutlineClipboardCheck } from 'react-icons/hi';
-import { getSum } from '@/utils/helper';
+import { HiClock, HiEye, HiOutlineClipboardCheck } from 'react-icons/hi';
+import { calculateShortFallTime, getNumbers, getSum } from '@/utils/helper';
+import TaskRecordView from '@/views/tasks/components/TaskRecordView';
 
 type Task = {
   taskId: string;
@@ -108,114 +109,59 @@ const TimeManagementBox = ({ row }: { row: any }) => {
   return (
     <>
       <div className='inline-flex items-center px-2 py-1 border border-gray-300 rounded-full'>
-        <HiOutlineClipboardCheck className='text-base' />
+        <HiClock className='text-base' />
         <span className='ml-1 rtl:mr-1 whitespace-nowrap'>
           {getSum(
             `${time_spent}|---|${wasted_time}|---|${extra_time_taken_to_finish_task}`,
           )}{' '}
-          / {estimated_time}
+          / {getSum(`${estimated_time}`)}
         </span>
       </div>
     </>
   );
 };
-const MyTasks = ({ allTaskData }: { allTaskData: INode[] }) => {
-//   const data = [
-//     {
-//       taskId: 'KCM-1393',
-//       taskSubject: 'Design sign up flow',
-//       priority: 0,
-//       assignees: [
-//         {
-//           id: '1',
-//           name: 'Carolyn Perkins',
-//           email: 'eileen_h@hotmail.com',
-//           img: '/img/avatars/thumb-1.jpg',
-//         },
-//         {
-//           id: '2',
-//           name: 'Terrance Moreno',
-//           email: '',
-//           img: '/img/avatars/thumb-2.jpg',
-//         },
-//       ],
-//     },
-//     {
-//       taskId: 'KCM-2039',
-//       taskSubject: 'Update contact page',
-//       priority: 1,
-//       assignees: [
-//         {
-//           id: '1',
-//           name: 'Carolyn Perkins',
-//           email: 'eileen_h@hotmail.com',
-//           img: '/img/avatars/thumb-1.jpg',
-//         },
-//       ],
-//     },
-//     {
-//       taskId: 'KCM-2155',
-//       taskSubject: 'Document features 2.0',
-//       priority: 1,
-//       assignees: [
-//         {
-//           id: '1',
-//           name: 'Carolyn Perkins',
-//           email: 'eileen_h@hotmail.com',
-//           img: '/img/avatars/thumb-1.jpg',
-//         },
-//         {
-//           id: '2',
-//           name: 'Terrance Moreno',
-//           email: '',
-//           img: '/img/avatars/thumb-2.jpg',
-//         },
-//         {
-//           id: '3',
-//           name: 'Ron Vargas',
-//           email: 'ronnie_vergas@infotech.io',
-//           img: '/img/avatars/thumb-3.jpg',
-//         },
-//       ],
-//     },
-//     {
-//       taskId: 'KCM-2270',
-//       taskSubject: 'Fix typo in home page',
-//       priority: 2,
-//       assignees: [
-//         {
-//           id: '1',
-//           name: 'Carolyn Perkins',
-//           email: 'eileen_h@hotmail.com',
-//           img: '/img/avatars/thumb-1.jpg',
-//         },
-//         {
-//           id: '5',
-//           name: 'Joyce Freeman',
-//           email: 'joyce991@infotech.io',
-//           img: '/img/avatars/thumb-5.jpg',
-//         },
-//       ],
-//     },
-//     {
-//       taskId: 'KCM-1957',
-//       taskSubject: 'Fix broken API',
-//       priority: 0,
-//       assignees: [
-//         {
-//           id: '1',
-//           name: 'Carolyn Perkins',
-//           email: 'eileen_h@hotmail.com',
-//           img: '/img/avatars/thumb-1.jpg',
-//         },
-//       ],
-//     },
-//   ];
 
-const data = allTaskData
+
+const ActionColumn = ({ data, handleView }: { data: INode, handleView: (data: any) => void }) => {
+  
+ 
+
+  return (
+      <div className="flex justify-start text-lg">
+          <span
+              className={`cursor-pointer p-2 `}
+              onClick={() => handleView(data)}
+          >
+              <HiEye />
+          </span>
+          {/* <span
+              className="cursor-pointer p-2 hover:text-red-500"
+              onClick={onDelete}
+          >
+              <HiOutlineTrash />
+          </span> */}
+      </div>
+  )
+}
+const MyTasks = ({ allTaskData }: { allTaskData: INode[] }) => {
+
+  const [openViewModal, setOpenViewModal] = useState<boolean>(false)
+  const [modalData,setModalData] = useState<any>({})
+  const handleView: (data?: any) => void = (data: any) => {
+      if (openViewModal) {
+          setOpenViewModal(false)
+
+      } else {
+          setOpenViewModal(true)
+          setModalData(data)
+
+      }
+  }
+ 
+const data = allTaskData.filter((i)=>i.tag !== 'note')
 const navigate = useNavigate();
 
-  const columns: ColumnDef<Task>[] = useMemo(
+  const columns: ColumnDef<INode>[] = useMemo(
     () => [
       // {
       //     header: 'Task ID',
@@ -236,15 +182,18 @@ const navigate = useNavigate();
       // },
 
       {
-        header: 'Name',
-        accessorKey: 'name',
+        header: 'Name', 
+        cell: props => {
+          const {name} = props.row.original
+          return  <span className='capitalize'>{name}</span>;
+        },
       },
+      // {
+      //   header: 'Tag',
+      //   accessorKey: 'tag',
+      // },
       {
-        header: 'Tag',
-        accessorKey: 'tag',
-      },
-      {
-        header: 'Time management',
+        header: <div> <div className='w-fit flex flex-col justify-center items-center'><span>Time management</span><span className='text-[9px] normal-case'>Spent/Estimated Time</span></div></div>,
         accessorKey: 'time_spent',
         cell: props => {
           return <TimeManagementBox row={props.row.original} />;
@@ -254,16 +203,31 @@ const navigate = useNavigate();
         header: 'Category',
         accessorKey: 'category',
         cell: props => {
-          const { category } = props.row.original;
-          return <CategoryTag category={category} />;
+          const { category = '0' } = props.row.original;
+          return <CategoryTag category={parseInt(`${category}`)} />;
         },
       },
       {
-        header: 'Satisfaction Rate',
+        header: 'Performance',
         accessorKey: 'satisfaction_rate',
         cell: props => {
-          const { satisfaction_rate } = props.row.original;
-          return <SatisfactionTag satisfaction={parseInt(satisfaction_rate)} />;
+          const { satisfaction_rate='0' } = props.row.original;
+          return `${getNumbers(props.row.original,'total_performance')}%`;
+        },
+      },
+      {
+        header: 'Time Shortfall(m) ',
+        accessorKey: 'description',
+        cell: props => {
+          const { name,time_spent } = props.row.original;
+          return `${calculateShortFallTime(`${name}`,`${time_spent}`)}`;
+        },
+      },
+      {
+        header: 'Action',
+        accessorKey: 'focus_rate',
+        cell: props => { 
+          return <ActionColumn data={props.row.original} handleView={handleView} />;
         },
       },
     ],
@@ -340,9 +304,17 @@ const navigate = useNavigate();
           })}
         </TBody>
       </Table>
-      <ListItem />
+      <ListItem allTaskData={allTaskData}/>
+      <TaskRecordView
+          modalData={modalData}
+          openViewModal={openViewModal}
+          handleView={handleView}
+        />
     </Card>
+
   );
 };
 
 export default MyTasks;
+
+

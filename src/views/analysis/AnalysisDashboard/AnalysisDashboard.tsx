@@ -1,11 +1,11 @@
 import Loading from '@/components/shared/Loading';
 import MyTasks from './components/MyTasks';
 import { RowData, taskData } from '../RowData';
-import { exatractNestedChild } from '@/utils/helper';
+import { exatractNestedChild, mergeTasksData } from '@/utils/helper';
 import { INode } from '@/views/tasks/type';
 
 const AnalysisDashboard = () => {
-  const allTaskData:INode[] = exatractNestedChild(taskData)
+  const allTaskData:INode[] = mergeTasksData(exatractNestedChild([taskData[1]]))
 
   const test = () =>[
     console.log(allTaskData)
