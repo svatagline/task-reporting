@@ -1,129 +1,104 @@
 const hourlyRanges = [
 
     {
-        id: "1738632600",
+        id: "1738805400",
         name: "Reporting",
-        time: "04 Feb 2025",
-        children: [
-
-
-        [
-            [
-                { id: '1738632600_1738636200', name: '7 AM to 8 AM',
+        time: "06 Feb 2025",
+        children: 
+            [  
+                {
+                    id: '1738805400_1738809000', name: '7 AM to 8 AM',
                     children: [
                         {
-                            "id": "1738632600_1738636200_01",
-                            "name": "eSkill",
-                            "description": "conversation in josh talk",
-                            "category": 1,
+                            "id": "1738805400_1738809000_01",
+                            "name": "Programming",
+                            "description": "make task analysis more easy to understand",
+                            "category": 2,
                             "status": "2",
                             "time_spent": "60",
                             "wasted_time": "0",
+                            "estimated_time": "60",
+                            "tag": "reporting app",
                             "focus_rate": "100",
                             "satisfaction_rate": "10",
+                            "taken_extra_time_to_finish": '0',
                             "reason_for_satisfaction": "",
                             "notes": ""
                         },
-
-
                     ]
-                 },
-                 { id: '1738639800_1738654200', name: '9 AM to 1 PM',
+                }, 
+                
+                { id: '1738812600_1738816200', name: '9 AM to 10 AM',
                     children: [
                         {
-                            "id": "1738639800_1738654200_01",
-                            "name": "Programming",
-                            "description": "Quiz app",
-                            "category": 1,
-                            "status": "3",
-                            "time_spent": "240",
-                            "wasted_time": "0",
-                            "estimated_time": "60",
-                            "tag":"Quiz application",
-                            "focus_rate": "100",
-                            "satisfaction_rate": "5",
-                            "reason_for_satisfaction": "time estimation is too weak, take 4x time",
-                            "notes": "divide task into subtask and calculate time during time estimation"
-                        },]
-                 }, 
-                { id: '1738654200_1738657800', name: '1 PM to 2 PM',
-                    children: [
-                        {
-                            "id": "1738654200_1738657800_01",
-                            "name": "eSkill",
-                            "description": "conversation in josh talk",
-                            "category": 1,
-                            "status": "2",
-                            "time_spent": "15",
-                            "wasted_time": "15",
-                            "estimated_time": "15",
-                            "tag":"E skill",
-                            "focus_rate": "100",
-                            "satisfaction_rate": "9",
-                            "reason_for_satisfaction": "time wast due to unwanted user of josh talk,they cut call without conversation, lake of topics for conversation",
-                            "notes": "choose topics for conversation so it will be long, suggestion from user: speak on unknown topics ti make better skill"
-                        }, 
-                    ]
-                 },
-                { id: '1738657800_1738661400', name: '2 PM to 3 PM',
-                    children: [
-                        {
-                            "id": "1738657800_1738661400_01",
+                            "id": "1738812600_1738816200_01",
                             "name": "Management",
-                            "description": "make proper yesterday and today task",
-                            "category": 1,
+                            "description": "add json task",
+                            "category": 2,
                             "status": "2",
-                            "time_spent": "60",
-                            "wasted_time": "60",
-                            "estimated_time": "60",
-                            "tag":"Management",
-                            "focus_rate": "",
-                            "satisfaction_rate": "8",
-                            "reason_for_satisfaction": "more then enough time spend for manage task data on daily basis",
+                            "time_spent": "30",
+                            "wasted_time": "0",
+                            "estimated_time": "30",
+                            "tag": "json",
+                            "focus_rate": "100",
+                            "satisfaction_rate": "10",
+                            "taken_extra_time_to_finish": '0',
+                            "reason_for_satisfaction": "",
                             "notes": ""
-                        }, 
+                        },
+                        
                     ]
                  },
-                { id: '1738661400_1738675800', name: '3 PM to 7 PM',
+                { id: '1738816200_1738819800', name: '10 AM to 11 AM',
                     children: [
+                       
                         {
-                            "id": "1738661400_1738675800_01",
+                            "id": "1738816200_1738819800_01",
                             "name": "Programming",
-                            "description": "add firebase in project for database",
+                            "description": "show category wise time distribution",
                             "category": 1,
                             "status": "2",
-                            "time_spent": "240",
+                            "time_spent": "0",
                             "wasted_time": "0",
-                            "tag":"Quiz application",
-                            "estimated_time": "120",
-                            "focus_rate": "",
-                            "satisfaction_rate": "5",
-                            "reason_for_satisfaction": "time estimation is too weak, take 3x time, firebase was not working properly so i change supabase database, time taken in learning supabase",
-                            "notes": "as fast as possible find current library workable or not. Practice more and more on task like qiz application. "
-                        }, 
+                            "estimated_time": "60",
+                            "tag": "reporting app",
+                            "focus_rate": "100",
+                            "satisfaction_rate": "0",
+                            "taken_extra_time_to_finish": '0',
+                            "reason_for_satisfaction": "",
+                            "notes": ""
+                        },
                     ]
-                 },  
-                { id: '1738675800_1738679400', name: '7 PM to 8 PM' },
-                { id: '1738679400_1738683000', name: '8 PM to 9 PM' },
-                { id: '1738683000_1738686600', name: '9 PM to 10 PM' },
-                { id: '1738686600_1738690200', name: '10 PM to 11 PM' },
-                { id: '1738632600_1738690200', name: '7 AM to 11 PM' },
+                 },
+                { id: '1738819800_1738823400', name: '11 AM to 12 PM' },
+                { id: '1738823400_1738827000', name: '12 PM to 1 PM' },
+                { id: '1738827000_1738830600', name: '1 PM to 2 PM' },
+                { id: '1738830600_1738834200', name: '2 PM to 3 PM' },
+                { id: '1738834200_1738837800', name: '3 PM to 4 PM' },
+                { id: '1738837800_1738841400', name: '4 PM to 5 PM' },
+                { id: '1738841400_1738845000', name: '5 PM to 6 PM' },
+                { id: '1738845000_1738848600', name: '6 PM to 7 PM' },
+                { id: '1738848600_1738852200', name: '7 PM to 8 PM' },
+                { id: '1738852200_1738855800', name: '8 PM to 9 PM' },
+                { id: '1738855800_1738859400', name: '9 PM to 10 PM' },
+                { id: '1738859400_1738863000', name: '10 PM to 11 PM' },
+                { id: '1738805400_1738863000', name: '7 AM to 11 PM' },
+
+
                 {
-                    id: '1738632600_1738690200', name: 'Notes',
+                    id: '1738719000_1738776600', name: 'Notes',
                     children: [
                         {
-                            "id": "1738546200_1738603800_01",
-                            'surynamaskar': 30,
-                            'deep/light sleep': "02:57/3:40",
-                            "typing-speed": "547 cpm,740 char,8:01 ct, 6:08 act",
+                            "id": "1738719000_1738776600_01",
+                            'surynamaskar': 36,
+                            'deep/light sleep': "03:21/2:52",
+                            'reason_of_deep_sleep': "full ac, flat surface of bad by 2 bads,sleep at 12:00 after completing work of project",
+                            "typing-speed": "0 cpm,0 char,08:17 ct, 06:19 act",
                         },
                     ]
 
                 }
-              ]
-
-          ]
-        ]
+            ]
     }
 
 ];

@@ -63,6 +63,8 @@ export type ProjectListState = {
     }[]
     view: 'grid' | 'list'
     query: Query
+    taskList:any[]
+    newTaskDialog: boolean
     newQuizDialog: boolean
     quizList:string
 }
@@ -115,6 +117,8 @@ const initialState: ProjectListState = {
         search: '',
     },
     newQuizDialog: false,
+    newTaskDialog:false,
+    taskList:[],
     quizList:`${localStorage.getItem('quizData')}`
 }
 
@@ -137,6 +141,12 @@ const projectListSlice = createSlice({
         toggleNewQuizDialog: (state, action) => {
             state.newQuizDialog = action.payload
         },
+        setTaskData: (state, action) => {
+            state.taskList = action.payload
+        },
+        toggleNewTaskDialog: (state, action) => {
+            state.newTaskDialog = action.payload
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -156,7 +166,8 @@ const projectListSlice = createSlice({
     },
 })
 
-export const { toggleView, toggleSort, toggleNewQuizDialog, setSearch,setQuizData } =
+export const { toggleView, toggleSort, toggleNewQuizDialog, setSearch,setQuizData,setTaskData,
+    toggleNewTaskDialog } =
     projectListSlice.actions
 
 export default projectListSlice.reducer

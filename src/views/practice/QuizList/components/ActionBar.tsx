@@ -38,7 +38,7 @@ const ActionBar = () => {
 const test = () => {
     console.log(`click on test`)
     // createDocument("quiz_list", { name: "John Doe", age: 25 }); 
-    getDocument()
+    
 }
 
 

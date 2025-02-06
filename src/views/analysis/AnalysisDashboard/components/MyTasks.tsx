@@ -3,9 +3,7 @@ import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Table from '@/components/ui/Table';
 import Tag from '@/components/ui/Tag';
-import { useNavigate } from 'react-router-dom';
-import UsersAvatarGroup from '@/components/shared/UsersAvatarGroup';
-import ActionLink from '@/components/shared/ActionLink';
+import { useNavigate } from 'react-router-dom'; 
 import {
   useReactTable,
   getCoreRowModel,
@@ -16,6 +14,8 @@ import ListItem from './ListItem';
 import { INode } from '@/views/tasks/type';
 import { HiClock, HiEye, HiOutlineClipboardCheck } from 'react-icons/hi';
 import { calculateShortFallTime, getNumbers, getSum } from '@/utils/helper';
+// import TaskRecordView from '@/views/tasks/components/TaskRecordView';
+import TaskDeleteConfirmation from '@/views/tasks/components/TaskDeleteConfirmation';
 import TaskRecordView from '@/views/tasks/components/TaskRecordView';
 
 type Task = {
@@ -98,7 +98,7 @@ const SatisfactionTag = ({ satisfaction }: { satisfaction: number }) => {
   }
 };
 
-const TimeManagementBox = ({ row }: { row: any }) => {
+ const TimeManagementBox = ({ row }: { row: any }) => {
   const {
     time_spent,
     wasted_time,
@@ -123,8 +123,8 @@ const TimeManagementBox = ({ row }: { row: any }) => {
 
 
 const ActionColumn = ({ data, handleView }: { data: INode, handleView: (data: any) => void }) => {
-  
- 
+
+
 
   return (
       <div className="flex justify-start text-lg">
@@ -148,6 +148,7 @@ const MyTasks = ({ allTaskData }: { allTaskData: INode[] }) => {
   const [openViewModal, setOpenViewModal] = useState<boolean>(false)
   const [modalData,setModalData] = useState<any>({})
   const handleView: (data?: any) => void = (data: any) => {
+   
       if (openViewModal) {
           setOpenViewModal(false)
 
@@ -157,10 +158,11 @@ const MyTasks = ({ allTaskData }: { allTaskData: INode[] }) => {
 
       }
   }
- 
-const data = allTaskData.filter((i)=>i.tag !== 'note')
+
+const data = allTaskData //.filter((i)=>i.tag !== 'note')
 const navigate = useNavigate();
 
+// @ts-ignore
   const columns: ColumnDef<INode>[] = useMemo(
     () => [
       // {
@@ -182,10 +184,10 @@ const navigate = useNavigate();
       // },
 
       {
-        header: 'Name', 
+        header: 'Name',
         cell: props => {
           const {name} = props.row.original
-          return  <span className='capitalize'>{name}</span>;
+          return  <span   className='capitalize'>{name}</span>;
         },
       },
       // {
@@ -211,8 +213,8 @@ const navigate = useNavigate();
         header: 'Performance',
         accessorKey: 'satisfaction_rate',
         cell: props => {
-          const { satisfaction_rate='0' } = props.row.original;
-          return `${getNumbers(props.row.original,'total_performance')}%`;
+          const { satisfaction_rate='0',name } = props.row.original;
+          return `${getNumbers(props.row.original,'total_performance',name)}%`;
         },
       },
       {
@@ -226,30 +228,14 @@ const navigate = useNavigate();
       {
         header: 'Action',
         accessorKey: 'focus_rate',
-        cell: props => { 
+        cell: props => {
           return <ActionColumn data={props.row.original} handleView={handleView} />;
         },
       },
     ],
     [],
   );
-  const gg = `
-
-
-  "id": "1738553400_1738567800_01",
-                          "name": "Management",
-                          "description": "add sat/sun schedule in task reporting",
-                          "category": 2,
-                          "status": "2",
-                          "time_spent": "25",
-                          "wasted_time": "0",
-                          "tag": "Management",
-                          "estimated_time": "15",
-                          "focus_rate": "0",
-                          "satisfaction_rate": "10",
-                          "reason_for_satisfaction": "",
-                          "notes": ""
-`;
+ 
   const table = useReactTable({
     data,
     columns,
@@ -310,6 +296,7 @@ const navigate = useNavigate();
           openViewModal={openViewModal}
           handleView={handleView}
         />
+
     </Card>
 
   );

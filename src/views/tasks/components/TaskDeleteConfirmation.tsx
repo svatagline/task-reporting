@@ -48,7 +48,7 @@ const TaskDeleteConfirmation = () => {
 
     return (
         <ConfirmDialog
-            isOpen={dialogOpen}
+            isOpen={ dialogOpen}
             type="danger"
             title="Delete task"
             confirmButtonColor="red-600"

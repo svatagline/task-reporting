@@ -479,7 +479,7 @@ export const taskData = [
                             "id": "1738567800_1738571400_01",
                             "name": "eSkill",
                             "description": "Conversation in josh talk",
-                            "category": 2,
+                            "category": 1,
                             "status": "2",
                             "time_spent": "25",
                             "wasted_time": "5",
@@ -498,7 +498,7 @@ export const taskData = [
                             "id": "1738571400_1738589400_01",
                             "name": "Programming",
                             "description": "Quiz app",
-                            "category": 2,
+                            "category": 1,
                             "status": "1",
                             "time_spent": "270",
                             "wasted_time": "30",
@@ -538,7 +538,7 @@ export const taskData = [
                             "id": "1738596600_1738603800_01",
                             "name": "yk",
                             "description": "",
-                            "category": 0,
+                            "category": 3,
                             "status": "0",
                             "time_spent": "0",
                             "wasted_time": "60",
@@ -566,7 +566,7 @@ export const taskData = [
                 }
 
             ]
-    }, 
+    },
     {
         id: "1738632600",
         name: "Reporting",
@@ -641,7 +641,7 @@ export const taskData = [
                             "id": "1738657800_1738661400_01",
                             "name": "Management",
                             "description": "make proper yesterday and today task",
-                            "category": 1,
+                            "category": 2,
                             "status": "2",
                             "time_spent": "60",
                             "wasted_time": "60",
@@ -703,7 +703,7 @@ export const taskData = [
                             "id": "1738683000_1738686600_01",
                             "name": "coding",
                             "description": "conversation in josh talk",
-                            "category": 1,
+                            "category": 0,
                             "status": "3",
                             "time_spent": "60",
                             "wasted_time": "0",
@@ -744,8 +744,8 @@ export const taskData = [
                             'surynamaskar': 36,
                             'deep/light sleep': "02:57/3:40",
                             "typing-speed": "547 cpm,740 char,8:01 ct, 6:08 act",
-                            "name":"note1",
-                            "tag":"note"
+                            "name": "note1",
+                            "tag": "note"
                         },
                     ]
 

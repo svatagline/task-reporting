@@ -27,12 +27,11 @@ export type ListItemData = {
 
 type ListItemProps = {
   data: INode
-  cardBorder?: boolean
-  key:number
+  cardBorder?: boolean 
   records_count:number
 };
 
-const ListItem = ({ data, cardBorder,records_count }: ListItemProps) => {
+const ListItemSm = ({ data, cardBorder=true,records_count }: ListItemProps) => {
   const {
     name,
     totalTask,
@@ -300,7 +299,7 @@ const ListItem = ({ data, cardBorder,records_count }: ListItemProps) => {
                 : notes,
             },
           ].map((label, index) => (
-            <div key={index}  className='my-1 sm:my-0 col-span-12    md:flex md:items-center'>
+            <div key={index} className='my-1 sm:my-0 col-span-12    md:flex md:items-center'>
               <div className='flex flex-col w-full'>
                 <h6 className='font-bold'> {label.title}</h6>
                 <p>
@@ -328,4 +327,4 @@ const ListItem = ({ data, cardBorder,records_count }: ListItemProps) => {
   );
 };
 
-export default ListItem;
+export default ListItemSm;

@@ -10,18 +10,18 @@ const apiResponse = (response:{data:any, status:number}) => {
 }
 /** 📌 CREATE: Add a new document */
 
-export async function createDocument(body:{jsonData:string}) {
-    const { jsonData } = body
+export async function createDocument(body:{table:string, jsonData:string}) {
+    const { jsonData,table } = body
     const { data, error } = await supabase
-        .from("quiz")
+        .from(table)
         .insert([{ jsonData }]);
     if (error) return apiResponse({status:500, data:error});
     else return apiResponse({status:200, data:data});
 }
 
 /** 📌 READ: Get a document by ID */
-export async function getDocument() {
-    const { data, error } = await supabase.from("quiz").select();
+export async function getDocument(table:string) {
+    const { data, error } = await supabase.from(table).select();
     if (error) return apiResponse({status:500, data:error});
     else return apiResponse({status:200, data:data});
 }

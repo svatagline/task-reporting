@@ -118,7 +118,7 @@ export function mergeTasksData(data: INode[]) {
 
                 if (t.name == item.name) {
                     let modifiedTask = {
-                        ...t, 
+                        ...t,
                         id: (t.id ? t.id : 0) + "|---|" + (item.id ? item.id : 0),
                         mergedRecord: existTask.mergedRecord + 1,
                         mergeId: (t.id ? t.id : 'null') + "|---|" + (item.id ? item.id : 'null'),
@@ -139,22 +139,22 @@ export function mergeTasksData(data: INode[]) {
                 }
             })
         } else {
-            result.push({ ...item, assignedTime: getTime, mergeId: item.id,mergedRecord: 1, })
+            result.push({ ...item, assignedTime: getTime, mergeId: item.id, mergedRecord: 1, })
         }
     });
     return result;
 }
 
-export function splitObjectValues(input:any) {
+export function splitObjectValues(input: any) {
     const separator = "|---|";
-    
+
     // Determine the maximum number of splits in any property
     const maxSplits = Math.max(
         ...Object.values(input)
             .filter(value => typeof value === "string")
             .map(value => value.split(separator).length)
     );
-    
+
     // Generate array of objects
     const result = Array.from({ length: maxSplits }, (_, index) => {
         return Object.fromEntries(
@@ -167,106 +167,167 @@ export function splitObjectValues(input:any) {
             })
         );
     });
-    
+
     return result;
 }
 
-export  const optIndex = (index:number|string)=>{
+export const optIndex = (index: number | string) => {
     return `0ABCD`.charAt(parseInt(`${index}`))
 }
 
-export const getValidParsedJsonData = (values:string)=>{
-        try {
-            return JSON.parse(values)
-            
-        } catch (error) {
-            return null
-        }
+export const getValidParsedJsonData = (values: string) => {
+    try {
+        return JSON.parse(values)
+
+    } catch (error) {
+        return null
+    }
+}
+
+
+export const getAvg = (str: string = "") => {
+    const arr = `${str}`.split('|---|');
+    const avg = arr.reduce((acc, item) => {
+        return acc + parseInt(item);
+    }, 0);
+
+    return avg / arr.length;
+};
+export const getSum = (str: string = "") => {
+    const arr = `${str}`.split('|---|');
+    const avg = arr.reduce((acc, item) => {
+        return acc + parseInt(item);
+    }, 0);
+
+    return avg;
+};
+
+export const exatractNestedChild = (initialData: any) => {
+    try {
+          let data: INode[] = initialData
+    let level = [24]
+    let listing: INode[] = []
+    const listLastNestedItems = (d: INode[], parentId = 0) => {
+        d.forEach((record: any) => {
+            if (level.includes(`${record.id}`.length)) {
+                // console.log(first)
+                listing.push({ ...record, parent_id: parentId })
+            }
+
+            if (record.children && record.children.length > 0) {
+                listLastNestedItems(record.children, record.id)
+            }
+        })
+    }
+    listLastNestedItems(data)
+
+
+    return listing
+    } catch (error) {
+        console.log("Error in exatractNestedChild:",error)
+        return []
+    }
+  
+}
+const dedicatedTime: Record<string, number> = {
+    'Programming': 540,
+    'eSkill': 120,
+    'Management': 0
+};
+export const calculateShortFallTime = (name: string, tasktime: string) => {
+    const taskTimeSum = getSum(tasktime);
+
+    if (name in dedicatedTime) {
+        return dedicatedTime[name] - taskTimeSum;
+    } else {
+        return -taskTimeSum;
     }
 
+    return 0; // Optional: Handle cases where `name` is not found
+};
 
-    export const getAvg = (str: string = "") => {
-        const arr = `${str}`.split('|---|');
-        const avg = arr.reduce((acc, item) => {
-            return acc + parseInt(item);
-        }, 0);
-    
-        return avg / arr.length;
-    };
-    export const getSum = (str: string = "") => {
-        const arr = `${str}`.split('|---|');
-        const avg = arr.reduce((acc, item) => {
-            return acc + parseInt(item);
-        }, 0);
-    
-        return avg;
-    };
+export const getNumbers = (record: INode, num_type: string, task_name?: string) => {
+    const { estimated_time, time_spent, wasted_time, satisfaction_rate, taken_extra_time_to_finish } = record
 
-    export const exatractNestedChild = (initialData:any) => {
-        let data: INode[] = initialData
-        let level = [24]
-        let listing: INode[] = []
-        const listLastNestedItems = (d: INode[], parentId = 0) => {
-            d.forEach((record: any) => {
-                if (level.includes(`${record.id}`.length)) {
-                    // console.log(first)
-                    listing.push({ ...record, parent_id: parentId })
-                }
-    
-                if (record.children && record.children.length > 0) {
-                    listLastNestedItems(record.children, record.id)
-                }
-            })
-        }
-        listLastNestedItems(data)
-    
-    
-        return listing
+    const utilizationPerformance = parseFloat(`${(parseFloat(`${getSum(`${estimated_time ?? time_spent}`) * 100}`) / (getSum(`${time_spent}`) + getSum(`${wasted_time}`))).toFixed(2)}`);
+    const estimationPerformance = parseFloat(`${(parseFloat(`${getSum(`${estimated_time ?? time_spent}`) * 100}`) / (getSum(`${time_spent}`) + getSum(`${wasted_time}`))).toFixed(2)}`);
+    const properWorkPerformance = 100 - parseFloat(`${(parseFloat(`${getSum(`${taken_extra_time_to_finish ?? 0}`) * 100}`) / (getSum(`${time_spent}`) + getSum(`${wasted_time}`))).toFixed(2)}`);
+    const satisfactionRate = getAvg(`${satisfaction_rate}`)
+    const priorityRate = 100 - parseFloat((calculateShortFallTime(`${task_name}`, `${time_spent}`) * 100 / dedicatedTime[`${task_name}`]).toFixed(2))
+
+
+    let total_performance = 0
+    if (dedicatedTime[`${task_name}`]) {
+        total_performance = parseFloat(parseFloat(`${priorityRate * 0.1 + satisfactionRate * 0.3 + estimationPerformance * 0.2 + properWorkPerformance * 0.3 + utilizationPerformance * 0.1}`).toFixed(2))
+    } else {
+        total_performance = satisfactionRate * 0.3 + estimationPerformance * 0.3 + properWorkPerformance * 0.3 + utilizationPerformance * 0.1;
+
     }
-
-    export const calculateShortFallTime = (name: string, tasktime: string) => {
-
-        const dedicatedTime: Record<string, number> = {
-            'Programming': 540,
-            'eSkill': 120,
-            'Management': 0
-        };
-    
-        const taskTimeSum = getSum(tasktime);
-    
-        if (name in dedicatedTime) {
-            return dedicatedTime[name] - taskTimeSum;
-        }else{
-            return  -taskTimeSum;
-        }
-    
-        return 0; // Optional: Handle cases where `name` is not found
-    };
- 
-    export   const getNumbers = (record:INode,num_type:string) =>{
-        const {estimated_time,  time_spent,  wasted_time,  satisfaction_rate,taken_extra_time_to_finish} = record
-    
-        const utilizationPerformance = parseFloat(`${(parseFloat(`${getSum(`${estimated_time ?? time_spent}`) * 100}`) / (getSum(`${time_spent}`) + getSum(`${wasted_time}`))).toFixed(2)}`);
-        const estimationPerformance = parseFloat(`${(parseFloat(`${getSum(`${estimated_time ?? time_spent}`) * 100}`) / (getSum(`${time_spent}`) + getSum(`${wasted_time}`))).toFixed(2)}`);
-        const properWorkPerformance = 100 - parseFloat(`${(parseFloat(`${getSum(`${taken_extra_time_to_finish??0}`) * 100}`) / (getSum(`${time_spent}`) + getSum(`${wasted_time}`))).toFixed(2)}`);
-        const satisfactionRate = getAvg(`${satisfaction_rate}`)  
-        const total_performance = satisfactionRate * 0.3 + estimationPerformance * 0.3 + properWorkPerformance * 0.3 + utilizationPerformance * 0.1;
-        switch (num_type) {
-          case 'satisfaction_rate':
+    switch (num_type) {
+        case 'satisfaction_rate':
             return satisfactionRate
-          case 'utilization_performance':
+        case 'utilization_performance':
             return utilizationPerformance
-          case 'estimation_performance':
+        case 'estimation_performance':
             return estimationPerformance
-          case 'proper_work_performance':
+        case 'proper_work_performance':
             return properWorkPerformance
-          case 'total_performance':
+        case 'priority_performance':
+            return priorityRate
+        case 'total_performance':
             return total_performance
-          // case 'sat_rate':
-          //   return getAvg(`${satisfaction_rate}`) 
-          default:
-            return 0 
+        // case 'sat_rate':
+        //   return getAvg(`${satisfaction_rate}`)
+        default:
+            return 0
+    }
+
+
+}
+
+
+
+
+
+ 
+
+type TimeDistribution = {
+    category: number;
+    timeSpent: number;
+    task: { name: string; timeSpent: number }[];
+};
+
+
+
+export function calculateTimeDistribution(tasks: INode[]): TimeDistribution[] {
+    try {
+        function parseTimeSpent(timeSpentStr: string): number {
+        return timeSpentStr
+            .split("|---|")
+            .map(Number)
+            .reduce((sum, val) => sum + val, 0);
+    }
+    const categoryMap = new Map<number, TimeDistribution>();
+
+    tasks.forEach(task => {
+        if (['','null','undefined',undefined].includes(`${task.category}`) || !task.time_spent) return;
+
+        const timeSpent = parseTimeSpent(`${task.time_spent}|---|${task.wasted_time}`);
+        if (timeSpent === 0) return;
+
+        if (!categoryMap.has(parseInt(task.category))) {
+            categoryMap.set(parseInt(task.category), { category: parseInt(task.category), timeSpent: 0, task: [] });
         }
-    
-    
-      }
+
+        const categoryEntry = categoryMap.get(parseInt(task.category))!;
+        categoryEntry.timeSpent += timeSpent;
+        categoryEntry.task.push({ name: `${task.name}`, timeSpent,data:task });
+    });
+
+    return Array.from(categoryMap.values()); 
+    } catch (error) {
+        console.log('Error in calculateTimeDistribution:', error)
+        return []
+    }
+   
+}

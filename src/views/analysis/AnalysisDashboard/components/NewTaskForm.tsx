@@ -2,12 +2,12 @@ import { FormItem, FormContainer } from '@/components/ui/Form'
 import Input from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import { Field, Form, Formik } from 'formik'
-import * as Yup from 'yup'
-import { setQuizData, toggleNewQuizDialog, useAppDispatch } from '../store'
-import { IQuizQue } from './AnswerForm'
+import * as Yup from 'yup' 
 import { createDocument, getDocument } from '@/utils/firebase/firebaseFunction'
 import { getValidParsedJsonData } from '@/utils/helper'
 import { HiOutlinePlusCircle } from 'react-icons/hi'
+import { setTaskData, toggleNewTaskDialog, useAppDispatch } from '../../store'
+import { IQuizQue } from '@/views/practice/QuizList/components/AnswerForm'
 
 const checkValidQuizData = (data: string) => {
     try {
@@ -21,9 +21,7 @@ const checkValidQuizData = (data: string) => {
                 isValid = false
                 return false
             }
-        })
-
-
+        }) 
         return isValid
     } catch (error) {
         console.log(error)
@@ -40,37 +38,33 @@ const validationSchema = Yup.object().shape({
         .required('Please enter name of quiz!'),
     jsonData: Yup.string()
         .required('Please add json data!')
-        .test(
-            'validJsonRequired',
-            'Json object is not valid: format: [{"id":"1","question":"q","options":["a","b","ad","v"],"answer":"1"},...]',
-            checkValidQuizData
-        ),
-})
-
-
-
-const NewQuizForm = () => {
+        // .test(
+        //     'validJsonRequired',
+        //     'Json object is not valid: format: [{"id":"1","question":"q","options":["a","b","ad","v"],"answer":"1"},...]',
+        //     checkValidQuizData
+        // ),
+}) 
+const NewTaskForm = () => {
     const dispatch = useAppDispatch()
     const onDialogClose = () => {
-        dispatch(toggleNewQuizDialog(false))
+        dispatch(toggleNewTaskDialog(false))
     }
     const handleSubmit = async (value: FormModel) => {
         try {
             const { jsonData, name } = value
             const parsedData = JSON.parse(jsonData);
             console.log(parsedData)
-            const response = await createDocument({table:"quiz", jsonData: JSON.stringify({ questions: parsedData, name: name }) })
+            const response = await createDocument({table:"reporting", jsonData:parsedData })
             console.log({ response })
 
             if (response.status === 200) {
-                const getData = await getDocument('quiz')
+                const getData = await getDocument('reporting')
                 if (getData.status === 200) {
-                    const reformatData = getData.data.filter((i: any) => i.jsonData !== null).map((data: any) => { return {...getValidParsedJsonData(data.jsonData),id:data.id}})  
-                    dispatch(setQuizData(JSON.stringify(reformatData)))
-                }
+                    dispatch(setTaskData(getData.data))
+                } 
                 onDialogClose()
             } else {
-                alert('Error on creating quiz:' + response.data.message)
+                alert('Error on creating task reporting:' + response.data.message)
             }
         } catch (error: any) {
             alert(error?.message ? error?.message : error)
@@ -99,7 +93,7 @@ const NewQuizForm = () => {
                         <FormContainer>
                             <FormItem
                                 asterisk
-                                label="Quiz Name"
+                                label="Reporting Name"
                                 invalid={errors.name && touched.name}
                                 errorMessage={errors.name}
                             >
@@ -112,7 +106,7 @@ const NewQuizForm = () => {
                             </FormItem>
                             <FormItem
                                 asterisk
-                                label="Quiz Object In JSON Format"
+                                label="Reporting Object In JSON Format"
                                 invalid={errors.jsonData && touched.jsonData}
                                 errorMessage={errors.jsonData}
                             >
@@ -147,9 +141,7 @@ const NewQuizForm = () => {
     )
 }
 
-export default NewQuizForm
+export default NewTaskForm
 
 
-let data123 =
-    `[{"id":"1","question":"ddffa","options":["a","b","ad","v"],"answer":"1"},{"id":"2","question":"What does the splice method return in the following case?\n\nlet arr = [10, 20, 30, 40, 50];\nlet removed = arr.splice(2, 2);\nconsole.log(removed);","options":["[10, 20]","[30, 40]","[40, 50]","[20, 30]"],"answer":"2"},{"id":"3","question":"What happens when you use a negative start index in splice?\n\nlet arr = [5, 10, 15, 20];\narr.splice(-2, 1, 99);\nconsole.log(arr);","options":["[5, 10, 99, 20]","[5, 10, 99, 15, 20]","[5, 10, 15, 99, 20]","[5, 99, 15, 20]"],"answer":"3"},{"id":"4","question":"What is the result of calling splice with a start index greater than the array length?\n\nlet arr = [1, 2, 3];\narr.splice(5, 1, 9);\nconsole.log(arr);","options":["[1, 2, 3]","[1, 2, 3, 9]","[1, 2, 3, undefined, 9]","[1, 2, 9, 3]"],"answer":"4"},{"id":"5","question":"How does splice behave when delete count is 0?\n\nlet arr = ['a', 'b', 'c'];\narr.splice(1, 0, 'x', 'y');\nconsole.log(arr);","options":["['a', 'x', 'y', 'b', 'c']","['a', 'b', 'c']","['a', 'b', 'x', 'y', 'c']","['x', 'y', 'a', 'b', 'c']"],"answer":"1"},{"id":"6","question":"What will be the result if you provide only one argument to splice?\n\nlet arr = [1, 2, 3, 4, 5];\narr.splice(2);\nconsole.log(arr);","options":["[1, 2]","[1, 2, 3, 4, 5]","[3, 4, 5]","[1, 2, 3]"],"answer":"2"},{"id":"7","question":"Which of the following statements about splice is false?","options":["splice modifies the original array","splice can remove elements without adding any new elements","splice always returns an array of the removed elements","splice cannot be used to add new elements"],"answer":"3"}]
-`
+ 

@@ -18,7 +18,7 @@ const ProgressionBar = ({ progression }: ProgressionBarProps) => {
         return {}
     }, [progression])
 
-    return <Progress size="sm" percent={parseFloat(`${progression.toFixed(0)}`)} {...progressExtraProps} />
+    return <Progress size="sm" percent={parseFloat(`${progression.toFixed(2)}`)} {...progressExtraProps} />
 }
 
 export default ProgressionBar
