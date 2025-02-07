@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { isArray } from 'lodash';
 import { calculateTimeDistribution, getNumbers, getSum, mergeTasksData } from '@/utils/helper';
 import { TimeDistributionCard } from './TimeDistributionCard';
+import { Notes } from './Notes';
 
 export type ListItemData = {
   id: number;
@@ -134,6 +135,16 @@ const ListItem = ({ allTaskData }: { allTaskData: INode[] }) => {
           }
 
                 <TimeDistributionCard 
+                  record={{
+                    "category": 'Wasted Time',
+                    "timeSpent":840 - (isArray(timeSpentByCat) ? timeSpentByCat.reduce((previous, current) => {
+                      return previous  + current.timeSpent
+                    }, 0):0),
+                    "task":  []
+                }}
+                />
+                <Notes 
+                allTaskData={allTaskData}
                   record={{
                     "category": 'Wasted Time',
                     "timeSpent":840 - (isArray(timeSpentByCat) ? timeSpentByCat.reduce((previous, current) => {

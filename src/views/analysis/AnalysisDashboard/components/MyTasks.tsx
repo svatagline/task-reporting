@@ -65,38 +65,7 @@ const CategoryTag = ({ category }: { category: number }) => {
     default:
       return null;
   }
-};
-const SatisfactionTag = ({ satisfaction }: { satisfaction: number }) => {
-  const condition1 = satisfaction <= 4;
-  const condition2 = satisfaction > 4 && satisfaction < 7;
-  const condition3 = satisfaction > 7 && satisfaction < 9;
-  const staisfactionPrc = 10 * parseFloat(`${satisfaction}`);
-  if (condition1) {
-    return (
-      <Tag className='text-red-600 bg-red-100 dark:text-red-100 dark:bg-red-500/20 rounded border-0'>
-        {`${staisfactionPrc}%`}
-      </Tag>
-    );
-  } else if (condition2) {
-    return (
-      <Tag className='text-amber-600 bg-amber-100 dark:text-amber-100 dark:bg-amber-500/20 rounded border-0'>
-        {`${staisfactionPrc}%`}
-      </Tag>
-    );
-  } else if (condition3) {
-    return (
-      <Tag className='text-amber-600 bg-amber-100 dark:text-amber-100 dark:bg-amber-500/20 rounded border-0'>
-        {`${staisfactionPrc}%`}
-      </Tag>
-    );
-  } else {
-    return (
-      <Tag className='bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-100 rounded border-0'>
-        {`${staisfactionPrc}%`}
-      </Tag>
-    );
-  }
-};
+}; 
 
  const TimeManagementBox = ({ row }: { row: any }) => {
   const {

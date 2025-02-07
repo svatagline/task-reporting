@@ -63,7 +63,8 @@ export const getNewId = (lastId: string) => {
 }
 
 
-function generateHourlyRanges(dateString: string) {
+//@ts-ignore
+function generateHourlyRanges(dateString) {
     const date = new Date(dateString);
     date.setHours(7, 0, 0, 0); // Start from 7 AM
 
@@ -90,14 +91,15 @@ function generateHourlyRanges(dateString: string) {
 }
 
 // Helper function to format time in 12-hour format
-function formatTime(hour: number) {
+//@ts-ignore
+function formatTime(hour) {
     let period = hour >= 12 ? "PM" : "AM";
     let formattedHour = hour % 12 || 12; // Convert 0 -> 12 for AM/PM format
     return `${formattedHour} ${period}`;
 }
 
 // Example usage
-// console.log(generateHourlyRanges("January 30, 2025"));
+// console.log(generateHourlyRanges("February 07, 2025"));
 
 
 export function mergeTasksData(data: INode[]) {
@@ -137,6 +139,45 @@ export function mergeTasksData(data: INode[]) {
                 } else {
                     return t
                 }
+            })
+        } else {
+            result.push({ ...item, assignedTime: getTime, mergeId: item.id, mergedRecord: 1, })
+        }
+    });
+    return result;
+}
+export function mergeDetailForNotes(data: INode[]) {
+    let result: INode[] = [];
+    data.forEach(item => {
+
+        const existTask = result.find(task => task.name == item.name)
+
+        let getTime = 0
+        try {
+            const time_span = `${item.id}`.split('_')
+            getTime = (parseInt(time_span[1]) - parseInt(time_span[0])) / 60
+        } catch (error) {
+            console.error('Error parsing time in mergeTasksData:', error);
+        }
+        if (existTask && existTask.id) {
+            result = result.map((t, i) => { 
+                let modifiedTask = {
+                    ...t,
+                    id: (t.id ? t.id : 0) + "|---|" + (item.id ? item.id : 0),
+                    mergedRecord: existTask.mergedRecord + 1,
+                    mergeId: (t.id ? t.id : 'null') + "|---|" + (item.id ? item.id : 'null'),
+                    assignedTime: `${existTask.assignedTime} |---| ${getTime}`,
+                    time_spent: (t.time_spent ? t.time_spent : 0) + "|---|" + (item.time_spent ? item.time_spent : 0),
+                    estimated_time: (t.estimated_time ? t.estimated_time : 0) + "|---|" + (item.estimated_time ? item.estimated_time : 0),
+                    wasted_time: (t.wasted_time ? t.wasted_time : 0) + "|---|" + (item.wasted_time ? item.wasted_time : 0),
+                    reason_for_satisfaction: (t.reason_for_satisfaction ? t.reason_for_satisfaction : 'null') + "|---|" + (item.reason_for_satisfaction ? item.reason_for_satisfaction : 'null'),
+                    description: (t.description ? t.description : 'null') + "|---|" + (item.description ? item.description : 'null'),
+                    status: (t.status ? t.status : 'null') + "|---|" + (item.status ? item.status : 'null'),
+                    focus_rate: (`${t.focus_rate ? t.focus_rate : 0}` + "|---|" + `${item.focus_rate ? item.focus_rate : 0}`),
+                    satisfaction_rate: (`${t.satisfaction_rate ? t.satisfaction_rate : 0}` + "|---|" + `${item.satisfaction_rate ? item.satisfaction_rate : 0}`),
+
+                }
+                return modifiedTask 
             })
         } else {
             result.push({ ...item, assignedTime: getTime, mergeId: item.id, mergedRecord: 1, })
@@ -204,33 +245,33 @@ export const getSum = (str: string = "") => {
 
 export const exatractNestedChild = (initialData: any) => {
     try {
-          let data: INode[] = initialData
-    let level = [24]
-    let listing: INode[] = []
-    const listLastNestedItems = (d: INode[], parentId = 0) => {
-        d.forEach((record: any) => {
-            if (level.includes(`${record.id}`.length)) {
-                // console.log(first)
-                listing.push({ ...record, parent_id: parentId })
-            }
+        let data: INode[] = initialData
+        let level = [24]
+        let listing: INode[] = []
+        const listLastNestedItems = (d: INode[], parentId = 0) => {
+            d.forEach((record: any) => {
+                if (level.includes(`${record.id}`.length)) {
+                    // console.log(first)
+                    listing.push({ ...record, parent_id: parentId })
+                }
 
-            if (record.children && record.children.length > 0) {
-                listLastNestedItems(record.children, record.id)
-            }
-        })
-    }
-    listLastNestedItems(data)
+                if (record.children && record.children.length > 0) {
+                    listLastNestedItems(record.children, record.id)
+                }
+            })
+        }
+        listLastNestedItems(data)
 
 
-    return listing
+        return listing
     } catch (error) {
-        console.log("Error in exatractNestedChild:",error)
+        console.log("Error in exatractNestedChild:", error)
         return []
     }
-  
+
 }
 const dedicatedTime: Record<string, number> = {
-    'Programming': 540,
+    'Programming': 720,
     'eSkill': 120,
     'Management': 0
 };
@@ -249,19 +290,18 @@ export const calculateShortFallTime = (name: string, tasktime: string) => {
 export const getNumbers = (record: INode, num_type: string, task_name?: string) => {
     const { estimated_time, time_spent, wasted_time, satisfaction_rate, taken_extra_time_to_finish } = record
 
-    const utilizationPerformance = parseFloat(`${(parseFloat(`${getSum(`${estimated_time ?? time_spent}`) * 100}`) / (getSum(`${time_spent}`) + getSum(`${wasted_time}`))).toFixed(2)}`);
+    const utilizationPerformance = parseFloat(`${(parseFloat(`${getSum(`${time_spent}`) * 100}`) / (getSum(`${time_spent}`) + getSum(`${wasted_time}`))).toFixed(2)}`);
     const estimationPerformance = parseFloat(`${(parseFloat(`${getSum(`${estimated_time ?? time_spent}`) * 100}`) / (getSum(`${time_spent}`) + getSum(`${wasted_time}`))).toFixed(2)}`);
     const properWorkPerformance = 100 - parseFloat(`${(parseFloat(`${getSum(`${taken_extra_time_to_finish ?? 0}`) * 100}`) / (getSum(`${time_spent}`) + getSum(`${wasted_time}`))).toFixed(2)}`);
-    const satisfactionRate = getAvg(`${satisfaction_rate}`)
+    const satisfactionRate = getAvg(`${satisfaction_rate}`) * 10
     const priorityRate = 100 - parseFloat((calculateShortFallTime(`${task_name}`, `${time_spent}`) * 100 / dedicatedTime[`${task_name}`]).toFixed(2))
 
 
     let total_performance = 0
     if (dedicatedTime[`${task_name}`]) {
-        total_performance = parseFloat(parseFloat(`${priorityRate * 0.1 + satisfactionRate * 0.3 + estimationPerformance * 0.2 + properWorkPerformance * 0.3 + utilizationPerformance * 0.1}`).toFixed(2))
+        total_performance = parseFloat(parseFloat(`${priorityRate * 0.05 + satisfactionRate * 0.1 + estimationPerformance * 0.8 + utilizationPerformance * 0.05}`).toFixed(2))
     } else {
-        total_performance = satisfactionRate * 0.3 + estimationPerformance * 0.3 + properWorkPerformance * 0.3 + utilizationPerformance * 0.1;
-
+        total_performance = satisfactionRate * 0.1 + estimationPerformance * 0.8 + utilizationPerformance * 0.1;
     }
     switch (num_type) {
         case 'satisfaction_rate':
@@ -289,7 +329,7 @@ export const getNumbers = (record: INode, num_type: string, task_name?: string) 
 
 
 
- 
+
 
 type TimeDistribution = {
     category: number;
@@ -302,32 +342,32 @@ type TimeDistribution = {
 export function calculateTimeDistribution(tasks: INode[]): TimeDistribution[] {
     try {
         function parseTimeSpent(timeSpentStr: string): number {
-        return timeSpentStr
-            .split("|---|")
-            .map(Number)
-            .reduce((sum, val) => sum + val, 0);
-    }
-    const categoryMap = new Map<number, TimeDistribution>();
-
-    tasks.forEach(task => {
-        if (['','null','undefined',undefined].includes(`${task.category}`) || !task.time_spent) return;
-
-        const timeSpent = parseTimeSpent(`${task.time_spent}|---|${task.wasted_time}`);
-        if (timeSpent === 0) return;
-
-        if (!categoryMap.has(parseInt(task.category))) {
-            categoryMap.set(parseInt(task.category), { category: parseInt(task.category), timeSpent: 0, task: [] });
+            return timeSpentStr
+                .split("|---|")
+                .map(Number)
+                .reduce((sum, val) => sum + val, 0);
         }
+        const categoryMap = new Map<number, TimeDistribution>();
 
-        const categoryEntry = categoryMap.get(parseInt(task.category))!;
-        categoryEntry.timeSpent += timeSpent;
-        categoryEntry.task.push({ name: `${task.name}`, timeSpent,data:task });
-    });
+        tasks.forEach(task => {
+            if (['', 'null', 'undefined', undefined].includes(`${task.category}`) || !task.time_spent) return;
 
-    return Array.from(categoryMap.values()); 
+            const timeSpent = parseTimeSpent(`${task.time_spent}|---|${task.wasted_time}`);
+            if (timeSpent === 0) return;
+
+            if (!categoryMap.has(parseInt(task.category))) {
+                categoryMap.set(parseInt(task.category), { category: parseInt(task.category), timeSpent: 0, task: [] });
+            }
+
+            const categoryEntry = categoryMap.get(parseInt(task.category))!;
+            categoryEntry.timeSpent += timeSpent;
+            categoryEntry.task.push({ name: `${task.name}`, timeSpent, data: task });
+        });
+
+        return Array.from(categoryMap.values());
     } catch (error) {
         console.log('Error in calculateTimeDistribution:', error)
         return []
     }
-   
+
 }

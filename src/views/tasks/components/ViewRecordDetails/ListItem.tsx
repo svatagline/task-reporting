@@ -1,10 +1,7 @@
-import Card from '@/components/ui/Card';
-import Members from './Members';
-import ProgressionBar from './ProgressionBar';
-import { HiOutlineClipboardCheck } from 'react-icons/hi';
-import { Link } from 'react-router-dom';
+import Card from '@/components/ui/Card'; 
+import ProgressionBar from './ProgressionBar'; 
 import { Tag } from '@/components/ui';
-import { getAvg, getNumbers, getSum } from '@/utils/helper';
+import {   getNumbers, getSum } from '@/utils/helper';
 import { INode } from '../../type';
 
 export type ListItemData = {
@@ -128,30 +125,66 @@ const ListItem = ({ data, cardBorder,records_count }: ListItemProps) => {
   const Satisfaction = ({ reason_for_satisfaction, satisfaction_rate }) => {
     return (
       <>
-        <div
-          className='mt-4 flex flex-wrap gap-2'
-          
-        >
-          {`${reason_for_satisfaction}`.length > 0 &&
-            `${reason_for_satisfaction}`
-              .split('|---|')
-              .map((r, index) => {
-                return {
-                  title: r ?? 'none',
-                  prefix: `bg-indigo-500`,
-                };
-              }).map((label, index) => (
-                <Tag
-                  key={index}
-                  prefix
-                  className='mx-1 text-wrap'
-                  style={{ textWrap: 'auto' }}
-                  prefixClass={label.prefix}
-                >
-                  {label.title}
-                </Tag>
-              ))}
-        </div>
+      <div className='mt-4 flex flex-wrap gap-2'  >
+
+{`${satisfaction_rate}`.length > 0 &&
+
+  <>
+    <p> Satisfaction rate </p>
+    {
+      `${satisfaction_rate}`
+        .split('|---|')
+        .map((r, index) => {
+          return {
+            title: r ?? 'none',
+            prefix: `bg-indigo-500`,
+          };
+        }).map((label, index) => (
+          <Tag
+            key={index}
+            prefix
+            className='mx-1 text-wrap'
+            style={{ textWrap: 'auto' }}
+            prefixClass={label.prefix}
+          >
+            {label.title}
+          </Tag>
+        ))
+    }
+  </>
+
+}
+</div>
+<div className='mt-4 flex flex-wrap gap-2'  >
+
+{`${reason_for_satisfaction}`.length > 0 &&
+
+  <>
+    <p> Reason for satisfaction rate </p>
+    {
+      `${reason_for_satisfaction}`
+        .split('|---|')
+        .map((r, index) => {
+          return {
+            title: r ?? 'none',
+            prefix: `bg-indigo-500`,
+          };
+        }).map((label, index) => (
+          <Tag
+            key={index}
+            prefix
+            className='mx-1 text-wrap'
+            style={{ textWrap: 'auto' }}
+            prefixClass={label.prefix}
+          >
+            {label.title}
+          </Tag>
+        ))
+    }
+  </>
+
+}
+</div>
         <ProgressionBar progression={getNumbers(data,'satisfaction_rate')} />
       </>
     );
@@ -278,8 +311,7 @@ const ListItem = ({ data, cardBorder,records_count }: ListItemProps) => {
             },
             {
               title: 'Satisfaction',
-              prefix: 'bg-rose-500',
-              description: `${reason_for_satisfaction}`.length>0?"Reason for satisfaction rate":"",
+              prefix: 'bg-rose-500', 
               element: (
                 <Satisfaction
                   reason_for_satisfaction={`${reason_for_satisfaction}`}

@@ -27,11 +27,11 @@ export type ListItemData = {
 
 type ListItemProps = {
   data: INode
-  cardBorder?: boolean 
-  records_count:number
+  cardBorder?: boolean
+  records_count: number
 };
 
-const ListItemSm = ({ data, cardBorder=true,records_count }: ListItemProps) => {
+const ListItemSm = ({ data, cardBorder = true, records_count }: ListItemProps) => {
   const {
     name,
     totalTask,
@@ -49,19 +49,19 @@ const ListItemSm = ({ data, cardBorder=true,records_count }: ListItemProps) => {
     satisfaction_rate,
     taken_extra_time_to_finish
   } = data;
-  const isMutipalRecord = records_count>1
+  const isMutipalRecord = records_count > 1
 
   const tu_progression =
     (getSum(time_spent) * 100) / (getSum(time_spent) + getSum(wasted_time));
 
- 
-  const ProperWorkPerformance = ({ time_spent, wasted_time,taken_extra_time_to_finish }) => {
+
+  const ProperWorkPerformance = ({ time_spent, wasted_time, taken_extra_time_to_finish }) => {
     return (
       <>
         <div className='mt-4 flex flex-wrap gap-2'>
           {[
             {
-              title: `Spent time: ${getSum(time_spent)+getSum(wasted_time)}`,
+              title: `Spent time: ${getSum(time_spent) + getSum(wasted_time)}`,
               prefix: 'bg-amber-400',
             },
             {
@@ -74,7 +74,7 @@ const ListItemSm = ({ data, cardBorder=true,records_count }: ListItemProps) => {
             </Tag>
           ))}
         </div>
-        <ProgressionBar progression={getNumbers(data,'proper_work_performance')} />
+        <ProgressionBar progression={getNumbers(data, 'proper_work_performance')} />
       </>
     );
   };
@@ -97,14 +97,14 @@ const ListItemSm = ({ data, cardBorder=true,records_count }: ListItemProps) => {
             </Tag>
           ))}
         </div>
-        <ProgressionBar progression={getNumbers(data,'utilization_performance')} />
+        <ProgressionBar progression={getNumbers(data, 'utilization_performance')} />
       </>
     );
   };
   const TimeEstimation = ({ time_spent, wasted_time, estimated_time }) => {
     return (
       <>
-        <div className='mt-4 flex flex-wrap gap-2' onClick={()=>console.log(estimated_time)}>
+        <div className='mt-4 flex flex-wrap gap-2' onClick={() => console.log(estimated_time)}>
           {[
             {
               title: `Total time: ${getSum(time_spent) + getSum(wasted_time)}`,
@@ -120,38 +120,74 @@ const ListItemSm = ({ data, cardBorder=true,records_count }: ListItemProps) => {
             </Tag>
           ))}
         </div>
-        <ProgressionBar progression={getNumbers(data,'estimation_performance')} />
+        <ProgressionBar progression={getNumbers(data, 'estimation_performance')} />
       </>
     );
   };
   const Satisfaction = ({ reason_for_satisfaction, satisfaction_rate }) => {
     return (
       <>
-        <div
-          className='mt-4 flex flex-wrap gap-2'
-          
-        >
-          {`${reason_for_satisfaction}`.length > 0 &&
-            `${reason_for_satisfaction}`
-              .split('|---|')
-              .map((r, index) => {
-                return {
-                  title: r ?? 'none',
-                  prefix: `bg-indigo-500`,
-                };
-              }).map((label, index) => (
-                <Tag
-                  key={index}
-                  prefix
-                  className='mx-1 text-wrap'
-                  style={{ textWrap: 'auto' }}
-                  prefixClass={label.prefix}
-                >
-                  {label.title}
-                </Tag>
-              ))}
+        <div className='mt-4 flex flex-wrap gap-2'  >
+
+          {`${satisfaction_rate}`.length > 0 &&
+
+            <>
+              <p> Satisfaction rate </p>
+              {
+                `${satisfaction_rate}`
+                  .split('|---|')
+                  .map((r, index) => {
+                    return {
+                      title: r ?? 'none',
+                      prefix: `bg-indigo-500`,
+                    };
+                  }).map((label, index) => (
+                    <Tag
+                      key={index}
+                      prefix
+                      className='mx-1 text-wrap'
+                      style={{ textWrap: 'auto' }}
+                      prefixClass={label.prefix}
+                    >
+                      {label.title}
+                    </Tag>
+                  ))
+              }
+            </>
+
+          }
         </div>
-        <ProgressionBar progression={getNumbers(data,'satisfaction_rate')} />
+        <div className='mt-4 flex flex-wrap gap-2'  >
+
+          {`${reason_for_satisfaction}`.length > 0 &&
+
+            <>
+              <p> Reason for satisfaction rate </p>
+              {
+                `${reason_for_satisfaction}`
+                  .split('|---|')
+                  .map((r, index) => {
+                    return {
+                      title: r ?? 'none',
+                      prefix: `bg-indigo-500`,
+                    };
+                  }).map((label, index) => (
+                    <Tag
+                      key={index}
+                      prefix
+                      className='mx-1 text-wrap'
+                      style={{ textWrap: 'auto' }}
+                      prefixClass={label.prefix}
+                    >
+                      {label.title}
+                    </Tag>
+                  ))
+              }
+            </>
+
+          }
+        </div>
+        <ProgressionBar progression={getNumbers(data, 'satisfaction_rate')} />
       </>
     );
   };
@@ -159,23 +195,23 @@ const ListItemSm = ({ data, cardBorder=true,records_count }: ListItemProps) => {
   const getStatus = (status: string) => {
     if (status.includes('|---|')) {
       const splits = status.split("|---|")
-      if (splits.every((i)=>i=='2')) {
+      if (splits.every((i) => i == '2')) {
         return 'Complated';
-      }else if(splits.some((i)=>i=='1')){
+      } else if (splits.some((i) => i == '1')) {
         return 'In Progress';
       }
       return 'Pending';
     } else {
-       switch (status) {
-      case '0':
-        return 'Pending';
-      case '1':
-        return 'In Progress';
-      case '2':
-        return 'Complated';
-      default:
-        return 'Pending';
-    }
+      switch (status) {
+        case '0':
+          return 'Pending';
+        case '1':
+          return 'In Progress';
+        case '2':
+          return 'Complated';
+        default:
+          return 'Pending';
+      }
     }
 
   };
@@ -186,9 +222,8 @@ const ListItemSm = ({ data, cardBorder=true,records_count }: ListItemProps) => {
           {[
             {
               title: ['', '-'].includes(status) ? 'Panding' : status,
-              prefix: `bg-${
-                parseInt(satisfaction_rate) > 50 ? 'rose' : 'indigo'
-              }-500`,
+              prefix: `bg-${parseInt(satisfaction_rate) > 50 ? 'rose' : 'indigo'
+                }-500`,
             },
           ].map((label, index) => (
             <Tag
@@ -211,19 +246,19 @@ const ListItemSm = ({ data, cardBorder=true,records_count }: ListItemProps) => {
   };
   return (
     <div className='mb-4'   >
-       { isMutipalRecord && key =='0' && <h4 className='font-bold mt-2  mb-2'>Total avarage</h4>}
+      {isMutipalRecord && key == '0' && <h4 className='font-bold mt-2  mb-2'>Total avarage</h4>}
       <Card bordered={cardBorder}>
         <div className='grid gap-x-4 grid-cols-12'>
           <div className='my-1 sm:my-0 col-span-12    md:flex md:items-center'>
             <div className='flex flex-col'>
-            <h6 className='font-bold'>Task Description { isMutipalRecord && key=='0'?"":key}</h6>
+              <h6 className='font-bold'>Task Description {isMutipalRecord && key == '0' ? "" : key}</h6>
 
               {listBySeparate(description).join(' | ')}
             </div>
           </div>
 
           <div className='my-1 sm:my-0 col-span-12   md:flex md:items-center'>
-            <ProgressionBar progression={getNumbers(data,'total_performance')} />
+            <ProgressionBar progression={getNumbers(data, 'total_performance')} />
           </div>
         </div>
         <div className='mt-4 flex flex-col gap-2'>
@@ -231,11 +266,10 @@ const ListItemSm = ({ data, cardBorder=true,records_count }: ListItemProps) => {
             {
               title: `Utilized Time `,
               prefix: 'bg-blue-500',
-              details: `Total: ${
-                parseInt(time_spent) + parseInt(wasted_time)
-              } Utilazed: ${parseInt(time_spent)} Wasted: ${parseInt(
-                wasted_time,
-              )}`,
+              details: `Total: ${parseInt(time_spent) + parseInt(wasted_time)
+                } Utilazed: ${parseInt(time_spent)} Wasted: ${parseInt(
+                  wasted_time,
+                )}`,
               element: (
                 <TimeUtilization
                   wasted_time={wasted_time}
@@ -246,11 +280,10 @@ const ListItemSm = ({ data, cardBorder=true,records_count }: ListItemProps) => {
             {
               title: `Estimated Time `,
               prefix: 'bg-blue-500',
-              details: `Total: ${
-                parseInt(time_spent) + parseInt(wasted_time)
-              } Utilazed: ${parseInt(time_spent)} Wasted: ${parseInt(
-                wasted_time,
-              )}`,
+              details: `Total: ${parseInt(time_spent) + parseInt(wasted_time)
+                } Utilazed: ${parseInt(time_spent)} Wasted: ${parseInt(
+                  wasted_time,
+                )}`,
               element: (
                 <TimeEstimation
                   wasted_time={wasted_time}
@@ -262,23 +295,21 @@ const ListItemSm = ({ data, cardBorder=true,records_count }: ListItemProps) => {
             {
               title: `Rework analysis`,
               prefix: 'bg-blue-500',
-              details: `Total: ${
-                parseInt(time_spent) + parseInt(wasted_time)
-              } Utilazed: ${parseInt(time_spent)} Wasted: ${parseInt(
-                wasted_time,
-              )}`,
+              details: `Total: ${parseInt(time_spent) + parseInt(wasted_time)
+                } Utilazed: ${parseInt(time_spent)} Wasted: ${parseInt(
+                  wasted_time,
+                )}`,
               element: (
                 <ProperWorkPerformance
                   wasted_time={wasted_time}
                   time_spent={time_spent}
-                  taken_extra_time_to_finish={`${taken_extra_time_to_finish??0}`}
+                  taken_extra_time_to_finish={`${taken_extra_time_to_finish ?? 0}`}
                 />
               ),
             },
             {
               title: 'Satisfaction',
               prefix: 'bg-rose-500',
-              description: `${reason_for_satisfaction}`.length>0?"Reason for satisfaction rate":"",
               element: (
                 <Satisfaction
                   reason_for_satisfaction={`${reason_for_satisfaction}`}
@@ -322,7 +353,7 @@ const ListItemSm = ({ data, cardBorder=true,records_count }: ListItemProps) => {
         </div>
       </Card>
 
-      { isMutipalRecord && key == '0' && <h4 className='font-bold mt-2  mb-2'>Nested Records</h4>}
+      {isMutipalRecord && key == '0' && <h4 className='font-bold mt-2  mb-2'>Nested Records</h4>}
     </div>
   );
 };
